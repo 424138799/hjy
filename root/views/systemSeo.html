@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>网站信息设置 </title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="<?php echo base_url('/style/root');?>/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('/style/root');?>/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="" /> 
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/amazeui.min.css" /> 
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/app.css">
+    <!-- <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/admin.css"> -->
+    <script src="<?php echo base_url('/style/root');?>/js/jquery.min.js"></script>
+
+</head>
+<style>
+	 .areachoose select{
+        width: 30%!important;
+        margin:5px;
+    }
+</style>
+<body data-type="index">
+    <script src="<?php echo base_url('/style/root');?>/js/theme.js"></script>
+    <div class="am-g tpl-g">
+<?php $this->load->view('header.html');?>
+
+
+        <!-- 内容区域 -->
+        <div class="tpl-content-wrapper">
+            <div class="row-content am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title  am-cf">网站信息设置</div>
+                            </div>
+                            <div class="widget-body  am-fr">
+                                <form class="am-form tpl-form-border-form tpl-form-border-br" action="<?php echo site_url('/Home/systemSeo');?>" method="post">
+                                    
+                                    <div class="am-form-group">
+                                        <label for="user-name" class="am-u-sm-3 am-form-label">SEO关键字</label>
+                                        <div class="am-u-sm-9">
+                                            <input type="text" class="tpl-form-input" id="keywords" name="keywords" value="<?php echo get_option('keywords');?>" placeholder="请输入网址关键字" ">
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label for="user-name" class="am-u-sm-3 am-form-label">SEO描述</label>
+                                        <div class="am-u-sm-9">
+                                            <textarea type="text" class="tpl-form-input" id="description" name="description" placeholder="请输入SEO描述" "><?php echo get_option('description');?></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label for="user-name" class="am-u-sm-3 am-form-label">采薇网简介</label>
+                                        <div class="am-u-sm-9">
+                                             <textarea type="text" class="tpl-form-input" id="websiteInfo" name="websiteInfo" placeholder="请输入采薇网简介" "><?php echo get_option('websiteInfo');?></textarea>
+                                        </div>
+                                    </div>
+    
+
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-3 am-form-label">版权声明</label>
+                                        <div class="am-u-sm-9">
+                                            <textarea type="text" class="tpl-form-input" id="copyright" name="copyright" placeholder="请输入版权声明" "><?php echo get_option('copyright');?></textarea>
+                                        </div>
+                                    </div>
+   
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-3 am-form-label">特别提示：</label>
+                                        <div class="am-u-sm-9">
+                                              <textarea type="text" class="tpl-form-input" id="prompt" name="prompt" placeholder="请输入特别提示" "><?php echo get_option('prompt');?></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-3 am-form-label">备案信息</label>
+                                        <div class="am-u-sm-9">
+                                            <input type="text" placeholder="请输入备案信息" name="information" value="<?php echo get_option('information');?>" >
+                                        </div>
+                                    </div> 
+
+                                    <div class="am-form-group">
+                                 
+                                   
+                                    <div class="am-form-group">
+                                        <div class="am-u-sm-9 am-u-sm-push-3">
+                                            <button type="reset" class="am-btn">取消</button>
+                                            <button type="submit" class="am-btn am-btn-primary tpl-btn-bg-color-success ">保存</button>
+                                        </div>
+                                    </div>
+                                </form>
+ 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+     
+    <script src="<?php echo base_url('/style/root');?>/js/amazeui.min.js"></script> 
+    <script src="<?php echo base_url('/style/root');?>/js/app.js"></script> 
+</body>
+
+</html>

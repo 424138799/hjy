@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>采薇网 - 用户管理 </title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="<?php echo base_url('/style/root');?>/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('/style/root');?>/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="" /> 
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/amazeui.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/app.css">
+    <!-- <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/admin.css"> -->
+    <script src="<?php echo base_url('/style/root');?>/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="index">
+    <script src="<?php echo base_url('/style/root');?>/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <?php $this->load->view('header.html');?>
+        <!-- 内容区域 -->
+        <div class="tpl-content-wrapper">
+            <div class="row-content am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title  am-cf">后台用户管理列表</div>
+                            </div>
+                            <div class="widget-body  am-fr">
+                            	<div style="margin-bottom: 20px">
+                                    <button type="button" data-am-modal="{target: '#my-prompt'}" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 添加管理用户</button>
+                                </div>
+                                
+                                <div class="am-u-sm-12">
+                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>用户名</th>
+                                                <th>创建时间</th>
+                                               
+                                                <th>状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="doc-modal-list">
+                                            <?php if(!empty($lists)):?>
+                                                <?php foreach($lists as $v):?>
+                                            <tr class="gradeX">
+                                                <td class="userid"><?php echo $v['id'];?></td>
+                                                <td class="username"><?php echo $v['username'];?></td>
+                                                <input type="hidden" id="g_id" value="<?php echo $v['g_id'];?>">
+                                                <td><?php echo $v['create_time'];?></td>
+                                               
+                                                <?php if($v['status'] == '1'):?>
+                                                    <td>正常</td>
+                                                <?php else:?>
+                                                    <td>禁止登陆</td>
+                                                <?php endif;?>
+                                                <td>
+                                                     <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                           
+                                                            <a data-id="<?php echo $v['id']?>" href="#" class="update  am-btn am-btn-warning"><span class="am-icon-edit"></span> 修改</a>
+                                                            <a data-id="<?php echo $v['id']?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del"><span class="am-icon-trash"></span> 删除</a>
+                                                       
+                                                        </div>
+                                                     </div>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach;?>
+                                        <?php else:?>
+                                            <tr > <td colspan="8">暂无内容！</td>   </tr>
+                                        <?php endif;?>
+                                        
+                                            <!-- more data -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                             
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    	<!-- 新增 -->
+    	 <div class="am-modal am-modal-confirm" tabindex="-1" id="my-prompt">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">新增用户</div>
+                <form class="am-form am-form-horizontal" action="<?php echo site_url('/Member/AddUser');?>" method="post">
+                    <div class="am-modal-bd">
+                        <div class="am-form-group">
+                            <label for="username" class="am-u-sm-2 am-form-label">用户名</label>
+                            <div class="am-u-sm-10">
+                            <input type="text"  name="username" value="" placeholder="输入你的用户名">
+                            </div>
+                        </div> 
+                         <div class="am-form-group">
+                            <label for="username" class="am-u-sm-2 am-form-label">密码</label>
+                            <div class="am-u-sm-10">
+                            <input type="text"  name="password" value="" placeholder="输入你的密码">
+                            </div>
+                        </div> 
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">用户组</label>
+                            <div class="am-u-sm-10">
+                            	<select name="g_id" required>
+                            		<?php foreach($group as $v):?>
+                            			<option value="<?php echo $v['gid'];?>"><?php echo $v['group_name'];?></option>
+                            		<?php endforeach;?>
+                            	</select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="status" class="am-u-sm-2 am-form-label">状态</label>
+                            <div class="am-u-sm-10">
+								<select name="status" required>
+                            		<option value="1">正常</option>
+                            		<option value="0">拒绝登陆</option>
+                            	</select>                            
+                           	</div>
+                        </div>
+                    </div>
+                    <div class="am-modal-footer">
+                        <span class="am-modal-btn" data-am-modal-cancel>取消</span> 
+                        <button type="submit" style="padding:0;border:none;background:none;width: 100%;height: 100%;outline: none;">提交</button>
+                    </div> 
+                </form>    
+            </div>
+        </div>
+
+        <!-- 编辑弹框 -->
+        <div class="am-modal am-modal-confirm" tabindex="-1" id="my-update-confirm">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">编辑</div>
+                <form class="am-form am-form-horizontal" action="<?php echo site_url('/Member/EditUser');?>" method="post">
+                    <div class="am-modal-bd">
+                        <div class="am-form-group">
+                            <label for="username" class="am-u-sm-2 am-form-label">用户名</label>
+                            <div class="am-u-sm-10">
+                            <input type="text" id='userName' name="username" value="" placeholder="输入你的用户名">
+                            </div>
+                        </div> 
+                         <div class="am-form-group">
+                            <label for="username" class="am-u-sm-2 am-form-label">密码</label>
+                            <div class="am-u-sm-10">
+                            <input type="text"  name="password" value="" placeholder="为空就是不修改">
+                            </div>
+                        </div> 
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">用户组</label>
+                            <div class="am-u-sm-10">
+                            	<select name="g_id" class="selector" required>
+                            		<?php foreach($group as $v):?>
+                            			<option value="<?php echo $v['gid'];?>"><?php echo $v['group_name'];?></option>
+                            		<?php endforeach;?>
+                            	</select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="status" class="am-u-sm-2 am-form-label">状态</label>
+                            <div class="am-u-sm-10">
+								<select name="status" required>
+                            		<option value="1">正常</option>
+                            		<option value="0">拒绝登陆</option>
+                            	</select>                            
+                           	</div>
+                        </div>
+                    </div>
+                    <div class="am-modal-footer">
+                        <input type="hidden" name="id" value="" id="user_id">
+                        <span class="am-modal-btn" data-am-modal-cancel>取消</span> 
+                        <button type="submit" style="padding:0;border:none;background:none;width: 100%;height: 100%;outline: none;">提交</button>
+                        
+                    </div> 
+                </form>    
+            </div>
+        </div>
+ 		<div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+          <div class="am-modal-dialog">
+            <div class="am-modal-hd">删除提示</div>
+            <div class="am-modal-bd">
+              你，确定要删除这条记录吗？
+            </div>
+            <div class="am-modal-footer">
+              <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+              <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+            </div>
+          </div>
+        </div>
+    <script>
+
+        $(function () {
+           
+
+             // 编辑模态框操作 
+            $('#doc-modal-list').find('.update').add('#doc-confirm-toggle').
+                on('click', function () {
+                    $('#userName').val($(this).parentsUntil('tbody').find('.username').html());
+                  
+                    $('#user_id').val($(this).parentsUntil('tbody').find('.userid').html());
+                    var gid = $(this).parentsUntil('tbody').find('#g_id').val();
+                    $(".selector").find("option[value='"+gid+"']").attr("selected",true);
+                    // $('#integral').val($(this).parentsUntil('tbody').find('.integral').html())
+                    $('#my-update-confirm').modal({
+                        relatedTarget: this,
+                  
+                    });
+                }); 
+        });
+         $(function() {
+          $('#doc-modal-list').find('.tpl-table-black-operation-del').add('#doc-confirm-toggle').
+            on('click', function() {
+              $('#my-confirm').modal({
+                relatedTarget: this,
+                onConfirm: function(options) {
+                  var $link = $(this.relatedTarget).prev('a');
+                  var uid = $(this.relatedTarget).attr('data-id');
+                  var data = { id: uid}
+                  console.log(data)
+                    $.post("<?php echo site_url('/Member/delUser');?>", data, function (result) {
+                       if(result == 1){
+                            alert('操作成功！');
+                            window.location.reload();
+
+                       }else if(result == '3'){
+                            alert('超级管理员不能删除！');
+                            window.location.reload();
+                       }else{
+                            alert('操作失败！');
+                            window.location.reload();
+                       }
+                    });
+                },
+                // closeOnConfirm: false,
+                onCancel: function() {
+                  
+                }
+              });
+            });
+        });
+
+
+       
+
+    </script>
+
+    <script src="<?php echo base_url('/style/root');?>/js/amazeui.min.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/amazeui.datatables.min.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/app.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/area.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/select.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/select1.js"></script>
+
+
+</body>
+
+</html>

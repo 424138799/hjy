@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>采薇网 - 用户管理 </title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="<?php echo base_url('/style/root');?>/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('/style/root');?>/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="" /> 
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/amazeui.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/app.css">
+    <!-- <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/admin.css"> -->
+    <script src="<?php echo base_url('/style/root');?>/js/jquery.min.js"></script>
+</head>
+
+<body style="background: white;">
+    <script src="<?php echo base_url('/style/root');?>/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <?php $this->load->view('header.html');?>
+        <!-- 内容区域 -->
+    <div class="tpl-content-wrapper">
+            <div class="row-content am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title  am-cf">用户管理列表</div>
+                            </div>
+                            <div class="widget-body  am-fr">
+                                <form action="<?php echo site_url('/Member/searchIntegral');?>" method="get"> 
+                                    <div style="margin-bottom:20px;" class="am-g am-padding-left">
+                                        <div class="am-u-sm-12 am-u-md-3 am-u-lg-3">
+                                            <span>状态:</span>
+                                            <select id="doc-select-1" name="type">
+                                                <option value="5">全部</option>
+
+                                                <option value="1">积分充值</option>
+                                                <option value="2">推广支出</option>
+                                                <option value="3">活动支出</option>
+                                                <option value="4">平台赠送</option>
+                                                <option value="6">管理员扣除</option>
+                                              </select>
+                                        </div>
+                                        
+                                        <div class="am-u-sm-12 am-u-md-2 am-u-lg-2">
+                                            <input type="hidden" name="user_id" value="<?php echo $userid?>">
+                                            <button type="submit" class="am-btn am-btn-primary am-radius">搜索</button>
+                                        </div>
+                                        <div class="am-u-sm-12 am-u-md-3 am-u-lg-3"></div>
+                                    </div>
+                                </form> 
+                                <div style="margin-bottom: 20px">
+                                    <button type="button" data-am-modal="{target: '#my-prompt'}" class="am-btn am-btn-default am-btn-success"><span class="am-icon-plus"></span> 积分操作</button>
+                                </div>
+                                <div class="am-u-sm-12">
+                                     <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">                    
+                                        <thead style="position: -webkit-sticky; position:sticky; top: 70px;">
+                                            <tr>
+                                                <th>类型
+                                               
+                                                </th>
+                                                <th>积分变化
+                                               
+                                                </th>
+                                                <th>消费时间</th>
+                                                <th>余额</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php if(!empty($lists)):?>
+                                            <?php foreach($lists as $v):?>
+                                                <tr class="gradeX">
+                                                    <?php if($v['type'] == '1'):?>
+                                                        <td>积分充值</td>
+                                                    <?php elseif($v['type'] == '2'):?>
+                                                        <td>推广支出</td>
+                                                    <?php elseif($v['type'] == '3'):?>
+                                                        <td>活动支出</td>
+                                                    <?php elseif($v['type'] == '4'):?>
+                                                        <td>平台赠送</td>
+                                                    <?php elseif($v['type'] == '6'):?>
+                                                        <td>管理员扣除</td>
+                                                    <?php endif;?>
+                                                    <td><?php if($v['type'] == '1'  || $v['type'] == '4'){echo "+";}else{echo "-";}?><?php echo $v['integral'];?></td>
+                                                    <td><?php echo $v['createTime'];?></td>
+                                                    <td><?php echo $v['balance'];?></td>
+                                                </tr>
+                                            <?php endforeach;?>
+                                        <?php else:?>
+                                             <tr class="gradeX">
+                                              <td colspan="4">暂无内容！</td>
+                                            </tr>
+                                        <?php endif;?>
+                                          
+                                            <!-- more data -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+            <div class="am-u-lg-12 am-cf">
+
+                <div class="am-fr">
+                    <?php echo $pages;?>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+</div>
+
+        <!-- 新增弹框 -->
+        <div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+            <div class="am-modal-dialog">
+                <div class="am-modal-hd">积分操作</div>
+                <form class="am-form am-form-horizontal" action="<?php echo site_url('/Member/integralRe');?>" method="post">
+                   
+                    <div class="am-modal-bd">
+                        <div class="am-form-group">
+                            <label for="accountName" class="am-u-sm-3 am-form-label">类型</label>
+                            <div class="am-u-sm-9">
+                                <select name="type" >
+                                    <option value='4'>赠送</option>
+                                    <option value="6">扣除</option>
+                                </select>
+                                <!-- <input type="text" id="accountName" value="" placeholder="输入公众号名称"> -->
+                            </div>
+                        </div>
+
+                        
+                        <div class="am-form-group">
+                            <label for="prompt" class="am-u-sm-3 am-form-label">积分量：</label>
+                            <div class="am-u-sm-9" style="text-align: left;">
+                               <input type="number" name="number" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-modal-footer">
+                        <input type="hidden" name="user_id" value="<?php echo $userid;?>">
+                        <span class="am-modal-btn" data-am-modal-cancel>取消</span> 
+                        <button type="submit" style="padding:0;border:none;background:none;width: 100%;height: 100%;outline: none;">提交</button>
+                        
+                    </div> 
+                </form>
+             
+            </div>
+        </div>
+
+
+    <script src="<?php echo base_url('/style/root');?>/js/amazeui.min.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/amazeui.datatables.min.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo base_url('/style/root');?>/js/app.js"></script>
+
+</body>
+
+</html>
