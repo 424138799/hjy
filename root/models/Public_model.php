@@ -48,7 +48,7 @@ class public_model extends CI_Model
     }
     //查询用户信息
     function select_admin_user($where){
-        $this->db->select('a.loginNum,a.userName,a.password,a.userId,a.status,a.g_id,b.status as state');
+        $this->db->select('a.loginNum,a.userName,a.password,a.userId,a.status,a.gId,b.status as state');
         $this->db->from('hj_admin_user as a','left');
         $this->db->from('hj_admin_user_group as b','inntr');
         $query = $this->db->where('a.loginNum',$where)->get();

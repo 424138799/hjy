@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-04-18 17:19:31
+Date: 2018-04-18 19:47:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -190,12 +190,16 @@ CREATE TABLE `hj_developers` (
   `sort` int(5) DEFAULT '200' COMMENT '排序 默认从低到高',
   `remarks` varchar(500) DEFAULT NULL COMMENT '备注',
   `isDel` int(2) DEFAULT '0' COMMENT '是否删除 1是 0没有',
+  `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_developers
 -- ----------------------------
+INSERT INTO `hj_developers` VALUES ('1', '包里', '34', '3434534353423', 'upload/developers/18-04-18_193459.png', '1', '3424', '344', '34', '24575545454', '0', '2018-04-18 19:34:59', null);
+INSERT INTO `hj_developers` VALUES ('2', '测试', '2323123', '232123123123', 'upload/developers/18-04-18_194403.png', '1', '256565', '4543434', '0', '6466435523544', '0', '2018-04-18 19:44:03', '435464');
 
 -- ----------------------------
 -- Table structure for hj_sales_company
@@ -258,7 +262,7 @@ CREATE TABLE `hj_system_log` (
   `log_message` text,
   `log_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_system_log
@@ -294,3 +298,5 @@ INSERT INTO `hj_system_log` VALUES ('28', 'Member/AddUser', '1', '系统创建�
 INSERT INTO `hj_system_log` VALUES ('29', 'Member/EditUser', '1', '系统创建者', '::1', '1', '编辑用户成功,用户id是:2', '2018-04-18 17:10:48');
 INSERT INTO `hj_system_log` VALUES ('30', 'Member/EditUser', '1', '系统创建者', '::1', '1', '编辑用户成功,用户id是:2', '2018-04-18 17:11:04');
 INSERT INTO `hj_system_log` VALUES ('31', 'Member/delUser', '1', '系统创建者', '::1', '1', '删除用户成功,用户id是:2,用户名称是王姐', '2018-04-18 17:17:14');
+INSERT INTO `hj_system_log` VALUES ('32', 'Post/addDevel', '1', '系统创建者', '::1', '1', '新增开发商成功,开发商名称是：包里', '2018-04-18 19:34:59');
+INSERT INTO `hj_system_log` VALUES ('33', 'Post/addDevel', '1', '系统创建者', '::1', '1', '新增开发商成功,开发商名称是：测试', '2018-04-18 19:44:03');

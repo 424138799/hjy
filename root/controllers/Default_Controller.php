@@ -14,7 +14,7 @@ class Default_Controller extends CI_Controller
 		$this->load->helper('public_helper');
 		define('ROOTCSS', base_url('/assets'));
 		define('name','噢唛嘎车位管理系统');
-	
+		$this->load->model('public_model');
 		// $a = '345';
 		//判断是否
 		if(!isset($this->session->users)){
