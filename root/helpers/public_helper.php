@@ -114,10 +114,19 @@ function getBankName($id){
 //返回用户信息
 function retUsername($id){
     $CI = &get_instance();
-    $query = $CI->db->where('user_id',$id)->get('wxCatchv1_member_user');
+    $query = $CI->db->where('userId',$id)->get('admin_user');
     $res = $query->row_array();
     return $res;
 }
+//返回公司名称
+function retCompanyName($id)
+{
+    $CI = &get_instance();
+    $query = $CI->db->where('id', $id)->get('admin_company');
+    $res = $query->row_array();
+    return $res;
+}
+
 
 //获取配置
 function get_option($name = '') {
@@ -157,82 +166,6 @@ function object_to_array($obj)
      return $obj;
 }
 
-// // 导出文章链接
-// function dow_contLink($id){
-//     $CI = &get_instance();
-//     //微信
-//     $sql1 = "select * from wxCatchv1_biz where id='$id'";
-//     $query1 = $CI->db->query($sql1);
-//     $wechat = $query1->row_array();
-
-//     //文章
-//     $sql = "select * from wxCatchv1_biz_news where _biz = '".$wechat['_biz']."'";
-//     $query = $CI->db->query($sql);
-//     $res = $query->result_array();  
-
-//     if(!empty($res)){
-//             $CI->load->library('excel');
-
-//             $CI->excel->setActiveSheetIndex(0);
-
-//             $CI->excel->getActiveSheet()->setTitle('ImportOrder');
-
-//             $arr_title = array(
-//                 'A' => '自定义编号',
-//                 'B' => '微信名称',
-//                 'C' => '微信号',
-//                 'D' => '文章标题',
-//                 'E' => '站内链接',
-//             );
-//             //设置excel 表头
-//             foreach ($arr_title as $key => $value) {
-
-//                 $CI->excel->getActiveSheet()->setCellValue($key . '1', $value);
-
-//                 $CI->excel->getActiveSheet()->getStyle($key . '1')->getFont()->setSize(13);
-
-//                 $CI->excel->getActiveSheet()->getStyle($key . '1')->getFont()->setBold(true);
-
-//                $CI->excel->getActiveSheet()->getDefaultColumnDimension('A')->setWidth(20);
-
-//                 $CI->excel->getActiveSheet()->getStyle($key . '1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-
-//             }
-
-//             $i = 2;
-
-
-
-//             foreach ($res as $booking) {
-//                     $CI->excel->getActiveSheet()->setCellValue('A' . $i,$i-1);  
-//                     $CI->excel->getActiveSheet()->setCellValue('B' . $i, $wechat['bizName']);  
-//                     $CI->excel->getActiveSheet()->setCellValue('C' . $i, $wechat['wxNumber']);  
-//                     $CI->excel->getActiveSheet()->setCellValue('D' . $i, $booking['title']);  
-//                     $CI->excel->getActiveSheet()->setCellValue('E' . $i, 'http://47.93.233.220:6789/index.php/content-'.$booking['id']);  
-
-//                     $i++;
-//             }
-//             $filename = 'ImportOrder.xls'; //save our workbook as CI file name
-
-//            /// var_dump($filename);
-
-//             header('Content-Type: application/vnd.ms-excel'); //mime type
-
-//             header('Content-Disposition: attachment;filename="' . $filename . '"'); //tell browser what's the file name
-
-//             header('Cache-Control: max-age=0'); //no cache
-
-
-
-//              $objWriter = PHPExcel_IOFactory::createWriter($CI->excel, 'Excel5');
-
-//              $objWriter->save('php://output');
-
-//              // return "1";
-//     }else{
-//         return "3";
-//     }
-// }
 
 
 

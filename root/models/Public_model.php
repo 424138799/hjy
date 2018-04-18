@@ -89,9 +89,11 @@ class public_model extends CI_Model
 
     //返回数据到用户
     function ret_userInfo($table,$where,$id,$id2){
-    	$query = $this->db->where($where,$id)->where('user_id !=',$id2)->get($table);
+    	$query = $this->db->where($where,$id)->where('userId !=',$id2)->get($table);
         return $query->row_array();
     }
+
+
 
     //返回文章数据
     function retArticeleList_page($size,$page){

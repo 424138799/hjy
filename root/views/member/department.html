@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+    <?php echo name;?> - 部门管理 </title>
+    <meta name="description" content="<?php echo name;?>">
+    <meta name="keywords" content="<?php echo name;?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="<?php echo ROOTCSS;?>/img/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo ROOTCSS;?>/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/app.css">
+    <!-- <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/admin.css"> -->
+    <script src="<?php echo ROOTCSS;?>/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="index">
+    <script src="<?php echo ROOTCSS;?>/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <?php $this->load->view('header.html');?>
+        <!-- 内容区域 -->
+        <div class="tpl-content-wrapper">
+            <div class="row-content am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title  am-cf">部门管理</div>
+                            </div>
+                            <div class="widget-body  am-fr">
+                                <div style="margin-bottom: 20px">
+                                    <button type="button" data-am-modal="{target: '#my-prompt'}" class="am-btn am-btn-default am-btn-success">
+                                        <span class="am-icon-plus"></span> 添加部门</button>
+                                </div>
+
+                                <div class="am-u-sm-12">
+                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>编码</th>
+                                                <th>部门名称</th>
+                                                <th>简称</th>
+                                                <th>性质</th>
+                                                <th>负责人</th>
+                                                <th>电话</th>
+                                                <th>传真</th>
+                                                <th>所属公司</th>
+                                                <th>说明</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="doc-modal-list">
+                                            <?php if(!empty($lists)):?>
+                                            <?php foreach($lists as $v):?>
+                                            <tr class="gradeX">
+                                                <td class="deparId"><?php echo $v['id'];?></td>
+                                                <td class="depcode"><?php echo $v['code'];?></td>
+                                                <td class="department"><?php echo $v['department'];?></td>
+                                                <td class="info"><?php echo $v['info'];?></td>
+                                                <td class="nature"><?php echo $v['nature'];?></td>
+                                                <td>
+                                                    <input type="hidden" value="<?php echo $v['userId'];?>" id="userId">
+                                                    <?php $user = retUsername($v['userId']); echo $user['userName'];?>
+                                                </td>
+                                                <td class="phone"><?php echo $v['phone'];?></td>
+                                                <td class="fax"><?php echo $v['fax'];?></td>
+                                                <td>
+                                                    <input type="hidden" value="<?php echo $v['cId'];?>" id="cId">
+                                                    <?php $com = retCompanyName($v['cId']); echo $com['companyTitle'];?>
+                                                </td>
+                                                <td class="remarks"><?php echo $v['remarks'];?></td>
+                                                <!-- <td><?php echo $v['createTime'];?></td> -->
+
+                                                <!-- <?php if($v['status'] == '1'):?>
+                                                <td>正常</td>
+                                                <?php else:?>
+                                                <td>禁止登陆</td>
+                                                <?php endif;?> -->
+                                                <td>
+                                                    <div class="am-btn-toolbar">
+                                                        <div class="am-btn-group am-btn-group-xs">
+
+                                                            <a data-id="<?php echo $v['id']?>" href="#" class="update  am-btn am-btn-warning">
+                                                                <span class="am-icon-edit"></span> 修改</a>
+                                                            <a data-id="<?php echo $v['id']?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                                <span class="am-icon-trash"></span> 删除</a>
+
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <?php endforeach;?>
+                                            <?php else:?>
+                                            <tr>
+                                                <td colspan="8">暂无内容！</td>
+                                            </tr>
+                                            <?php endif;?>
+
+                                            <!-- more data -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- 新增 -->
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="my-prompt">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">新增公司</div>
+            <form class="am-form am-form-horizontal" action="<?php echo site_url('/Member/addDepartment');?>" method="post">
+                <div class="am-modal-bd">
+                    <div class="am-form-group">
+                        <label for="username" class="am-u-sm-2 am-form-label">所属公司</label>
+                        <div class="am-u-sm-10">
+                            <select name="cId" required>
+                                <option value="0">请选择一项</option>
+                                <?php foreach($company as $v):?>
+                                <option value="<?php echo $v['id']?>"><?php echo $v['companyTitle'];?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="username" class="am-u-sm-2 am-form-label">部门编码</label>
+                        <div class="am-u-sm-10">
+                            <input type="text" name="code" value="" placeholder="输入公司名称">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="username" class="am-u-sm-2 am-form-label">部门名称</label>
+                        <div class="am-u-sm-10">
+                            <input type="text" name="department" value="" placeholder="输入公司编码">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="gid" class="am-u-sm-2 am-form-label">部门简称</label>
+                        <div class="am-u-sm-10">
+                            <input type="text" name="info" value="" placeholder="输入简称">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="gid" class="am-u-sm-2 am-form-label">公司性质</label>
+                        <div class="am-u-sm-10">
+                            <select name="nature" required>
+                                <option value="综合性">综合性</option>
+                                <option value="协调性">协调性</option>
+                                <option value="咨询性">咨询性</option>
+                                <option value="生产">生产</option>
+                                <option value="IT">IT</option>
+                                <option value="维修">维修</option>
+                                <option value="点检">点检</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="gid" class="am-u-sm-2 am-form-label">负责人</label>
+                        <div class="am-u-sm-10">
+                            <select name="userId" required>
+                                <option value="0">请选择</option>
+                                <?php foreach($users as $v):?>
+                                <option value="<?php echo $v['userId']?>"><?php echo $v['userName'];?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="gid" class="am-u-sm-2 am-form-label">联系电话</label>
+                        <div class="am-u-sm-10">
+                            <input type="text" name="phone" value="" placeholder="输入公司联系电话">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="gid" class="am-u-sm-2 am-form-label">传真</label>
+                        <div class="am-u-sm-10">
+                            <input type="text" name="fax" value="" placeholder="输入公司传真">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="gid" class="am-u-sm-2 am-form-label">说明</label>
+                        <div class="am-u-sm-10">
+                            <input type="text" name="remarks" value="" placeholder="输入公司描述">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="am-modal-footer">
+                    <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                    <button type="submit" style="padding:0;border:none;background:none;width: 100%;height: 100%;outline: none;">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 编辑弹框 -->
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="my-update-confirm">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">编辑部门信息</div>
+            <form class="am-form am-form-horizontal" action="<?php echo site_url('/Member/editDepartment');?>" method="post">
+                <div class="am-modal-bd">
+                        <div class="am-form-group">
+                            <label for="username" class="am-u-sm-2 am-form-label">所属公司</label>
+                            <div class="am-u-sm-10">
+                                <select name="cId" class="cId" required>
+                                    <option value="0">请选择一项</option>
+                                    <?php foreach($company as $v):?>
+                                    <option value="<?php echo $v['id']?>">
+                                        <?php echo $v['companyTitle'];?>
+                                    </option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="username" class="am-u-sm-2 am-form-label">部门编码</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="code" name="code" value="" placeholder="输入公司名称">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="username" class="am-u-sm-2 am-form-label">部门名称</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="department" name="department" value="" placeholder="输入公司编码">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">部门简称</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="info" name="info" value="" placeholder="输入简称">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">公司性质</label>
+                            <div class="am-u-sm-10">
+                                <select name="nature" class="nature" required>
+                                    <option value="综合性">综合性</option>
+                                    <option value="协调性">协调性</option>
+                                    <option value="咨询性">咨询性</option>
+                                    <option value="生产">生产</option>
+                                    <option value="IT">IT</option>
+                                    <option value="维修">维修</option>
+                                    <option value="点检">点检</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">负责人</label>
+                            <div class="am-u-sm-10">
+                                <select name="userId" class="userId" required>
+                                    <option value="0">请选择</option>
+                                    <?php foreach($users as $v):?>
+                                    <option value="<?php echo $v['userId']?>">
+                                        <?php echo $v['userName'];?>
+                                    </option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">联系电话</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="phone" name="phone" value="" placeholder="输入公司联系电话">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">传真</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="fax" name="fax" value="" placeholder="输入公司传真">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="gid" class="am-u-sm-2 am-form-label">说明</label>
+                            <div class="am-u-sm-10">
+                                <input type="text" id="remarks" name="remarks" value="" placeholder="输入公司描述">
+                            </div>
+                        </div>
+                </div>
+                <div class="am-modal-footer">
+                    <input type="hidden" name="id" value="" id="deparId">
+                    <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                    <button type="submit" style="padding:0;border:none;background:none;width: 100%;height: 100%;outline: none;">提交</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">删除提示</div>
+            <div class="am-modal-bd">
+                你，确定要删除这条记录吗？
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $(function () {
+
+
+            // 编辑模态框操作 
+            $('#doc-modal-list').find('.update').add('#doc-confirm-toggle').
+                on('click', function () {
+                    $('#code').val($(this).parentsUntil('tbody').find('.depcode').html());
+                    $('#deparId').val($(this).parentsUntil('tbody').find('.deparId').html());
+                    $('#department').val($(this).parentsUntil('tbody').find('.department').html());
+                    $('#info').val($(this).parentsUntil('tbody').find('.info').html());
+                    $('#fax').val($(this).parentsUntil('tbody').find('.fax').html());
+                    $('#phone').val($(this).parentsUntil('tbody').find('.phone').html());
+                    $('#remarks').val($(this).parentsUntil('tbody').find('.remarks').html());
+
+                    $('#companyId').val($(this).parentsUntil('tbody').find('.deparId').html());
+
+                    var userId = $(this).parentsUntil('tbody').find('#userId').val();
+                    var cid = $(this).parentsUntil('tbody').find('#cId').val();
+                    var nature = $(this).parentsUntil('tbody').find('.nature').html();
+                   
+                    $(".cId").find("option[value='" + cid + "']").attr("selected", true);
+                    $(".nature").find("option[value='" + nature + "']").attr("selected", true);
+                    $(".userId").find("option[value='" + userId + "']").attr("selected", true);
+                    // $('#integral').val($(this).parentsUntil('tbody').find('.integral').html())
+                    $('#my-update-confirm').modal({
+                        relatedTarget: this,
+
+                    });
+                });
+        });
+        $(function () {
+            $('#doc-modal-list').find('.tpl-table-black-operation-del').add('#doc-confirm-toggle').
+                on('click', function () {
+                    $('#my-confirm').modal({
+                        relatedTarget: this,
+                        onConfirm: function (options) {
+                            var $link = $(this.relatedTarget).prev('a');
+                            var uid = $(this.relatedTarget).attr('data-id');
+                            var data = { id: uid }
+                            // console.log(data)
+                            $.post("<?php echo site_url('/Member/delDepartment');?>", data, function (result) {
+                                if (result == 1) {
+                                    alert('操作成功！');
+                                    window.location.reload();
+
+                                } else if (result == '3') {
+                                    alert('超级管理员不能删除！');
+                                    window.location.reload();
+                                } else {
+                                    alert('操作失败！');
+                                    window.location.reload();
+                                }
+                            });
+                        },
+                        // closeOnConfirm: false,
+                        onCancel: function () {
+
+                        }
+                    });
+                });
+        });
+
+
+
+
+    </script>
+
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.datatables.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/app.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/area.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/select.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/select1.js"></script>
+
+
+</body>
+
+</html>

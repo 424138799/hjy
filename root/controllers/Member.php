@@ -73,14 +73,267 @@ class Member extends Default_Controller
         $this->pagination->initialize($config);
 
         $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
-		//获取我的公众号
-  //       echo "<pre>";
-  //       var_dump($data);
-		// exit;
-        // $data['menu'] = 'memberList';
+	
         $this->load->view('member/companyList.html', $data);
     }
 
+    //新增公司
+    function AddCompany(){
+        if($_POST){
+            $data = $this->input->post();
+            if ($this->public_model->insert($this->company, $data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "新增公司信息成功,公司名称是" . $data['companyTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Member/company') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => 'o',
+                    'log_message' => "新增公司信息失败,公司名称是" . $data['companyTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Member/company') . "'</script>";
+                exit;
+
+            }
+        }
+    }
+
+    //修改公司
+    function editCompany(){
+        if ($_POST) {
+            $data = $this->input->post();
+            if ($this->public_model->updata($this->company,'id',$data['id'] ,$data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "修改公司信息成功,公司名称是" . $data['companyTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Member/company') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => 'o',
+                    'log_message' => "修改公司信息失败,公司名称是" . $data['companyTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Member/company') . "'</script>";
+                exit;
+
+            }
+        }
+    }
+
+    //删除
+    function delCompany(){
+        if ($_POST) {
+            $id = $this->input->post('id');
+            if ($this->public_model->delete($this->company, 'id', $id)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "修改公司信息成功,公司id是" . $id,
+                );
+                add_system_log($arr);
+                echo "1";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "修改公司信息失败,公司id是" . $id,
+                );
+                add_system_log($arr);
+                echo "2";
+                exit;
+            }
+        }
+    }
+
+    //部门信息
+    function department(){
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->uri->segment(3));//index.php 后数第4个/
+        //配置
+        $config['base_url'] = site_url('/Member/department');
+        //分页配置
+
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '»';
+
+        $config['prev_link'] = '«';
+
+        $config['last_link'] = '末页';
+        $config['num_links'] = 4;
+
+        $total = count($this->public_model->select($this->department, 'createTime'));
+        $config['total_rows'] = $total;
+
+        $this->load->library('pagination');//加载ci pagination类
+        $listpage = $this->public_model->select_page($this->department, 'createTime', $current_page, $config['per_page']);
+        $this->pagination->initialize($config);
+        //获取公司
+        $company = $this->public_model->select($this->company, 'createTime');
+        //获取用户
+        $user = $this->public_model->select($this->member, 'createTime');
+
+
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'company'=>$company,'users'=>$user);
+
+        $this->load->view('member/department.html', $data);
+    }
+
+    //新增部门信息
+    function addDepartment(){
+        if ($_POST) {
+            $data = $this->input->post();
+            if ($this->public_model->insert($this->department, $data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "新增部门信息成功,部门名称是" . $data['department'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Member/department') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "新增部门信息失败,部门名称是" . $data['department'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Member/department') . "'</script>";
+                exit;
+            }
+        }
+    }
+
+
+    //修改部门信息
+    function editDepartment(){
+        if ($_POST) {
+            $data = $this->input->post();
+            if ($this->public_model->updata($this->department,'id',$data['id'], $data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "新增部门信息成功,部门名称是" . $data['department'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Member/department') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "新增部门信息失败,部门名称是" . $data['department'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Member/department') . "'</script>";
+                exit;
+            }
+        }
+    }
+
+    //删除部门信息
+    function delDepartment(){
+        $id = $this->input->post('id');
+        if ($this->public_model->delete($this->department, 'id', $id)) {
+            $arr = array(
+                'log_url' => $this->uri->uri_string(),
+                'user_id' => $this->session->users['userId'],
+                'username' => $this->session->users['userName'],
+                'log_ip' => get_client_ip(),
+                'log_status' => '1',
+                'log_message' => "删除部门信息成功,部门id是" . $id,
+            );
+            add_system_log($arr);
+            echo "1";
+            exit;
+        } else {
+            $arr = array(
+                'log_url' => $this->uri->uri_string(),
+                'user_id' => $this->session->users['userId'],
+                'username' => $this->session->users['userName'],
+                'log_ip' => get_client_ip(),
+                'log_status' => '0',
+                'log_message' => "删除部门信息成功,部门id是：" . $id,
+            );
+            add_system_log($arr);
+            echo "2";
+            exit;
+        }
+    
+    }
 
 
 	//用户列表
@@ -243,206 +496,6 @@ class Member extends Default_Controller
 			}
 		}
 	}
-
-	//积分查询
-	function integralList(){
-        $id = intval($this->uri->segment('3'));
-        if($id == '0'){
-            $this->load->view('404.html');
-        }else{
-            $config['per_page'] = 10;
-            //获取页码
-            $current_page=intval($this->uri->segment(4));//index.php 后数第4个/
-            //配置
-            $config['base_url'] = site_url('/Member/integralList/'.$id);
-            //分页配置
-
-            $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
-
-            $config['full_tag_close'] = '</ul>';
-
-            $config['first_tag_open'] = '<li>';
-
-            $config['first_tag_close'] = '</li>';
-
-            $config['prev_tag_open'] = '<li>';
-
-            $config['prev_tag_close'] = '</li>';
-
-            $config['next_tag_open'] = '<li>';
-
-            $config['next_tag_close'] = '</li>';
-
-            $config['cur_tag_open'] = '<li class="am-active"><a>';
-
-            $config['cur_tag_close'] = '</a></li>';
-
-            $config['last_tag_open'] = '<li>';
-
-            $config['last_tag_close'] = '</li>';
-
-            $config['num_tag_open'] = '<li>';
-
-            $config['num_tag_close'] = '</li>';
-
-            $config['first_link']= '首页';
-
-            $config['next_link']= '»';
-
-            $config['prev_link']= '«';
-
-            $config['last_link']= '末页';
-            $config['num_links'] = 4;
-            
-            $total = count($this->public_model->select_where($this->intreord,'user_id',$id,'createTime','desc'));
-            $config['total_rows'] = $total;
-        
-            $this->load->library('pagination');//加载ci pagination类
-            $listpage =  $this->public_model->select_where_page($this->intreord,'user_id',$id,'createTime','desc',$current_page,$config['per_page']);
-            $this->pagination->initialize($config);
-            $menu = 'memberList';
-
-            $data = array('lists'=>$listpage,'pages' => $this->pagination->create_links(),'menu'=>$menu,'userid'=>$id);
-            //获取我的公众号
-    		
-            
-    		$this->load->view('userAdmin/integral.html',$data);
-        }
-	}
-
-    //积分查询
-    function searchIntegral(){
-        $config['per_page'] = 10;
-        //获取页码
-        $current_page=intval($this->input->get("size"));//index.php 后数第4个/
-
-        $type = $this->input->get('type');
-        $userid = $this->input->get('user_id');
-        //分页配置
-        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
-
-        $config['full_tag_close'] = '</ul>';
-
-        $config['first_tag_open'] = '<li>';
-
-        $config['first_tag_close'] = '</li>';
-
-        $config['prev_tag_open'] = '<li>';
-
-        $config['prev_tag_close'] = '</li>';
-
-        $config['next_tag_open'] = '<li>';
-
-        $config['next_tag_close'] = '</li>';
-
-        $config['cur_tag_open'] = '<li class="am-active"><a>';
-
-        $config['cur_tag_close'] = '</a></li>';
-
-        $config['last_tag_open'] = '<li>';
-
-        $config['last_tag_close'] = '</li>';
-
-        $config['num_tag_open'] = '<li>';
-
-        $config['num_tag_close'] = '</li>';
-        $config['first_link']= '首页';
-
-        $config['next_link']= '下一页';
-
-        $config['prev_link']= '上一页';
-
-        $config['last_link']= '末页';
-
-        if($type =='5'){
-            $total = count($this->public_model->select_where($this->intreord,'user_id',$userid,'createTime','desc'));
-            $config['total_rows'] = $total;
-            $listpage =  $this->public_model->select_where_page($this->intreord,'user_id',$userid,'createTime','desc',$current_page,$config['per_page']);
-
-        }else{
-            $list = $this->public_model->select_where_many($this->intreord,'user_id',$userid,'type',$type,'createTime','desc');
-       
-
-            $config['total_rows'] = count($list);
-            $listpage = $this->public_model->select_where_many($this->intreord,'user_id',$userid,'type',$type,'createTime','desc',$config['per_page'],$current_page);
-        }
-
-
-
-        $config['page_query_string'] = TRUE;//关键配置
-        // $config['reuse_query_string'] = FALSE;
-        $config['query_string_segment'] = 'size';
-        $config['base_url'] = site_url('/Member/searchIntegral?').'type='.$type.'&user_id='.$userid;
-
-        // //分页数据\
-       
-        
-        $this->load->library('pagination');//加载ci pagination类
-
-        $this->pagination->initialize($config);
-
-        // var_dump($data);
-  
-        $menu = 'memberList';
-
-        $data = array('lists'=>$listpage,'pages' => $this->pagination->create_links(),'menu'=>$menu,'userid'=>$userid);
-            //获取我的公众号
-            
-            
-        $this->load->view('userAdmin/integral.html',$data);
-    }
-
-    //积分赠送
-    function integralRe(){
-        if($_POST){
-            $data = $this->input->post();
-            //获取用户信息
-            $user = $this->public_model->select_info($this->member,'user_id',$data['user_id']);
-
-            if($data['type'] == '6'){
-                $title = "扣除用户积分";
-                $data['integral'] = $data['number'];
-                $data['balance'] = $user['integral'] - $data['number'];
-            }else{
-                $title = "赠送用户积分";
-
-                $data['integral'] = $data['number'];
-                $data['balance'] = $user['integral'] + $data['number'];
-            }
-            unset($data['number']);
-
-            if($this->public_model->insert($this->intreord,$data)){
-                $a['integral'] = $data['balance'];
-                $this->public_model->updata($this->member,'user_id',$data['user_id'],$a);
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'1',
-                    'log_message'=>$title."成功,用户站内id是".$data['user_id'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功！');window.location.href='".site_url('/Member/integralList/'.$data['user_id'])."'</script>";exit;
-
-            }else{
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'o',
-                    'log_message'=>$title."失败,用户站内id是".$data['user_id'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败！');window.location.href='".site_url('/Member/integralList/'.$data['user_id'])."'</script>";exit;
-
-            }   
-        }else{
-            $this->load->view('404.html');
-        }
-    }
-
 
 	//搜索用户
 	function search_member(){
@@ -826,136 +879,64 @@ class Member extends Default_Controller
         }
     }
 
-    //系统微信公总号
-    function systemWechat(){
-        $listpage = $this->public_model->select('wxCatchv1_system','id','desc');
-
-
-        $data['lists'] = $listpage;
-        $data['menu'] = 'systemWechat';
-
-        $this->load->view('systemWechat.html',$data);
-    }
-
-    //新增微信号
-    function addWechat(){
-        if($_POST){
-            $data = $this->input->post();
-            if($this->public_model->insert('wxCatchv1_system',$data)){
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"新增系统微信号成功",
-                );
-                add_system_log($arr);
-                echo "<script>alert('新增成功');window.location.href='".site_url('/Member/systemWechat')."'</script>";
-
-            }else{
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"新增系统微信号失败",
-                );
-                add_system_log($arr);
-                echo "<script>alert('新增失败！');window.location.href='".site_url('/Member/systemWechat')."'</script>";
-
-            }
-        }else{
-             echo "<script>alert('请求失败！');window.location.href='".site_url('/Member/systemWechat')."'</script>";
-             exit;
-        }
-    }
-
-    function editWechat(){
-        if($_POST){
-            $data = $this->input->post();
-            if($this->public_model->updata('wxCatchv1_system','id',$data['id'],$data)){
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"编辑系统微信号成功",
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功');window.location.href='".site_url('/Member/systemWechat')."'</script>";
-
-            }else{
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"编辑系统微信号失败",
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败');window.location.href='".site_url('/Member/systemWechat')."'</script>";
-
-            }
-        }else{
-             echo "<script>alert('请求失败！');window.location.href='".site_url('/Member/systemWechat')."'</script>";
-             exit;
-        }
-    }
-
-    function delWechat(){
-        if($_POST){
-            $id = $this->input->post('id');
-            if($id == '1'){
-                echo "<script>alert('该公众号不可删除！');window.location.href='".site_url('/Member/systemWechat')."'</script>";
-                exit;
-            }
-            if($this->public_model->delete("wxCatchv1_system",'id',$id)){
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"删除系统微信号成功",
-                );
-                add_system_log($arr);
-                echo "1";
-
-            }else{
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"删除系统微信号失败",
-                );
-                add_system_log($arr);
-                echo "2";
-
-            }
-        }else{
-            echo "3";
-        }
-    }
-
     //后台用户管理
     function adminUser(){
 
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->uri->segment(3));//index.php 后数第4个/
+        //配置
+        $config['base_url'] = site_url('/Member/index');
+        //分页配置
 
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
 
-        $listpage = $this->public_model->select('wxCatchv1_system_user','id','desc');
-        $data['group'] = $this->public_model->select('wxCatchv1_system_group','gid','desc');
+        $config['full_tag_close'] = '</ul>';
 
+        $config['first_tag_open'] = '<li>';
 
-        $data['lists'] = $listpage;
-        $data['menu'] = array('Jurisdiction','adminUser');
+        $config['first_tag_close'] = '</li>';
 
-        $this->load->view('userAdmin/adminUser.html',$data);
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '»';
+
+        $config['prev_link'] = '«';
+
+        $config['last_link'] = '末页';
+        $config['num_links'] = 4;
+
+        $total = count($this->public_model->select($this->member, 'createTime'));
+        $config['total_rows'] = $total;
+
+        $this->load->library('pagination');//加载ci pagination类
+        $listpage = $this->public_model->select_page($this->member, 'createTime', $current_page, $config['per_page']);
+        $this->pagination->initialize($config);
+
+        $group = $this->public_model->select($this->group, 'gid', 'desc');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'group'=>$group);
+        $this->load->view('member/adminUser.html',$data);
     }
 
 
@@ -963,73 +944,112 @@ class Member extends Default_Controller
     function AddUser(){
         if($_POST){
             $data = $this->input->post();
-            $data['password'] = md5($this->input->post('password'));
+			//根据用户名获取用户
+            $user = $this->public_model->select_info($this->member, 'loginNum', $data['loginNum']);
+            if (!empty($user)) {
+                echo "<script>alert('用户登陆账户已注册！');window.location.href='" . site_url('/Member/adminUser') . "'</script>";
+                exit;
 
-            if($this->public_model->insert('wxCatchv1_system_user',$data)){
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'1',
-                    'log_message'=>"新增后台用户成功",
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功');window.location.href='".site_url('/Member/adminUser')."'</script>";
+            } else {
+                 $data['password'] = md5($data['password']);
+                if ($this->public_model->insert($this->member, $data)) {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '1',
+                        'log_message' => "新增用户信息成功,用户登陆账户是" . $data['loginNum'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作成功！');window.location.href='" . site_url('/Member/adminUser') . "'</script>";
+                    exit;
+                } else {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => 'o',
+                        'log_message' => "新增用户信息失败,用户登陆账户是" . $data['loginNum'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作失败！');window.location.href='" . site_url('/Member/adminUser') . "'</script>";
+                    exit;
 
-            }else{
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"新增后台用户失败",
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败');window.location.href='".site_url('/Member/adminUser')."'</script>";
-
+                }
             }
 
+        }else{
+            $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
+            $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+            $this->load->view('member/addUser.html', $data);
         }
     }
+    //根据公司返回职位
+    function retCompanyDear(){
+        if($_POST){
+            $id = $this->input->post('cId');
+            $lists = $this->public_model->select_where($this->department,'cId',$id,'id','desc');
+            if(!empty($lists)){
+                echo json_encode($lists);
+            }else{
+                echo "2";
+            }
+        }
+    }
+
+
     //修改
     function EditUser(){
         if($_POST){
             $data = $this->input->post();
-            $password = $this->input->post('password');
-            if(!empty($password)){
-                $data['password'] = md5($password);
+            $user = $this->public_model->ret_userInfo($this->member, 'loginNum', $data['loginNum'],$data['userId']);        
+            if(empty($user)){
+                if (!empty($password)) {
+                    $data['password'] = md5($password);
+                } else {
+                    unset($data['password']);
+                }
+                if ($this->public_model->updata($this->member, 'userId', $data['userId'], $data)) {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '1',
+                        'log_message' => "编辑用户成功,用户id是:".$data['userId'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作成功');window.location.href='" . site_url('/Member/adminUser') . "'</script>";
+                } else {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '0',
+                        'log_message' => "编辑用户失败,用户id是:" . $data['userId'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作失败');window.location.href='" . site_url('/Member/adminUser') . "'</script>";
+
+                }
             }else{
-                unset($data['password']);
+                echo "<script>alert('用户登陆账户已注册！');window.location.href='" . site_url('/Member/adminUser') . "'</script>";
+                exit;
             }
-
-            if($this->public_model->updata('wxCatchv1_system_user','id',$data['id'],$data)){
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'1',
-                    'log_message'=>"编辑后台用户成功",
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功');window.location.href='".site_url('/Member/adminUser')."'</script>";
-
+        }else{
+            $id = intval($this->uri->segment('3'));
+            if($id != '0'){
+                $data['users'] = $this->public_model->select_info($this->member,'userId',$id);
+                
+                $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
+                $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+                $this->load->view('member/editUser.html', $data);
             }else{
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"编辑后台用户失败",
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败');window.location.href='".site_url('/Member/adminUser')."'</script>";
-
+                $this->load->view('404.html');
             }
-
         }
     }
 
@@ -1037,18 +1057,19 @@ class Member extends Default_Controller
     function delUser(){
         if($_POST){
             $id = $this->input->post('id');
+            $name = $this->input->post('name');
             if($id == '1'){
                 echo "3";
                 exit;
             }
-            if($this->public_model->delete('wxCatchv1_system_user','id',$id)){
+            if($this->public_model->delete($this->member,'userId',$id)){
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                     'user_id'=> $this->session->users['userId'],
+                    'username'=>$this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'1',
-                    'log_message'=>"删除后台用户成功",
+                    'log_message'=>"删除用户成功,用户id是:".$id.',用户名称是'.$name,
                 );
                 add_system_log($arr);
                 echo "1";
@@ -1056,15 +1077,14 @@ class Member extends Default_Controller
             }else{
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                     'user_id'=> $this->session->users['userId'],
+                    'username'=>$this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'0',
-                    'log_message'=>"删除后台用户失败",
+                    'log_message' => "删除用户失败,用户id是:" . $id . ',用户名称是' . $name,
                 );
                 add_system_log($arr);
                 echo "2";
-
             }
 
         }
