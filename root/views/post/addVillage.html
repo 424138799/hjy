@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        <?php echo name;?> - 小区信息管理 </title>
+    <meta name="description" content="<?php echo name;?>">
+    <meta name="keywords" content="<?php echo name;?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="<?php echo ROOTCSS;?>/img/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo ROOTCSS;?>/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/app.css">
+    <!-- <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/admin.css"> -->
+    <script src="<?php echo ROOTCSS;?>/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="index">
+    <script src="<?php echo ROOTCSS;?>/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <?php $this->load->view('header.html');?>
+        <!-- 内容区域 -->
+        <div class="tpl-content-wrapper">
+            <div class="row-content am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title  am-cf">
+                                    <a href="<?php echo site_url('/Post/village');?>">小区管理</a> > 新增小区</div>
+                            </div>
+                            <div class="widget-body  am-fr">
+                                <form class="am-form" action="<?php echo site_url('/Post/addVillage');?>" method="post" enctype="multipart/form-data" data-am-validator>
+                                    <div class="widget am-cf">
+                                        <div class="widget-body  am-fr">
+                                            <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
+
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+
+                                                    <label for="villageTitle" class="am-u-sm-3 am-form-label">小区名称
+                                                        <span class="red">*</span>：</label>
+                                                    <div class="am-u-sm-8">
+
+                                                        <input type="text" minlength="2" placeholder="请输入2-100个字符" name="villageTitle" required onblur="validate(this,2,100,2)" />
+
+                                                    </div>
+                                                    <small class="am-u-sm-1 red redtips2" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+
+                                                    <small class="am-u-sm-1 green blacktips2" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+
+                                                </div>
+
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+
+                                                    <label for="address" class="am-u-sm-3 am-form-label">小区地址
+                                                        <span class="red">*</span>：</label>
+                                                    <div class="am-u-sm-8">
+                                                        <input type="text" minlength="2" placeholder="请输入2-200个字符" name="address" required onblur="validate(this,2,200,2)" />
+                                                    </div>
+                                                    <small class="am-u-sm-1 red redtips2" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+
+                                                    <small class="am-u-sm-1 green blacktips2" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+
+                                                </div>
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                
+                                                    <label for="bankId" class="am-u-sm-3 am-form-label">银行
+                                                        <span class="red">*</span>：</label>
+                                                        <div class="am-u-sm-8 am-u-end">
+                                                            <select name="bankId" required>
+                                                                <option value="">==请选择==</option>
+                                                                <?php foreach($bank as $v):?>
+                                                                <option value="<?php echo $v['id']?>"><?php echo $v['bankName'];?></option>
+                                                                <?php endforeach;?>
+                                                            </select>
+                                                        </div>
+                                                    <small class="am-u-sm-1 red redtips2" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips2" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                
+                                                    <label for="dId" class="am-u-sm-3 am-form-label">开发商
+                                                        <span class="red">*</span>：</label>
+                                                        <div class="am-u-sm-8 am-u-end">
+                                                            <select name="dId" required>
+                                                                <option value="">==请选择==</option>
+                                                                <?php foreach($devel as $v):?>
+                                                                <option value="<?php echo $v['id']?>">
+                                                                    <?php echo $v['title'];?>
+                                                                </option>
+                                                                <?php endforeach;?>
+                                                            </select>
+                                                        </div>
+                                                    <small class="am-u-sm-1 red redtips2" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips2" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                                <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                    <label for="respons" class="am-u-sm-3 am-form-label">负责人<span class="red">*</span>：</label>
+                                                    <div class="am-u-sm-8">
+                                                        <input type="text" minlength="2" placeholder="请输入2-15个字符" name="respons" required onblur="validate(this,2,15,2)" />
+
+                                                    </div>
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                                <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                    <label for="linkPhone" class="am-u-sm-3 am-form-label">联系电话<span class="red">*</span>：</label>
+                                                    <div class="am-u-sm-8">
+                                                        <input type="number" minlength="2" placeholder="请输入2-15个字符" name="linkPhone" required onblur="validate(this,2,15,2)" />
+                                                
+                                                    </div>
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                                
+                                               <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+
+                                                    <label for="" class="am-u-sm-3 am-form-label">小区logo ：
+                                                    </label>
+                                                    <div class="am-u-sm-8">
+                                                        <div class="am-form-group am-form-file">
+                                                            <button type="button" class="am-btn am-btn-danger am-btn-sm">
+                                                                <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
+                                                            <input id="doc-form-file" type="file" name="file" multiple>
+                                                        </div>
+                                                        <div id="file-list"></div>
+                                                        <script>
+                                                            $(function () {
+                                                                $('#doc-form-file').on('change', function () {
+                                                                    var fileNames = '';
+                                                                    $.each(this.files, function () {
+                                                                        fileNames += '<span class="am-badge">' + this.name + '</span> ';
+                                                                    });
+                                                                    $('#file-list').html(fileNames);
+                                                                });
+                                                            });
+                                                        </script>
+                                                    </div>
+
+
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
+
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+
+                                                    <label for="carNum" class="am-u-sm-3 am-form-label">车位数量 ：</label>
+
+                                                    <div class="am-u-sm-8">
+
+                                                        <input type="number" placeholder="" name="carNum" onblur="validate(this,2,20,7)" value="" />
+
+                                                    </div>
+
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+
+                                                </div>
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+
+                                                    <label for="soldNum" class="am-u-sm-3 am-form-label">已售数量 ：</label>
+
+                                                    <div class="am-u-sm-8">
+
+                                                        <input type="number" placeholder="" name="soldNum" onblur="validate(this,2,20,7)" value="" />
+
+                                                    </div>
+
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+
+                                                </div>
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                
+                                                    <label for="surplusNum" class="am-u-sm-3 am-form-label">剩余数量 ：</label>
+                                                
+                                                    <div class="am-u-sm-8">
+                                                
+                                                        <input type="number" placeholder="" name="surplusNum" onblur="validate(this,2,20,7)" value="" />
+                                                
+                                                    </div>
+                                                
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+
+                                                    <label for="carPrice" class="am-u-sm-3 am-form-label">车位均价 ：</label>
+
+                                                    <div class="am-u-sm-8">
+
+                                                        <input type="number" placeholder="" name="carPrice" onblur="validate(this,2,20,7)" value="" />
+
+                                                    </div>
+
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+
+                                                </div>
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                
+                                                    <label for="brokerage" class="am-u-sm-3 am-form-label">销售提成 ：</label>
+                                                
+                                                    <div class="am-u-sm-8">
+                                                
+                                                        <input type="number" placeholder="" name="brokerage" onblur="validate(this,2,20,7)" value="" />
+                                                
+                                                    </div>
+                                                
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                
+                                                    <label for="carWashNum" class="am-u-sm-3 am-form-label">洗车卷赠送数 ：</label>
+                                                
+                                                    <div class="am-u-sm-8">
+                                                
+                                                        <input type="number" placeholder="" name="carWashNum" onblur="validate(this,2,20,7)" value="" />
+                                                
+                                                    </div>
+                                                
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                                <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                    <label for="remarks" class="am-u-sm-3 am-form-label">备注</label>
+                                                    <div class="am-u-sm-8">
+                                                        <textarea class="am-form-field tpl-form-no-bg" rows="4" name="remarks"></textarea>
+                                                    </div>
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+                                            </div>
+                                            <div class="am-form-group">
+                                                <label for="user-name" class="am-u-sm-1 am-form-label">简介详情</label>
+                                                <div class="am-u-sm-10">
+                                                    <div class="editor" id="editor">
+                                                    </div>
+                                                    <textarea id='content' name="content" style="width:100%; height:200px;display: none;"> </textarea>
+                                                </div>
+                                            </div>
+                                            
+
+                                        </div>
+                                        <div class="am-form-group am-text-center">
+                                            <button class="am-btn am-btn-default" id="cancle" type="reset">取消</button>
+                                            <button class="am-btn am-btn-secondary" id="submit" type="submit">添加</button>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.datatables.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/app.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/wangEditor.min.js"></script>
+
+
+</body>
+<script>
+
+    //表单验证函数
+
+    function validate(obj, minlen, maxlen, i) {
+
+        var content = obj.value;
+
+        if (content.length < minlen || content.length > maxlen) {
+
+            $('.blacktips' + i).css('display', 'none');
+
+            $('.redtips' + i).css('display', 'inline-block');
+
+        } else {
+
+            $('.redtips' + i).css('display', 'none');
+
+            $('.blacktips' + i).css('display', 'inline-block');
+
+        }
+
+    }
+
+
+    $('#cancle').click(function () {
+
+        history.go(-1);
+
+    });
+
+
+    //创建查看编辑器
+    var E = window.wangEditor;
+    //  var editors =document.getElementsByClassName('editor');
+
+    var editor = new E('#editor')
+    var $content = $('#content')
+    editor.customConfig.onchange = function (html) {
+        // 监控变化，同步更新到 textarea
+        $content.val(html)
+    }
+    //设置图片大小
+    editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+    // 下面两个配置，使用其中一个即可显示“上传图片”的tab。但是两者不要同时使用！！！
+    // editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
+    editor.customConfig.uploadImgServer = '<?php echo site_url("/Post/uploadImg");?>'  // 上传图片到服务器
+    editor.customConfig.uploadFileName = 'img'
+
+    editor.create()
+    $content.val(editor.txt.html())
+</script>
+
+</html>

@@ -34,10 +34,10 @@
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
                                 <div class="widget-title  am-cf">
-                                    <a href="<?php echo site_url('/Post/business');?>">商家管理</a> > 新增商家</div>
+                                    <a href="<?php echo site_url('/Post/business');?>">商家管理</a> > 编辑商家</div>
                             </div>
                             <div class="widget-body  am-fr">
-                                <form class="am-form" action="<?php echo site_url('/Post/addHusiness');?>" method="post" enctype="multipart/form-data" data-am-validator>
+                                <form class="am-form" action="<?php echo site_url('/Post/editHusiness');?>" method="post" enctype="multipart/form-data" data-am-validator>
                                     <div class="widget am-cf">
                                         <div class="widget-body  am-fr">
                                             <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
@@ -48,7 +48,7 @@
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="text" minlength="2" placeholder="请输入2-100个字符" name="title" required onblur="validate(this,2,100,2)" />
+                                                        <input type="text" minlength="2" placeholder="请输入2-100个字符" name="title" value="<?php echo $buesion['title'];?>" required onblur="validate(this,2,100,2)" />
 
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips2" style="display: none;">
@@ -67,7 +67,7 @@
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="text" minlength="2" placeholder="请输入2-15个字符" name="address" required onblur="validate(this,2,15,2)" />
+                                                        <input type="text" minlength="2" placeholder="请输入2-15个字符" name="address" value="<?php echo $buesion['address'];?>" required onblur="validate(this,2,15,2)" />
 
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips2" style="display: none;">
@@ -81,19 +81,19 @@
                                                 </div>
                                                 <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
                                                     <label for="en_name" class="am-u-sm-3 am-form-label">简介</label>
-                                                        <div class="am-u-sm-8">
-                                                            <textarea class="am-form-field tpl-form-no-bg" rows="4" name="info"></textarea>
-                                                        </div>
-                                                        <small class="am-u-sm-1 red redtips7" style="display: none;">
-                                                            <i class="am-icon-close"></i>
-                                                        </small>
-                                                        
-                                                        <small class="am-u-sm-1 green blacktips7" style="display: none;">
-                                                            <i class="am-icon-check"></i>
-                                                        </small>
-                                                    
+                                                    <div class="am-u-sm-8">
+                                                        <textarea class="am-form-field tpl-form-no-bg" rows="4" name="info"><?php echo $buesion['info'];?></textarea>
+                                                    </div>
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+
                                                 </div>
-                                                
+
                                             </div>
 
                                             <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
@@ -104,7 +104,7 @@
 
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="text" placeholder="" name="linkman" onblur="validate(this,2,200,7)" value="" />
+                                                        <input type="text" placeholder="" name="linkman" onblur="validate(this,2,200,7)" value="<?php echo $buesion['linkman'];?>" />
 
                                                     </div>
 
@@ -127,7 +127,7 @@
 
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="number" placeholder="" name="linkPhone" onblur="validate(this,2,20,7)" value="" />
+                                                        <input type="number" placeholder="" name="linkPhone" onblur="validate(this,2,20,7)" value="<?php echo $buesion['linkPhone'];?>" />
 
                                                     </div>
 
@@ -146,7 +146,7 @@
 
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="number" placeholder="" name="sort" onblur="validate(this,2,20,7)" value="" />
+                                                        <input type="number" placeholder="" name="sort" onblur="validate(this,2,20,7)" value="<?php echo $buesion['sort'];?>" />
 
                                                     </div>
 
@@ -159,7 +159,28 @@
                                                     </small>
 
                                                 </div>
-                                               
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                
+                                                    <label for="barnd_name" class="am-u-sm-3 am-form-label">状态 ：</label>
+                                                
+                                                    <div class="am-u-sm-8">
+                                                
+                                                        <select name="isDel">
+                                                            <option value="0" <?php if($buesion['isDel'] == '0'){echo "selected";}?>>正常</option>
+                                                            <option value="1" <?php if($buesion['isDel'] == '1'){echo "selected";}?>>删除</option>
+                                                        </select>
+                                                    </div>
+                                                
+                                                    <small class="am-u-sm-1 red redtips7" style="display: none;">
+                                                        <i class="am-icon-close"></i>
+                                                    </small>
+                                                
+                                                    <small class="am-u-sm-1 green blacktips7" style="display: none;">
+                                                        <i class="am-icon-check"></i>
+                                                    </small>
+                                                
+                                                </div>
+
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
 
                                                     <label for="" class="am-u-sm-3 am-form-label">商家logo ：
@@ -170,7 +191,11 @@
                                                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
                                                             <input id="doc-form-file" type="file" name="file" multiple>
                                                         </div>
-                                                        <div id="file-list"></div>
+                                                        <div id="file-list">
+                                                            <?php if(!empty($buesion['logo'])):?>
+                                                                <img src="<?php echo base_url().$buesion['logo'];?>" width="100px" alt="">
+                                                            <?php endif;?>
+                                                        </div>
                                                         <script>
                                                             $(function () {
                                                                 $('#doc-form-file').on('change', function () {
@@ -197,6 +222,7 @@
 
                                         </div>
                                         <div class="am-form-group am-text-center">
+                                            <input type="hidden" name="id" value="<?php echo $buesion['id'];?>">
                                             <button class="am-btn am-btn-default" id="cancle" type="reset">取消</button>
                                             <button class="am-btn am-btn-secondary" id="submit" type="submit">添加</button>
                                         </div>

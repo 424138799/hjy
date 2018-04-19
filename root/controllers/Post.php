@@ -10,9 +10,12 @@ class Post extends Default_Controller
 
     public $developers = 'developers';//开发商
     public $company = 'sales_company';//销售公司
-    public $salesUser = 'sales_user';
-    public $business = 'business';
-    public $member = 'admin_user';
+    public $salesUser = 'sales_user';//销售人员
+    public $business = 'business';//商家
+    public $member = 'admin_user';//用户
+    public $village = 'village';//小区
+    public $bank = 'bank';//小区
+    public $carPark = 'car_parking';//小区
 
 
     function __construct()
@@ -688,34 +691,491 @@ class Post extends Default_Controller
     //新增商家
     function addHusiness(){
         if($_POST){
+            $data = $this->input->post();
+            if (!empty($_FILES['file']['name'])) {
+                $config['upload_path'] = 'upload/user/';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size'] = 5120;
+                $config['file_name'] = date('y-m-d_His');
+                $this->load->library('upload', $config);
+                // 上传
+                if (!$this->upload->do_upload('file')) {
+                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                    exit;
+                } else {
+                    $data['logo'] = 'upload/user/' . $this->upload->data('file_name');
+                }
+            }
 
+            if ($this->public_model->insert($this->business, $data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "新增商家成功,商家名称是：" . $data['title'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/business') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "新增商家失败,商家名称是：" . $data['title'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/business') . "'</script>";
+                exit;
+            }                            
         }else{
-
             $this->load->view('post/addBusiness.html');
         }
     }
 
     //编辑商家
     function editHusiness(){
+        if ($_POST) {
+            $data = $this->input->post();
+            if (!empty($_FILES['file']['name'])) {
+                $config['upload_path'] = 'upload/user/';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size'] = 5120;
+                $config['file_name'] = date('y-m-d_His');
+                $this->load->library('upload', $config);
+                // 上传
+                if (!$this->upload->do_upload('file')) {
+                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                    exit;
+                } else {
+                    $data['logo'] = 'upload/user/' . $this->upload->data('file_name');
+                }
+            }
+           
+            if ($this->public_model->updata($this->business,'id',$data['id'],$data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "编辑商家成功,商家名称是：" . $data['title'].',商家id是：'.$data['id'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/business') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "编辑商家失败,商家名称是：" . $data['title'] . ',商家id是：' . $data['id'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/business') . "'</script>";
+                exit;
+            }
+        } else {
+            $id = intval($this->uri->segment(3));
+            if($id != '0'){
+                //获取信息
+                $data['buesion'] = $this->public_model->select_info($this->business,'id',$id);
 
+                
+                $this->load->view('post/editBusiness.html',$data);
+            }else{
+                $this->load->view('404.html');
+            }
+
+        }
     }
 
     //删除商家
     function delHusiness(){
+        if($_POST){
+            $data = $this->input->post();
+            if($this->public_model->delete($this->business,'id',$data['id'])){
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "删除商家成功,商家名称是：" . $data['name'] . ',商家id是：' . $data['id'],
+                );
+                add_system_log($arr);
+                echo "1";
+                exit;
+            }else{
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "删除商家失败,商家名称是：" . $data['name'] . ',商家id是：' . $data['id'],
+                );
+                add_system_log($arr);
+                echo "2";
+                exit;
+            }
 
+        }else{
+            echo "3";
+        }
     }
-
-
 
     //小区管理
     function village(){
-        $this->load->view('post/village.html');
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->uri->segment(3));//index.php 后数第4个/
+        //配置
+        $config['base_url'] = site_url('/Post/village');
+        //分页配置
 
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '»';
+
+        $config['prev_link'] = '«';
+
+        $config['last_link'] = '末页';
+        $config['num_links'] = 4;
+
+        $total = count($this->public_model->select($this->village, 'updataTime'));
+        $config['total_rows'] = $total;
+
+        $this->load->library('pagination');//加载ci pagination类
+        $listpage = $this->public_model->select_page($this->village, 'updataTime', $current_page, $config['per_page']);
+        $this->pagination->initialize($config);
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+
+        
+        $this->load->view('post/village.html',$data);
     }
+
+    //新增小区信息
+    function addVillage(){
+        if($_POST){
+            $data = $this->input->post();
+            $data['createUser'] = $this->session->users['userId'];
+            if (!empty($_FILES['file']['name'])) {
+                $config['upload_path'] = 'upload/village/';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size'] = 5120;
+                $config['file_name'] = date('y-m-d_His');
+                $this->load->library('upload', $config);
+                // 上传
+                if (!$this->upload->do_upload('file')) {
+                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                    exit;
+                } else {
+                    $data['logo'] = 'upload/village/' . $this->upload->data('file_name');
+                }
+            }
+
+            if ($this->public_model->insert($this->village, $data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "新增小区信息成功,小区名称是：" . $data['villageTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/village') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "新增小区信息失败,小区名称是：" . $data['villageTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/village') . "'</script>";
+                exit;
+            }      
+        }else{
+
+            //获取银行
+            $data['bank'] = $this->public_model->select($this->bank,'createTime','desc');
+            $data['devel'] = $this->public_model->select($this->developers,'createTime','desc');
+            $this->load->view('post/addVillage.html',$data);
+        }
+    }
+
+    //修改小区
+    function editVillage(){
+        if ($_POST) {
+            $data = $this->input->post();
+            $data['updataUser'] = $this->session->users['userId'];
+            $data['updataTime'] = date('Y-m-d H:i:s',time());
+            if (!empty($_FILES['file']['name'])) {
+                $config['upload_path'] = 'upload/village/';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size'] = 5120;
+                $config['file_name'] = date('y-m-d_His');
+                $this->load->library('upload', $config);
+                // 上传
+                if (!$this->upload->do_upload('file')) {
+                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                    exit;
+                } else {
+                    $data['logo'] = 'upload/village/' . $this->upload->data('file_name');
+                }
+            }
+
+            if ($this->public_model->updata($this->village,'id',$data['id'],$data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "编辑小区信息成功,小区名称是：" . $data['villageTitle'].",小区编号是:".$data['id'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/village') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "编辑小区信息失败,小区名称是：" . $data['villageTitle'] . ",小区编号是:" . $data['id'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/village') . "'</script>";
+                exit;
+            }
+        } else {
+            $id = intval($this->uri->segment(3));
+            if($id != '0'){
+                $data['village'] = $this->public_model->select_info($this->village,'id',$id);
+                  //获取银行
+                $data['bank'] = $this->public_model->select($this->bank, 'createTime', 'desc');
+                $data['devel'] = $this->public_model->select($this->developers, 'createTime', 'desc');
+                $this->load->view('post/editVillage.html', $data);
+            }else{
+                $this->load->view('404.html');
+            }
+          
+        }
+    }
+
+    //
+    function delVillage(){
+        if($_POST){
+            $data = $this->input->post();
+            if($this->public_model->delete($this->village,'id',$data['id'])){
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "删除小区信息成功,小区名称是：" . $data['name'] . ",小区编号是:" . $data['id'],
+                );
+                add_system_log($arr);
+                echo "1";
+                exit;
+            }else{
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "删除小区信息失败,小区名称是：" . $data['name'] . ",小区编号是:" . $data['id'],
+                );
+                add_system_log($arr);
+                echo "2";
+                exit;
+            }
+        }else{
+            echo "3";
+        }
+    }
+
+
+
+
+
     //车位管理
     function carPark(){
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->uri->segment(3));//index.php 后数第4个/
+        //配置
+        $config['base_url'] = site_url('/Post/village');
+        //分页配置
+
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '»';
+
+        $config['prev_link'] = '«';
+
+        $config['last_link'] = '末页';
+        $config['num_links'] = 4;
+
+        $total = count($this->public_model->select($this->carPark, 'createTime'));
+        $config['total_rows'] = $total;
+
+        $this->load->library('pagination');//加载ci pagination类
+        $listpage = $this->public_model->select_page($this->carPark, 'createTime', $current_page, $config['per_page']);
+        $this->pagination->initialize($config);
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+
         $this->load->view('post/carPark.html');
     } 
+    //新增车位
+    function addCarPark(){
+        if($_POST){
+            $data = $this->input->post();
+            if (!empty($_FILES['file']['name'])) {
+                $config['upload_path'] = 'upload/car/';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size'] = 5120;
+                $config['file_name'] = date('y-m-d_His');
+                $this->load->library('upload', $config);
+                // 上传
+                if (!$this->upload->do_upload('file')) {
+                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                    exit;
+                } else {
+                    $data['logo'] = 'upload/car/' . $this->upload->data('file_name');
+                }
+            }
+
+            if ($this->public_model->insert($this->carPark, $data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "新增车位信息成功,车位名称是：" . $data['carTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/carPark') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "新增车位信息失败,车位名称是：" . $data['carTitle'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/carPark') . "'</script>";
+                exit;
+            }      
+        }else{
+            //获取小区信息
+            $data['village'] = $this->public_model->select($this->village,'createTime','desc');
+            $this->load->view('post/addCarPark.html',$data);
+        }
+    }
+
+
+    //编辑车位
+    
+
+
+    //上传图片
+    function uploadImg()
+    {
+        $error = '0';
+        if (!empty($_FILES['img']['name'])) {
+            $config['upload_path'] = 'upload/news/';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config['max_size'] = 5120;
+            $config['file_name'] = date('y-m-d_His');
+            $this->load->library('upload', $config);
+            // 上传
+            if (!$this->upload->do_upload('img')) {
+                $error = "1";
+            } else {
+                $data[] = base_url() . 'upload/news/' . $this->upload->data('file_name');
+            }
+        }
+        $arr = array('errno' => $error, 'data' => $data);
+        echo json_encode($arr);
+    }
 
 
 }
