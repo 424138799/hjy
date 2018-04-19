@@ -165,8 +165,31 @@ function object_to_array($obj)
      }
      return $obj;
 }
+//七牛上传
+function qiniu($path,$data)
+{
+    $CI = &get_instance();
+    $CI->load->library('Qiniu');
+    $accessKey = "qjWkScOlHQsxnSMyAYScOwCBgWljlwaOuqMmXAg2";
+    $secretKey = "hj-sLlpzxyKIbGd4T97iXQscj9UG2-Yx2siA0kXg";
+    $bucket = "hengjiyuan";
 
+    $auth = new Qiniu\Auth($accessKey, $secretKey);
 
+    $token = $auth->uploadToken($bucket);
+    $type = substr($path, strrpos($path, '.') + 1); 
+		//上传文件的本地路径
+    $key = $data.time().'.'.$type;
+    $uploadMgr = new Qiniu\Storage\UploadManager();
+
+    list($ret, $err) = $uploadMgr->putFile($token, $key, $path);
+    echo "\n====> putFile result: \n";
+    if ($err !== null) {
+        echo "2";
+    } else {
+        return 'https://img.hengjiyuankeji.com/'.$ret['key'];
+    }
+}
 
 
 

@@ -34,15 +34,15 @@
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
                                 <div class="widget-title  am-cf">
-                                    <a href="<?php echo site_url('/Post/village');?>">车位管理</a> > 新增车位</div>
+                                    <a href="<?php echo site_url('/Post/village');?>">车位管理</a> > 编辑车位</div>
                             </div>
                             <div class="widget-body  am-fr">
-                                <form class="am-form" action="<?php echo site_url('/Post/addCarPark');?>" method="post" enctype="multipart/form-data" data-am-validator>
+                                <form class="am-form" action="<?php echo site_url('/Post/editCarPark');?>" method="post" enctype="multipart/form-data" data-am-validator>
                                     <div class="widget am-cf">
                                         <div class="widget-body  am-fr">
                                             <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
 
-                                             
+
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
 
                                                     <label for="vId" class="am-u-sm-3 am-form-label">小区名称
@@ -51,7 +51,7 @@
                                                         <select name="vId" required>
                                                             <option value="">==请选择==</option>
                                                             <?php foreach($village as $v):?>
-                                                            <option value="<?php echo $v['id']?>">
+                                                            <option value="<?php echo $v['id']?>" <?php if($car['vId'] == $v['id']){echo "selected";}?>>
                                                                 <?php echo $v['villageTitle'];?>
                                                             </option>
                                                             <?php endforeach;?>
@@ -67,28 +67,28 @@
 
                                                 </div>
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                                
+
                                                     <label for="carTitle" class="am-u-sm-3 am-form-label">车位名称
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
-                                                
-                                                        <input type="text" minlength="2" placeholder="请输入2-100个字符" name="carTitle" required onblur="validate(this,2,100,2)" />
-                                                
+
+                                                        <input type="text" minlength="2" placeholder="请输入2-100个字符" name="carTitle" value="<?php echo $car['carTitle'];?>" required onblur="validate(this,2,100,2)" />
+
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips2" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                                
+
                                                     <small class="am-u-sm-1 green blacktips2" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
-                                                
+
                                                 </div>
                                                 <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
                                                     <label for="carNum" class="am-u-sm-3 am-form-label">车位编号
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
-                                                        <input type="text" minlength="2" placeholder="请输入2-15个字符" name="carNum" required onblur="validate(this,2,15,2)" />
+                                                        <input type="text" minlength="2" placeholder="请输入2-15个字符" name="carNum" value="<?php echo $car['carNum'];?>" required onblur="validate(this,2,15,2)" />
 
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
@@ -104,7 +104,7 @@
                                                     <label for="price" class="am-u-sm-3 am-form-label">价格
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
-                                                        <input type="number" minlength="2" placeholder="请输入2-15个字符" name="price" required />
+                                                        <input type="number" minlength="2" placeholder="请输入2-15个字符" name="price" value="<?php echo $car['price'];?>" required />
 
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
@@ -117,25 +117,25 @@
 
                                                 </div>
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                                
+
                                                     <label for="discountPrice" class="am-u-sm-3 am-form-label">优惠价格 ：</label>
-                                                
+
                                                     <div class="am-u-sm-8">
-                                                
-                                                        <input type="number" placeholder="" name="discountPrice"  value="" />
-                                                
+
+                                                        <input type="number" placeholder="" name="discountPrice" value="<?php echo $car['discountPrice'];?>" />
+
                                                     </div>
-                                                
+
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                                
+
                                                     <small class="am-u-sm-1 green blacktips7" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
-                                                
+
                                                 </div>
-                                                
+
 
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
 
@@ -147,7 +147,11 @@
                                                                 <i class="am-icon-cloud-upload"></i> 选择要上传的文件</button>
                                                             <input id="doc-form-file" type="file" name="file" multiple>
                                                         </div>
-                                                        <div id="file-list"></div>
+                                                        <div id="file-list">
+                                                            <?php if(!empty($car['logo'])):?>
+                                                                <img src="<?php echo base_url().$car['logo'];?>" width="50px;" alt="">
+                                                            <?php endif;?>
+                                                        </div>
                                                         <script>
                                                             $(function () {
                                                                 $('#doc-form-file').on('change', function () {
@@ -175,42 +179,42 @@
 
                                             <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                                
+
                                                     <label for="startTime" class="am-u-sm-3 am-form-label">开始时间 ：</label>
-                                                
+
                                                     <div class="am-u-sm-8">
-                                                
-                                                        <input type="text" placeholder="" name="startTime"  value="" />
-                                                
+
+                                                        <input type="text" placeholder="" name="startTime" value="<?php echo $car['startTime'];?>" />
+
                                                     </div>
-                                                
+
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                                
+
                                                     <small class="am-u-sm-1 green blacktips7" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
-                                                
+
                                                 </div>
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                                
+
                                                     <label for="endTime" class="am-u-sm-3 am-form-label">结束时间 ：</label>
-                                                
+
                                                     <div class="am-u-sm-8">
-                                                
-                                                        <input type="text" placeholder="" name="endTime"  value="" />
-                                                
+
+                                                        <input type="text" placeholder="" name="endTime" value="<?php echo $car['endTime'];?>" />
+
                                                     </div>
-                                                
+
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                                
+
                                                     <small class="am-u-sm-1 green blacktips7" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
-                                                
+
                                                 </div>
 
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
@@ -219,7 +223,7 @@
 
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="number" placeholder="" name="carParkNum" onblur="validate(this,2,20,7)" value="" />
+                                                        <input type="number" placeholder="" name="carParkNum" onblur="validate(this,2,20,7)" value="<?php echo $car['carParkNum'];?>" />
 
                                                     </div>
 
@@ -238,7 +242,7 @@
 
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="number" placeholder="" name="soldNum" onblur="validate(this,2,20,7)" value="" />
+                                                        <input type="number" placeholder="" name="soldNum" onblur="validate(this,2,20,7)" value="<?php echo $car['soldNum'];?>"/>
 
                                                     </div>
 
@@ -257,7 +261,7 @@
 
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="number" placeholder="" name="surplusNum" onblur="validate(this,2,20,7)" value="" />
+                                                        <input type="number" placeholder="" name="surplusNum" onblur="validate(this,2,20,7)" value="<?php echo $car['surplusNum'];?>" />
 
                                                     </div>
 
@@ -276,7 +280,7 @@
 
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="number" placeholder="" name="carPrice" onblur="validate(this,2,20,7)" value="" />
+                                                        <input type="number" placeholder="" name="carPrice" onblur="validate(this,2,20,7)" value="<?php echo $car['carPrice'];?>" />
 
                                                     </div>
 
@@ -289,11 +293,11 @@
                                                     </small>
 
                                                 </div>
-                                               
+
                                                 <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
                                                     <label for="remarks" class="am-u-sm-3 am-form-label">备注</label>
                                                     <div class="am-u-sm-8">
-                                                        <textarea class="am-form-field tpl-form-no-bg" rows="4" name="remarks"></textarea>
+                                                        <textarea class="am-form-field tpl-form-no-bg" rows="4" name="remarks"><?php echo $car['remarks'];?></textarea>
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
@@ -309,6 +313,7 @@
                                                 <label for="user-name" class="am-u-sm-1 am-form-label">简介详情</label>
                                                 <div class="am-u-sm-10">
                                                     <div class="editor" id="editor">
+                                                        <?php echo $car['content'];?>
                                                     </div>
                                                     <textarea id='content' name="content" style="width:100%; height:200px;display: none;"> </textarea>
                                                 </div>
@@ -317,6 +322,7 @@
 
                                         </div>
                                         <div class="am-form-group am-text-center">
+                                            <input type="hidden" name="carId" value="<?php echo $car['carId'];?>">
                                             <button class="am-btn am-btn-default" id="cancle" type="reset">取消</button>
                                             <button class="am-btn am-btn-secondary" id="submit" type="submit">添加</button>
                                         </div>

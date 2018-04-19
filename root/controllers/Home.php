@@ -7,14 +7,6 @@ require_once(APPPATH.'controllers/Default_Controller.php');
 */
 class Home extends Default_Controller
 {
-	public $classliy = 'wxCatchv1_biz_classify';//类别
-	public $wechat = 'wxCatchv1_biz';//公众号表
-	public $content = 'wxCatchv1_biz_news';//公众号表
-	public $conf = 'wxCatchv1_system_configure';//公众号表
-	public $table = "wxCatchv1_system_nav";
-	public $member = "wxCatchv1_member_user";
-	public $spread = "wxCatchv1_biz_spread";//推广
-    public $activity = "wxCatchv1_biz_activity"; //活动
 	function __construct()
 	{
 		parent::__construct();
@@ -71,6 +63,35 @@ class Home extends Default_Controller
 
 		$this->load->view('index.html');
 	}
+
+	//囚牛
+	function qiniu(){
+	
+		$this->load->library('Qiniu');
+		$accessKey = "qjWkScOlHQsxnSMyAYScOwCBgWljlwaOuqMmXAg2";
+		$secretKey = "hj-sLlpzxyKIbGd4T97iXQscj9UG2-Yx2siA0kXg";
+		$bucket = "hengjiyuan";
+
+
+		$auth = new Qiniu\Auth($accessKey, $secretKey);
+
+		$token = $auth->uploadToken($bucket);
+
+		//上传文件的本地路径
+		$filePath = 'upload/car/18-04-19_184520.png';
+		$key = '2313213132.jpg';
+		$uploadMgr = new Qiniu\Storage\UploadManager();
+
+		list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
+		echo "\n====> putFile result: \n";
+		if ($err !== null) {
+			var_dump($err);
+		} else {
+			echo $ret['key'];
+
+		}
+	}
+
 
 	//修改数据配置信息
 	function configure(){

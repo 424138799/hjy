@@ -79,23 +79,35 @@
                                         <a href="<?php echo site_url('/Post/addCarPark');?>" class="am-btn am-btn-default am-btn-success">
                                             <span class="am-icon-plus"></span> 添加车位信息</a>
                                     </div>
-                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
+                                    <style>
+                                        .am-table>thead>tr>th {
+                                            padding: .3rem;
+                                        }
+                                    
+                                        .am-table>tbody>tr>td {
+                                            padding: .3rem;
+                                        }
+                                    </style>
+                                    <div class="am-scrollable-horizontal">
+                                        <table width="100%" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-hover" id="example-r">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>工号</th>
-                                                <th>登陆账号</th>
-                                                <th>姓名</th>
-                                                <th>性别</th>
-                                                <th>手机</th>
-                                                <th>电话</th>
-                                                <th>邮箱</th>
-                                                <th>所在公司</th>
-                                                <th>所在部门</th>
-                                                <th>担任职务</th>
-                                                <th>最后登陆时间</th>
-                                                <th>说明</th>
-                                                <th>状态</th>
+                                                <th>小区名称</th>
+                                                <th>车位名称</th>
+                                                <th>车位编号</th>
+                                                <th>车位数量</th>
+                                                <th>已售数量</th>
+                                                <th>剩余数量</th>
+                                                <th>均价</th>
+                                                <th>价格</th>
+                                                <th>优惠价格</th>
+                                                <th>开始时间</th>
+                                                <th>结束时间</th>
+                                                <th>logo</th>
+                                                <th>创建时间</th>
+                                                <th>创建人</th>
+                                                <th>备注</th>
                                                 <th>操作</th>
                                             </tr>
                                         </thead>
@@ -104,57 +116,64 @@
                                             <?php foreach($lists as $v):?>
                                             <tr class="gradeX">
                                                 <td class="userid">
-                                                    <?php echo $v['userId'];?>
+                                                    <?php echo $v['carId'];?>
                                                 </td>
                                                 <td class="username">
-                                                    <?php echo $v['userCode'];?>
+                                                    <?php echo $v['vId'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['loginNum'];?>
+                                                    <?php echo $v['carTitle'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['userName'];?>
+                                                    <?php echo $v['carNum'];?>
                                                 </td>
                                                 <td>
-                                                    <?php if($v['gender'] == '1'):?>男
-                                                    <?php else:?>女
+                                                    <?php echo $v['carParkNum'];?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $v['soldNum'];?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $v['surplusNum'];?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $v['carPrice'];?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $v['price'];?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $v['discountPrice'];?>
+                                                </td>
+                                              
+                                                <td>
+                                                    <?php echo $v['startTime'];?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $v['endTime'];?>
+                                                </td>
+                                            
+                                                <td>
+                                                    <?php if(!empty($v['logo'])):?>
+                                                        <img src="<?php echo $v['logo'];?>" width="50px" alt="">
                                                     <?php endif;?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['phone'];?>
+                                                    <?php echo $v['createTime'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['telPhone'];?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $v['email'];?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $v['companyId'];?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $v['department'];?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $v['duty'];?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $v['loginTime'];?>
+                                                    <?php echo $v['createUser'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['remarks'];?>
                                                 </td>
-                                                <?php if($v['status'] == '1'):?>
-                                                <td>正常</td>
-                                                <?php else:?>
-                                                <td>禁止登陆</td>
-                                                <?php endif;?>
+                                               
                                                 <td>
-                                                    <div class="am-btn-toolbar">
+                                                    <div class="am-btn-toolbar" style="width: 150px;">
                                                         <div class="am-btn-group am-btn-group-xs">
-                                                            <a href="<?php echo site_url('/Member/EditUser/').$v['userId'];?>" class="update  am-btn am-btn-warning">
+                                                            <a href="<?php echo site_url('/Post/editCarPark/').$v['carId'];?>" class="update  am-btn am-btn-warning">
                                                                 <span class="am-icon-edit"></span> 修改</a>
-                                                            <a data-id="<?php echo $v['userId']?>" name="<?php echo $v['userName'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                            <a data-id="<?php echo $v['carId']?>" name="<?php echo $v['carTitle'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
                                                                 <span class="am-icon-trash"></span> 删除</a>
                                                         </div>
                                                     </div>
@@ -170,6 +189,7 @@
                                             <!-- more data -->
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
 
 

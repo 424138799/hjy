@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-04-19 14:52:33
+Date: 2018-04-19 22:29:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,14 +166,46 @@ CREATE TABLE `hj_business` (
   `linkman` varchar(20) DEFAULT NULL COMMENT '联系人',
   `linkPhone` varchar(12) DEFAULT NULL COMMENT '联系电话',
   `sort` int(5) DEFAULT '200' COMMENT '排序 从小到达排序',
-  `idDel` int(2) DEFAULT '0' COMMENT '是否删除 1是 0否',
+  `isDel` int(2) DEFAULT '0' COMMENT '是否删除 1是 0否',
   `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_business
 -- ----------------------------
+INSERT INTO `hj_business` VALUES ('2', '客人', '玩儿玩儿', 'upload/user/18-04-19_154358.png', 'f d f d f s d是的方式的', '23244', '23424', '3', '0', '2018-04-19 15:43:58');
+
+-- ----------------------------
+-- Table structure for hj_car_parking
+-- ----------------------------
+DROP TABLE IF EXISTS `hj_car_parking`;
+CREATE TABLE `hj_car_parking` (
+  `carId` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '车位管理',
+  `vId` int(11) DEFAULT NULL COMMENT '小区id',
+  `carTitle` varchar(50) DEFAULT NULL COMMENT '车位名称',
+  `carNum` varchar(100) DEFAULT NULL COMMENT '车位编号',
+  `logo` varchar(500) DEFAULT NULL COMMENT 'ligo',
+  `price` float DEFAULT NULL COMMENT '价格',
+  `discountPrice` int(11) DEFAULT NULL COMMENT '优惠价格',
+  `surplusNum` int(10) DEFAULT NULL COMMENT '剩余数量',
+  `createTime` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `startTime` timestamp NULL DEFAULT NULL COMMENT '开始时间',
+  `endTime` timestamp NULL DEFAULT NULL COMMENT '结束时间',
+  `content` text COMMENT '简介',
+  `remarks` varchar(300) DEFAULT NULL COMMENT '备注',
+  `soldNum` int(11) DEFAULT NULL COMMENT '已售数量',
+  `carParkNum` int(11) DEFAULT NULL COMMENT '车位数量',
+  `carPrice` float DEFAULT NULL COMMENT '均价',
+  `createUser` int(11) DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`carId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hj_car_parking
+-- ----------------------------
+INSERT INTO `hj_car_parking` VALUES ('2', '1', '美岸001', '34545', 'upload/car/18-04-19_184520.png', '4545', '154', '0', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '<p>4534535242424</p><p><br></p>', '4534532434', '0', '0', '45566', null);
+INSERT INTO `hj_car_parking` VALUES ('3', '1', '34242', '4234242', 'https://img.hengjiyuankeji.com/2018-04-19_21:48:45.jpg', '4234230', '242334242', '23423432', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '<p>4353453535345</p>', '', '2147483647', '4242', '4234320000', '1');
 
 -- ----------------------------
 -- Table structure for hj_developers
@@ -194,7 +226,7 @@ CREATE TABLE `hj_developers` (
   `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `address` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_developers
@@ -266,7 +298,7 @@ CREATE TABLE `hj_system_log` (
   `log_message` text,
   `log_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_system_log
@@ -316,3 +348,51 @@ INSERT INTO `hj_system_log` VALUES ('42', 'Post/addSalesUser', '1', '系统创�
 INSERT INTO `hj_system_log` VALUES ('43', 'Post/editSalesUser', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：', '2018-04-19 14:14:12');
 INSERT INTO `hj_system_log` VALUES ('44', 'Post/addSalesUser', '1', '系统创建者', '::1', '1', '新增销售人员成功,销售公司名称是：2,销售人员名称是：海运费', '2018-04-19 14:28:33');
 INSERT INTO `hj_system_log` VALUES ('45', 'Post/delSalesUser', '1', '系统创建者', '::1', '1', '删除销售人员成功,销售人员id是：1,销售人员名称是：景色', '2018-04-19 14:28:39');
+INSERT INTO `hj_system_log` VALUES ('46', 'Post/addHusiness', '1', '系统创建者', '::1', '1', '新增商家成功,商家名称是：恒纪元', '2018-04-19 15:10:38');
+INSERT INTO `hj_system_log` VALUES ('47', 'Post/editHusiness', '1', '系统创建者', '::1', '1', '编辑商家成功,商家名称是：恒纪元1,商家id是：', '2018-04-19 15:28:27');
+INSERT INTO `hj_system_log` VALUES ('48', 'Post/editHusiness', '1', '系统创建者', '::1', '1', '编辑商家成功,商家名称是：恒纪元1,商家id是：1', '2018-04-19 15:33:27');
+INSERT INTO `hj_system_log` VALUES ('49', 'Post/editHusiness', '1', '系统创建者', '::1', '1', '编辑商家成功,商家名称是：恒纪元1,商家id是：1', '2018-04-19 15:36:12');
+INSERT INTO `hj_system_log` VALUES ('50', 'Post/addHusiness', '1', '系统创建者', '::1', '1', '新增商家成功,商家名称是：客人', '2018-04-19 15:43:58');
+INSERT INTO `hj_system_log` VALUES ('51', 'Post/delHusiness', '1', '系统创建者', '::1', '1', '删除商家成功,商家名称是：恒纪元1,商家id是：1', '2018-04-19 15:44:03');
+INSERT INTO `hj_system_log` VALUES ('52', 'Post/addVillage', '1', '系统创建者', '::1', '1', '新增小区信息成功,小区名称是：美年', '2018-04-19 16:57:15');
+INSERT INTO `hj_system_log` VALUES ('53', 'Post/editVillage', '1', '系统创建者', '::1', '1', '新增小区信息成功,小区名称是：美年1', '2018-04-19 18:03:48');
+INSERT INTO `hj_system_log` VALUES ('54', 'Post/addVillage', '1', '系统创建者', '::1', '1', '新增小区信息成功,小区名称是：3434', '2018-04-19 18:10:26');
+INSERT INTO `hj_system_log` VALUES ('55', 'Post/delVillage', '1', '系统创建者', '::1', '1', '删除小区信息成功,小区名称是：3434,小区编号是:2', '2018-04-19 18:10:32');
+INSERT INTO `hj_system_log` VALUES ('56', 'Post/addCarPark', '1', '系统创建者', '::1', '1', '新增车位信息成功,车位名称是：', '2018-04-19 18:45:20');
+INSERT INTO `hj_system_log` VALUES ('57', 'Post/editCarPark', '1', '系统创建者', '::1', '1', '编辑车位信息成功,车位名称是：美岸001,车位id是：2', '2018-04-19 19:26:48');
+INSERT INTO `hj_system_log` VALUES ('58', 'Post/addCarPark', '1', '系统创建者', '::1', '1', '新增车位信息成功,车位名称是：34242', '2018-04-19 21:48:46');
+
+-- ----------------------------
+-- Table structure for hj_village
+-- ----------------------------
+DROP TABLE IF EXISTS `hj_village`;
+CREATE TABLE `hj_village` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `bankId` int(11) DEFAULT NULL COMMENT '所属银行',
+  `dId` int(11) DEFAULT NULL COMMENT '开发商id',
+  `villageTitle` varchar(300) DEFAULT NULL COMMENT '小区名称',
+  `address` varchar(500) DEFAULT NULL COMMENT '小区地址',
+  `respons` varchar(30) DEFAULT NULL COMMENT '负责人',
+  `linkPhone` int(12) DEFAULT NULL COMMENT '联系电话',
+  `carNum` int(10) DEFAULT NULL COMMENT '车位数量',
+  `soldNum` int(10) DEFAULT NULL COMMENT '已售数量',
+  `surplusNum` int(11) DEFAULT NULL COMMENT '剩余数量',
+  `logo` varchar(500) DEFAULT NULL COMMENT '小区logo',
+  `carInfo` text COMMENT '车位简介',
+  `content` text COMMENT '图片简介',
+  `remarks` varchar(500) DEFAULT NULL COMMENT '备注',
+  `status` int(2) DEFAULT '1' COMMENT '是否展示 1是 0 否',
+  `carPrice` float DEFAULT NULL COMMENT '车位均价',
+  `createUser` int(11) DEFAULT NULL COMMENT '创建者',
+  `createTime` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `updataUser` int(11) DEFAULT NULL COMMENT '修改用户',
+  `updataTime` timestamp NULL DEFAULT NULL COMMENT '修改用户时间',
+  `brokerage` float DEFAULT NULL COMMENT '佣金',
+  `carWashNum` int(11) DEFAULT NULL COMMENT '赠送洗车卷数量',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hj_village
+-- ----------------------------
+INSERT INTO `hj_village` VALUES ('1', '3', '1', '美年1', '撒娇看到那句', '李先生', '2147483647', '2300', '300', '1200', 'upload/village/18-04-19_165715.png', null, '<p>啊啊大大大<img src=\"http://localhost/hjy/upload/news/18-04-19_165713.png\" style=\"font-size: 1.6rem; max-width: 100%;\"></p><p><br></p>', '是的方式的', '1', '130000', null, null, '1', '2018-04-19 18:03:48', '500', '3');

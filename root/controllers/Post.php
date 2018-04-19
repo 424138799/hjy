@@ -1098,12 +1098,13 @@ class Post extends Default_Controller
 
         $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
 
-        $this->load->view('post/carPark.html');
+        $this->load->view('post/carPark.html',$data);
     } 
     //新增车位
     function addCarPark(){
         if($_POST){
             $data = $this->input->post();
+            $data['createUser'] = $this->session->users['userId'];
             if (!empty($_FILES['file']['name'])) {
                 $config['upload_path'] = 'upload/car/';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -1115,9 +1116,10 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['logo'] = 'upload/car/' . $this->upload->data('file_name');
+                    $logo = 'upload/car/' . $this->upload->data('file_name');
                 }
             }
+            $data['logo'] = qiniu($logo,'carPark');
 
             if ($this->public_model->insert($this->carPark, $data)) {
                 $arr = array(
@@ -1153,6 +1155,64 @@ class Post extends Default_Controller
 
 
     //编辑车位
+    function editCarPark(){
+        if($_POST){
+            $data = $this->input->post();
+            
+            if (!empty($_FILES['file']['name'])) {
+                $config['upload_path'] = 'upload/car/';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size'] = 5120;
+                $config['file_name'] = date('y-m-d_His');
+                $this->load->library('upload', $config);
+                // 上传
+                if (!$this->upload->do_upload('file')) {
+                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                    exit;
+                } else {
+                    $data['logo'] = 'upload/car/' . $this->upload->data('file_name');
+                }
+            }
+
+            if ($this->public_model->updata($this->carPark,'carId',$data['carId'], $data)) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "编辑车位信息成功,车位名称是：" . $data['carTitle'].',车位id是：'.$data['carId'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/carPark') . "'</script>";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "编辑车位信息失败,车位名称是：" . $data['carTitle'] . ',车位id是：' . $data['carId'],
+                );
+                add_system_log($arr);
+                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/carPark') . "'</script>";
+                exit;
+            } 
+        }else{
+            $id = intval($this->uri->segment(3));
+            if($id != '0'){
+                $data['car'] = $this->public_model->select_info($this->carPark,'carId',$id);
+
+
+                $data['village'] = $this->public_model->select($this->village, 'createTime', 'desc');
+
+                $this->load->view('post/editCarPark.html',$data);
+            }else{
+                $this->load->view('404.html');
+            }
+        }
+    }
     
 
 

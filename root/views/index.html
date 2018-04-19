@@ -22,9 +22,19 @@
     <script src="<?php echo ROOTCSS;?>/js/theme.js"></script>
     <div class="am-g tpl-g">
 <?php $this->load->view('header.html');?>
+<div class="tpl-content-wrapper">
+    <div class="row-content am-cf">
+        <div class="row">
+        <div >
+            <form action="<?php echo site_url('/Home/qiniu');?>" method="post" enctype="multipart/form-data">
+                 <input type="file" name="file" />
+                 <input type="submit" name="tijia" value="tijaio "/>
+            </form>
+        </div>
+        </div>
+        </div>
 
-
-    </div>
+</div>    </div>
     <script src="<?php echo ROOTCSS;?>/js/amazeui.min.js"></script>
     <script src="<?php echo ROOTCSS;?>/js/amazeui.datatables.min.js"></script>
     <script src="<?php echo ROOTCSS;?>/js/dataTables.responsive.min.js"></script>
