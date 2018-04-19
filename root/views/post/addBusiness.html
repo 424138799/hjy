@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>
-        <?php echo name;?> - 开发商管理 </title>
+        <?php echo name;?> - 商家信息管理 </title>
     <meta name="description" content="<?php echo name;?>">
     <meta name="keywords" content="<?php echo name;?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,21 +34,21 @@
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
                                 <div class="widget-title  am-cf">
-                                    <a href="<?php echo site_url('/Member/adminUser');?>">用户管理</a> > 新增用户</div>
+                                    <a href="<?php echo site_url('/Post/business');?>">商家管理</a> > 新增商家</div>
                             </div>
                             <div class="widget-body  am-fr">
-                                <form class="am-form" action="<?php echo site_url('/Post/addDevel');?>" method="post" enctype="multipart/form-data" data-am-validator>
+                                <form class="am-form" action="<?php echo site_url('/Post/AddCompany');?>" method="post" enctype="multipart/form-data" data-am-validator>
                                     <div class="widget am-cf">
                                         <div class="widget-body  am-fr">
                                             <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
-                                    
+
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
 
-                                                    <label for="username" class="am-u-sm-3 am-form-label">开发商名称
+                                                    <label for="username" class="am-u-sm-3 am-form-label">销售公司名称
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
 
-                                                        <input type="text" minlength="2" placeholder="请输入2-100个字符" name="title" required onblur="validate(this,2,100,2)" />
+                                                        <input type="text" minlength="2" placeholder="请输入2-100个字符" name="companyName" required onblur="validate(this,2,100,2)" />
 
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips2" style="display: none;">
@@ -60,41 +60,24 @@
                                                     </small>
 
                                                 </div>
+
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                                
-                                                    <label for="username" class="am-u-sm-3 am-form-label">法人
-                                                        <span class="red">*</span>：</label>
-                                                    <div class="am-u-sm-8">
-                                                
-                                                        <input type="text" minlength="2" placeholder="请输入2-15个字符" name="legalUser" required onblur="validate(this,2,15,2)" />
-                                                
-                                                    </div>
-                                                    <small class="am-u-sm-1 red redtips2" style="display: none;">
-                                                        <i class="am-icon-close"></i>
-                                                    </small>
-                                                
-                                                    <small class="am-u-sm-1 green blacktips2" style="display: none;">
-                                                        <i class="am-icon-check"></i>
-                                                    </small>
-                                                
-                                                </div>
-                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                                
+
                                                     <label for="username" class="am-u-sm-3 am-form-label">营业执照编码
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
-                                                
+
                                                         <input type="text" minlength="2" placeholder="请输入2-15个字符" name="license" required onblur="validate(this,2,15,2)" />
-                                                
+
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips2" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                                
+
                                                     <small class="am-u-sm-1 green blacktips2" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
-                                                
+
                                                 </div>
 
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
@@ -102,7 +85,7 @@
                                                     <label for="store_name" class="am-u-sm-3 am-form-label">负责人
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8 am-u-end">
-                                                        <select name="blameId" required>
+                                                        <select name="uid" required>
                                                             <option value="">==请选择用户群组==</option>
                                                             <?php foreach($users as $val):?>
                                                             <option value="<?php echo $val['userId'];?>">
@@ -132,7 +115,7 @@
                                                     <label for="" class="am-u-sm-3 am-form-label">联系人电话：</label>
 
                                                     <div class="am-u-sm-8">
-                                                        <input type="number" name="linkPhone" class="am-form-field tpl-form-no-bg" placeholder="请输入手机号码"  />
+                                                        <input type="number" name="linkPhone" class="am-form-field tpl-form-no-bg" placeholder="请输入手机号码" />
 
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips12" style="display: none;">
@@ -142,27 +125,40 @@
                                                         <i class="am-icon-check"></i>
                                                     </small>
                                                 </div>
-                                            </div>
-                                            <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
-                                            
-                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                            
-                                                    <label for="barnd_name" class="am-u-sm-3 am-form-label">地址 ：</label>
-                                            
-                                                    <div class="am-u-sm-8">
-                                            
-                                                        <input type="number" placeholder="" name="address" onblur="validate(this,2,20,7)" value="" />
-                                            
+                                                <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                    <label for="en_name" class="am-u-sm-3 am-form-label">开票信息</label>
+                                                    <div class="am-u-sm-8 am-u-end">
+                                                        <input type="text" name="billing" value="">
                                                     </div>
-                                            
+                                                </div>
+                                                <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
+                                                    <label for="en_name" class="am-u-sm-3 am-form-label">开户信息</label>
+                                                    <div class="am-u-sm-8 am-u-end">
+                                                        <input type="text" name="openAccount" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="memberInfo am-u-xs-12 am-u-sm-6 am-u-md-6 am-u-lg-6 padding-horizontal-lg">
+
+                                                <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
+
+                                                    <label for="barnd_name" class="am-u-sm-3 am-form-label">销售公司地址 ：</label>
+
+                                                    <div class="am-u-sm-8">
+
+                                                        <input type="text" placeholder="" name="companyAddress" onblur="validate(this,2,200,7)" value="" />
+
+                                                    </div>
+
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                            
+
                                                     <small class="am-u-sm-1 green blacktips7" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
-                                            
+
                                                 </div>
                                             </div>
 
@@ -189,21 +185,21 @@
                                                 </div>
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
 
-                                                    <label for="" class="am-u-sm-3 am-form-label">备注
-                                                        ：</label>
+                                                    <label for="" class="am-u-sm-3 am-form-label">简介 ：
+                                                    </label>
                                                     <div class="am-u-sm-8">
-                                                        <textarea  class="am-form-field tpl-form-no-bg" rows="4" name="remarks"></textarea>
+                                                        <textarea class="am-form-field tpl-form-no-bg" rows="4" name="companyInfo"></textarea>
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                            
+
                                                     <small class="am-u-sm-1 green blacktips7" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
                                                 </div>
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
-                                                
+
                                                     <label for="" class="am-u-sm-3 am-form-label">营业执照图片 ：
                                                     </label>
                                                     <div class="am-u-sm-8">
@@ -225,12 +221,12 @@
                                                             });
                                                         </script>
                                                     </div>
-                                                  
+
 
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-                                                
+
                                                     <small class="am-u-sm-1 green blacktips7" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
@@ -289,23 +285,6 @@
         history.go(-1);
 
     });
-    $('#submit').click(function () {
-
-        console.log(document.getElementById('verification').checked);
-
-        console.log(document.getElementById('disverification').checked);
-
-        if ($('#startBusinessTime').val() == "") {
-            alert("请选择开业时间！");
-            return false;
-        } else {
-            return true;
-        }
-    })
-
-
-
-
 
 </script>
 

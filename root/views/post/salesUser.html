@@ -5,13 +5,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>
-        <?php echo name;?> - 公司管理 </title>
+        <?php echo name;?> - 销售人员管理 </title>
     <meta name="description" content="<?php echo name;?>">
     <meta name="keywords" content="<?php echo name;?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="icon" type="image/png" href="<?php echo ROOTCSS;?>/i/favicon.png">
+    <link rel="icon" type="image/png" href="<?php echo ROOTCSS;?>/img/favicon.ico">
     <link rel="apple-touch-icon-precomposed" href="<?php echo ROOTCSS;?>/i/app-icon72x72@2x.png">
     <meta name="apple-mobile-web-app-title" content="" />
     <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.min.css" />
@@ -33,7 +33,7 @@
                     <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
-                                <div class="widget-title  am-cf">用户管理列表</div>
+                                <div class="widget-title  am-cf">销售人员信息</div>
                             </div>
                             <div class="widget-body  am-fr">
 
@@ -76,26 +76,34 @@
                                 </form>
                                 <div class="am-u-sm-12">
                                     <div style="margin-bottom: 20px">
-                                        <a href="<?php echo site_url('/Member/AddUser');?>" class="am-btn am-btn-default am-btn-success">
-                                            <span class="am-icon-plus"></span> 添加管理用户</a>
+                                        <a href="<?php echo site_url('/Post/addSalesUser');?>" class="am-btn am-btn-default am-btn-success">
+                                            <span class="am-icon-plus"></span> 添加销售人员</a>
                                     </div>
-                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
+                                    <style>
+                                        .am-table>thead>tr>th {
+                                            padding: .3rem;
+                                        }
+                                    
+                                        .am-table>tbody>tr>td {
+                                            padding: .3rem;
+                                        }
+                                    </style>
+                                    <div class="am-scrollable-horizontal">
+                                        <table width="100%" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-hover">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>工号</th>
-                                                <th>登陆账号</th>
+                                                <th>销售公司名称</th>
                                                 <th>姓名</th>
                                                 <th>性别</th>
-                                                <th>手机</th>
                                                 <th>电话</th>
-                                                <th>邮箱</th>
-                                                <th>所在公司</th>
-                                                <th>所在部门</th>
-                                                <th>担任职务</th>
-                                                <th>最后登陆时间</th>
-                                                <th>说明</th>
-                                                <th>状态</th>
+                                                <th>生日</th>
+                                                <th>简介</th>
+                                                <th>头像</th>
+                                                <th>销售总计</th>
+                                                <th>销售数量</th>
+                                                <th>提成总计</th>
+                                                <th>提成数量</th>
                                                 <th>操作</th>
                                             </tr>
                                         </thead>
@@ -104,17 +112,15 @@
                                             <?php foreach($lists as $v):?>
                                             <tr class="gradeX">
                                                 <td class="userid">
-                                                    <?php echo $v['userId'];?>
+                                                    <?php echo $v['id'];?>
                                                 </td>
                                                 <td class="username">
-                                                    <?php echo $v['userCode'];?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $v['loginNum'];?>
+                                                    <?php echo $v['c_id'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['userName'];?>
                                                 </td>
+                                            
                                                 <td>
                                                     <?php if($v['gender'] == '1'):?>男
                                                     <?php else:?>女
@@ -124,37 +130,33 @@
                                                     <?php echo $v['phone'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['telPhone'];?>
+                                                    <?php echo $v['birthday'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['email'];?>
+                                                    <?php echo $v['info'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['companyId'];?>
+                                                    <img src="<?php echo base_url().$v['headPic'];?>" width="100px;" alt="">
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['department'];?>
+                                                   12
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['duty'];?>
+                                                    3
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['loginTime'];?>
+                                                   1
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['remarks'];?>
+                                                   244
                                                 </td>
-                                                <?php if($v['status'] == '1'):?>
-                                                <td>正常</td>
-                                                <?php else:?>
-                                                <td>禁止登陆</td>
-                                                <?php endif;?>
+                                             
                                                 <td>
                                                     <div class="am-btn-toolbar">
                                                         <div class="am-btn-group am-btn-group-xs">
-                                                            <a href="<?php echo site_url('/Member/EditUser/').$v['userId'];?>" class="update  am-btn am-btn-warning">
+                                                            <a href="<?php echo site_url('/Post/editSalesUser/').$v['id'];?>" class="update  am-btn am-btn-warning">
                                                                 <span class="am-icon-edit"></span> 修改</a>
-                                                            <a data-id="<?php echo $v['userId']?>" name="<?php echo $v['userName'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                            <a data-id="<?php echo $v['id']?>" name="<?php echo $v['userName'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
                                                                 <span class="am-icon-trash"></span> 删除</a>
                                                         </div>
                                                     </div>
@@ -170,6 +172,7 @@
                                             <!-- more data -->
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
 
 
@@ -213,13 +216,13 @@
                             var name = $(this.relatedTarget).attr('name');
                             var data = { id: uid, name: name }
                             console.log(data)
-                            $.post("<?php echo site_url('/Member/delUser');?>", data, function (result) {
+                            $.post("<?php echo site_url('/Post/delSalesUser');?>", data, function (result) {
                                 if (result == 1) {
                                     alert('操作成功！');
                                     window.location.reload();
 
                                 } else if (result == '3') {
-                                    alert('超级管理员不能删除！');
+                                    alert('请求错误');
                                     window.location.reload();
                                 } else {
                                     alert('操作失败！');

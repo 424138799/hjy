@@ -142,9 +142,9 @@
                                                 <td>
                                                     <div class="am-btn-toolbar">
                                                         <div class="am-btn-group am-btn-group-xs">
-                                                            <a href="<?php echo site_url('/Member/EditUser/').$v['id'];?>" class="update  am-btn am-btn-warning">
+                                                            <a href="<?php echo site_url('/Post/editDevelopers/').$v['id'];?>" class="update  am-btn am-btn-warning">
                                                                 <span class="am-icon-edit"></span> 修改</a>
-                                                            <a data-id="<?php echo $v['id']?>"  href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                            <a data-id="<?php echo $v['id']?>" name="<?php echo $v['title'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
                                                                 <span class="am-icon-trash"></span> 删除</a>
                                                         </div>
                                                     </div>
@@ -203,13 +203,13 @@
                             var name = $(this.relatedTarget).attr('name');
                             var data = { id: uid, name: name }
                             console.log(data)
-                            $.post("<?php echo site_url('/Member/delUser');?>", data, function (result) {
+                            $.post("<?php echo site_url('/Post/delDevelopers');?>", data, function (result) {
                                 if (result == 1) {
                                     alert('操作成功！');
                                     window.location.reload();
 
                                 } else if (result == '3') {
-                                    alert('超级管理员不能删除！');
+                                    alert('请求错误！');
                                     window.location.reload();
                                 } else {
                                     alert('操作失败！');

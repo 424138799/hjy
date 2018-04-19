@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-04-18 19:47:05
+Date: 2018-04-19 14:52:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -57,7 +57,7 @@ CREATE TABLE `hj_admin_department` (
   `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `remarks` varchar(500) DEFAULT NULL COMMENT '说明',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_admin_department
@@ -87,7 +87,7 @@ CREATE TABLE `hj_admin_user` (
   `password` varchar(32) DEFAULT NULL COMMENT '密码',
   `userCode` varchar(20) DEFAULT NULL COMMENT '用户工号',
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_admin_user
@@ -167,6 +167,7 @@ CREATE TABLE `hj_business` (
   `linkPhone` varchar(12) DEFAULT NULL COMMENT '联系电话',
   `sort` int(5) DEFAULT '200' COMMENT '排序 从小到达排序',
   `idDel` int(2) DEFAULT '0' COMMENT '是否删除 1是 0否',
+  `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -198,8 +199,7 @@ CREATE TABLE `hj_developers` (
 -- ----------------------------
 -- Records of hj_developers
 -- ----------------------------
-INSERT INTO `hj_developers` VALUES ('1', '包里', '34', '3434534353423', 'upload/developers/18-04-18_193459.png', '1', '3424', '344', '34', '24575545454', '0', '2018-04-18 19:34:59', null);
-INSERT INTO `hj_developers` VALUES ('2', '测试', '2323123', '232123123123', 'upload/developers/18-04-18_194403.png', '1', '256565', '4543434', '0', '6466435523544', '0', '2018-04-18 19:44:03', '435464');
+INSERT INTO `hj_developers` VALUES ('1', '包里2', '34', '  3434534353423', 'upload/developers/18-04-19_100746.jpg', '1', '包里2', '344', '34', '24575545454', '0', '2018-04-18 19:34:59', '1');
 
 -- ----------------------------
 -- Table structure for hj_sales_company
@@ -208,7 +208,7 @@ DROP TABLE IF EXISTS `hj_sales_company`;
 CREATE TABLE `hj_sales_company` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '销售公司',
   `companyName` varchar(500) DEFAULT NULL COMMENT '公司名称',
-  `companyAdress` varchar(500) DEFAULT NULL COMMENT '公司地址',
+  `companyAddress` varchar(500) DEFAULT NULL COMMENT '公司地址',
   `companyInfo` varchar(500) DEFAULT NULL COMMENT '公司简介',
   `uid` int(20) DEFAULT NULL COMMENT '负责人id',
   `linkman` varchar(50) DEFAULT NULL COMMENT '联系人',
@@ -217,14 +217,16 @@ CREATE TABLE `hj_sales_company` (
   `licensePic` varchar(500) DEFAULT NULL COMMENT '营业执照图片',
   `billing` varchar(100) DEFAULT NULL COMMENT '开票信息',
   `openAccount` varchar(200) DEFAULT NULL COMMENT '开户信息',
-  `sort` varchar(10) DEFAULT '200' COMMENT '排序 从小到大排序',
+  `sort` int(10) DEFAULT '200' COMMENT '排序 从小到大排序',
   `isDel` int(2) DEFAULT '0' COMMENT '是否删除  1是 0否',
+  `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_sales_company
 -- ----------------------------
+INSERT INTO `hj_sales_company` VALUES ('2', '的方式发送', '34535', '', '1', '4455345', '345', '25475734dsfsfs', 'upload/company/18-04-19_112348.jpg', '3453', '5353535', '0', '0', '2018-04-19 11:23:48');
 
 -- ----------------------------
 -- Table structure for hj_sales_user
@@ -240,13 +242,15 @@ CREATE TABLE `hj_sales_user` (
   `info` varchar(500) DEFAULT NULL COMMENT '简介',
   `headPic` varchar(500) DEFAULT NULL COMMENT '头像',
   `sort` int(20) DEFAULT '200' COMMENT '排序 从小到大 ',
-  `idDel` int(2) DEFAULT '0' COMMENT '是否删除  1是 0否',
+  `isDel` int(2) DEFAULT '0' COMMENT '是否删除  1是 0否',
+  `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_sales_user
 -- ----------------------------
+INSERT INTO `hj_sales_user` VALUES ('2', '2', '海运费', '2', '19958575', '23424', '4234', 'upload/user/18-04-19_142833.jpg', '200', '0', '2018-04-19 14:28:33');
 
 -- ----------------------------
 -- Table structure for hj_system_log
@@ -262,7 +266,7 @@ CREATE TABLE `hj_system_log` (
   `log_message` text,
   `log_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_system_log
@@ -300,3 +304,15 @@ INSERT INTO `hj_system_log` VALUES ('30', 'Member/EditUser', '1', '系统创建�
 INSERT INTO `hj_system_log` VALUES ('31', 'Member/delUser', '1', '系统创建者', '::1', '1', '删除用户成功,用户id是:2,用户名称是王姐', '2018-04-18 17:17:14');
 INSERT INTO `hj_system_log` VALUES ('32', 'Post/addDevel', '1', '系统创建者', '::1', '1', '新增开发商成功,开发商名称是：包里', '2018-04-18 19:34:59');
 INSERT INTO `hj_system_log` VALUES ('33', 'Post/addDevel', '1', '系统创建者', '::1', '1', '新增开发商成功,开发商名称是：测试', '2018-04-18 19:44:03');
+INSERT INTO `hj_system_log` VALUES ('34', 'Post/editDevelopers', '1', '系统创建者', '::1', '1', '编辑开发商成功,开发商名称是：包里2,开发商id是：1', '2018-04-19 10:06:44');
+INSERT INTO `hj_system_log` VALUES ('35', 'Post/editDevelopers', '1', '系统创建者', '::1', '1', '编辑开发商成功,开发商名称是：包里2,开发商id是：1', '2018-04-19 10:07:46');
+INSERT INTO `hj_system_log` VALUES ('36', 'Post/delDevelopers', '1', '系统创建者', '::1', '1', '删除开发商成功,开发商名称是：测试,开发商id是：2', '2018-04-19 10:16:59');
+INSERT INTO `hj_system_log` VALUES ('37', 'Post/AddCompany', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：测试而微软', '2018-04-19 10:42:40');
+INSERT INTO `hj_system_log` VALUES ('38', 'Post/editCompany', '1', '系统创建者', '::1', '1', '编辑销售公司成功,销售公司名称是：测试而微软', '2018-04-19 11:22:46');
+INSERT INTO `hj_system_log` VALUES ('39', 'Post/AddCompany', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：的方式发送', '2018-04-19 11:23:48');
+INSERT INTO `hj_system_log` VALUES ('40', 'Post/editCompany', '1', '系统创建者', '::1', '1', '编辑销售公司成功,销售公司名称是：的方式发送', '2018-04-19 11:24:03');
+INSERT INTO `hj_system_log` VALUES ('41', 'Post/delCompany', '1', '系统创建者', '::1', '1', '删除销售公司成功,销售公司名称是：测试而微软,开发商id是：1', '2018-04-19 11:31:39');
+INSERT INTO `hj_system_log` VALUES ('42', 'Post/addSalesUser', '1', '系统创建者', '::1', '1', '新增销售人员成功,销售公司名称是：2,销售人员名称是：车话', '2018-04-19 13:47:48');
+INSERT INTO `hj_system_log` VALUES ('43', 'Post/editSalesUser', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：', '2018-04-19 14:14:12');
+INSERT INTO `hj_system_log` VALUES ('44', 'Post/addSalesUser', '1', '系统创建者', '::1', '1', '新增销售人员成功,销售公司名称是：2,销售人员名称是：海运费', '2018-04-19 14:28:33');
+INSERT INTO `hj_system_log` VALUES ('45', 'Post/delSalesUser', '1', '系统创建者', '::1', '1', '删除销售人员成功,销售人员id是：1,销售人员名称是：景色', '2018-04-19 14:28:39');
