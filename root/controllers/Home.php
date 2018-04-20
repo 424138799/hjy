@@ -16,93 +16,156 @@ class Home extends Default_Controller
 	//登陆界面
 	function index(){
 
-		//获取用户信息
-		// var_dump($)
-		$power = $this->public_model->select_info('admin_user_group','gid',$this->session->users['gId']);
-
-		$this->session->set_userdata('menus',$power['perm']);
-
+	
 		$data['menu'] = 'index';
 		$this->load->view('index.html',$data);
 	}
 
-	//囚牛
-	function qiniu(){
-	
-		$this->load->library('Qiniu');
-		$accessKey = "qjWkScOlHQsxnSMyAYScOwCBgWljlwaOuqMmXAg2";
-		$secretKey = "hj-sLlpzxyKIbGd4T97iXQscj9UG2-Yx2siA0kXg";
-		$bucket = "hengjiyuan";
 
+	// banner
+	function bannerList(){
+		$data['banners'] = $this->public_model->select('system_banner','createTime','desc');
+		$data['menu'] = array('system', 'bannerList');
+		$this->load->view('bannerList.html', $data);
+	}
 
-		$auth = new Qiniu\Auth($accessKey, $secretKey);
+	//新增banner
+	function addBanner(){
+		if($_POST){
+			$data = $this->input->post();
+			if (!empty($_FILES['file']['name'])) {
+				$config['upload_path'] = 'upload/car/';
+				$config['allowed_types'] = 'gif|jpg|png|jpeg';
+				$config['max_size'] = 5120;
+				$config['file_name'] = date('y-m-d_His');
+				$this->load->library('upload', $config);
+                // 上传
+				if (!$this->upload->do_upload('file')) {
+					echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+					exit;
+				} else {
+					$logo = 'upload/car/' . $this->upload->data('file_name');
+					$data['bannerUrl'] = qiniu($logo, 'banner');
+					unlink($logo);
+				}
+			}
 
-		$token = $auth->uploadToken($bucket);
+			if($this->public_model->insert('system_banner',$data)){
+				$arr = array(
+					'log_url' => $this->uri->uri_string(),
+					'user_id' => $this->session->users['userId'],
+					'username' => $this->session->users['userName'],
+					'log_ip' => get_client_ip(),
+					'log_status' => '1',
+					'log_message' => "新增banner成功,banner名称是：" . $data['title'],
+				);
+				add_system_log($arr);
+				echo "<script>alert('操作成功！');window.location.href='" . site_url('/Home/bannerList') . "'</script>";
+				exit;
+			}else{
+				$arr = array(
+					'log_url' => $this->uri->uri_string(),
+					'user_id' => $this->session->users['userId'],
+					'username' => $this->session->users['userName'],
+					'log_ip' => get_client_ip(),
+					'log_status' => '0',
+					'log_message' => "新增banner失败,banner名称是：" . $data['title'],
+				);
+				add_system_log($arr);
+				echo "<script>alert('操作成功！');window.location.href='" . site_url('/Home/bannerList') . "'</script>";
+				exit;
+			}
+		}else{
+			$this->load->view('404.html');
+		}
+	}
 
-		//上传文件的本地路径
-		$filePath = 'upload/car/18-04-19_184520.png';
-		$key = '2313213132.jpg';
-		$uploadMgr = new Qiniu\Storage\UploadManager();
+	//编辑banner
+	function editBanner(){
+		if($_POST){
+			$data = $this->input->post();
+			if (!empty($_FILES['file']['name'])) {
+				$config['upload_path'] = 'upload/car/';
+				$config['allowed_types'] = 'gif|jpg|png|jpeg';
+				$config['max_size'] = 5120;
+				$config['file_name'] = date('y-m-d_His');
+				$this->load->library('upload', $config);
+					// 上传
+				if (!$this->upload->do_upload('file')) {
+					echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+					exit;
+				} else {
+					$logo = 'upload/car/' . $this->upload->data('file_name');
+					$data['bannerUrl'] = qiniu($logo, 'banner');
+					unlink($logo);
+				}
+			}
 
-		list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
-		echo "\n====> putFile result: \n";
-		if ($err !== null) {
-			var_dump($err);
+			if ($this->public_model->updata('system_banner','bannerId',$data['bannerId'] ,$data)) {
+				$arr = array(
+					'log_url' => $this->uri->uri_string(),
+					'user_id' => $this->session->users['userId'],
+					'username' => $this->session->users['userName'],
+					'log_ip' => get_client_ip(),
+					'log_status' => '1',
+					'log_message' => "编辑banner成功,banner名称是：" . $data['title'].',bannerId是:'.$data['bannerId'],
+				);
+				add_system_log($arr);
+				echo "<script>alert('操作成功！');window.location.href='" . site_url('/Home/bannerList') . "'</script>";
+				exit;
+			} else {
+				$arr = array(
+					'log_url' => $this->uri->uri_string(),
+					'user_id' => $this->session->users['userId'],
+					'username' => $this->session->users['userName'],
+					'log_ip' => get_client_ip(),
+					'log_status' => '0',
+					'log_message' => "编辑banner失败,banner名称是：" . $data['title'] . ',bannerId是:' . $data['bannerId'],
+				);
+				add_system_log($arr);
+				echo "<script>alert('操作成功！');window.location.href='" . site_url('/Home/bannerList') . "'</script>";
+				exit;
+			}
 		} else {
-			echo $ret['key'];
-
+			$this->load->view('404.html');
 		}
 	}
 
 
-	//修改数据配置信息
-	function configure(){
+	//删除banner
+	function delBanner(){
 		if($_POST){
-			$data = $this->input->post();
-			foreach ($data as $k => $v) {
-				$this->public_model->updata($this->conf,'name',$k,array('value'=>$v));
+			$id = $this->input->post('id');
+			if($this->public_model->delete('system_banner','bannerId',$id)){
+				$arr = array(
+					'log_url' => $this->uri->uri_string(),
+					'user_id' => $this->session->users['userId'],
+					'username' => $this->session->users['userName'],
+					'log_ip' => get_client_ip(),
+					'log_status' => '1',
+					'log_message' => "删除banner成功,bannerId是:" . $data['bannerId'],
+				);
+				add_system_log($arr);
+				echo "1";
+				exit;
+			}else{
+				$arr = array(
+					'log_url' => $this->uri->uri_string(),
+					'user_id' => $this->session->users['userId'],
+					'username' => $this->session->users['userName'],
+					'log_ip' => get_client_ip(),
+					'log_status' => '0',
+					'log_message' => "删除banner失败,bannerId是:" . $data['bannerId'],
+				);
+				add_system_log($arr);
+				echo "2";
+				exit;
 			}
-			$arr = array(
-	                'log_url'=>$this->uri->uri_string(),
-	                'user_id'=> $this->session->users['id'],
-	                'username'=>$this->session->users['username'],
-	                'log_ip'=>get_client_ip(),
-	                'log_status'=>'1',
-	                'log_message'=>"修改数据调整信息",
-	        );
-            add_system_log($arr);
-            echo "<script>alert('操作成功！');window.location.href='".site_url('/Home/configure')."'</script>";exit;
+
 		}else{
-			$data['menu'] = 'configure';
-			//配置
-			$this->load->view('dataAdjust.html',$data);
+			echo "3";
 		}
 	}
-
-	//
-	function systemSeo(){
-		if($_POST){
-			$data = $this->input->post();
-			foreach ($data as $k => $v) {
-				$this->public_model->updata($this->conf,'name',$k,array('value'=>$v));
-			}
-			$arr = array(
-	                'log_url'=>$this->uri->uri_string(),
-	                'user_id'=> $this->session->users['id'],
-	                'username'=>$this->session->users['username'],
-	                'log_ip'=>get_client_ip(),
-	                'log_status'=>'1',
-	                'log_message'=>"修改网站信息",
-	        );
-            add_system_log($arr);
-            echo "<script>alert('操作成功！');window.location.href='".site_url('/Home/systemSeo')."'</script>";exit;
-		}else{
-			$data['menu'] = 'systemSeo';
-			//配置
-			$this->load->view('systemSeo.html',$data);
-		}
-	}
-
 
 
 

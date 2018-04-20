@@ -242,30 +242,38 @@ class Bank extends Default_Controller
     function addBankUser(){
         if ($_POST) {
             $data = $this->input->post();
-            if ($this->Public_model->insert($this->bankUser, $data)) {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '1',
-                    'log_message' => "新增银行管理人员成功,银行编号是：" . $data['bankId'].',银行管理人员名称是：'.$data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
+            $user = $this->public_model->select_info($this->bankUser, 'linkPhone', $data['linkPhone']);
+            if (!empty($user)) {
+                echo "<script>alert('手机账户已注册！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
                 exit;
+
             } else {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '0',
-                    'log_message' => "新增银行管理人员失败,银行编号是：" . $data['bankId'] . ',银行管理人员名称是：' . $data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
-                exit;
+                $data['password'] = md5($data['password']);
+                if ($this->Public_model->insert($this->bankUser, $data)) {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '1',
+                        'log_message' => "新增银行管理人员成功,银行编号是：" . $data['bankId'].',银行管理人员名称是：'.$data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作成功！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
+                    exit;
+                } else {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '0',
+                        'log_message' => "新增银行管理人员失败,银行编号是：" . $data['bankId'] . ',银行管理人员名称是：' . $data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作失败！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
+                    exit;
+                }
             }
         } else {
             $this->load->view('404.html');
@@ -276,29 +284,40 @@ class Bank extends Default_Controller
     function editBankUser(){
         if ($_POST) {
             $data = $this->input->post();
-            if ($this->Public_model->updata($this->bankUser,'uId',$data['uId'], $data)) {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '1',
-                    'log_message' => "编辑银行管理人员成功,银行编号是：" . $data['bankId'] . ',银行管理人员名称是：' . $data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
-                exit;
-            } else {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '0',
-                    'log_message' => "编辑银行管理人员失败,银行编号是：" . $data['bankId'] . ',银行管理人员名称是：' . $data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
+            $user = $this->public_model->retBankUserInfo($this->bankUser, 'linkPhone', $data['linkPhone'], $data['uId']);
+            if (empty($user)) {
+                if (!empty($data['password'])) {
+                    $data['password'] = md5($data['password']);
+                } else {
+                    unset($data['password']);
+                }
+                if ($this->Public_model->updata($this->bankUser,'uId',$data['uId'], $data)) {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '1',
+                        'log_message' => "编辑银行管理人员成功,银行编号是：" . $data['bankId'] . ',银行管理人员名称是：' . $data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作成功！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
+                    exit;
+                } else {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '0',
+                        'log_message' => "编辑银行管理人员失败,银行编号是：" . $data['bankId'] . ',银行管理人员名称是：' . $data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作失败！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";
+                    exit;
+                }
+            }else{
+                echo "<script>alert('用户手机账户已注册！');window.location.href='" . site_url('/bank/bankPersonnel') . "'</script>";
                 exit;
             }
         } else {
