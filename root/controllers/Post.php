@@ -97,7 +97,11 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['licensePic'] = 'upload/developers/' . $this->upload->data('file_name');
+                    $licensePic = 'upload/developers/' . $this->upload->data('file_name');
+                     //骑牛上次
+                    $data['licensePic'] = qiniu($licensePic, 'developers');
+                    unlink($licensePic);
+
                 }
             }
 
@@ -148,7 +152,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['licensePic'] = 'upload/developers/' . $this->upload->data('file_name');
+                    $licensePic = 'upload/developers/' . $this->upload->data('file_name');
+                    $data['licensePic'] = qiniu($licensePic, 'developers');
+                    unlink($licensePic);
                 }
             }
 
@@ -300,7 +306,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['licensePic'] = 'upload/company/' . $this->upload->data('file_name');
+                    $licensePic = 'upload/company/' . $this->upload->data('file_name');
+                    $data['licensePic'] = qiniu($licensePic, 'salesCompany');
+                    unlink($licensePic);
                 }
             }
 
@@ -351,7 +359,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['licensePic'] = 'upload/company/' . $this->upload->data('file_name');
+                    $licensePic = 'upload/company/' . $this->upload->data('file_name');
+                    $data['licensePic'] = qiniu($licensePic, 'salesCompany');
+                    unlink($licensePic);
                 }
             }
 
@@ -502,7 +512,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['headPic'] = 'upload/user/' . $this->upload->data('file_name');
+                    $headPic = 'upload/user/' . $this->upload->data('file_name');
+                    $data['headPic'] = qiniu($headPic, 'userHeader');
+                    unlink($headPic);
                 }
             }
 
@@ -553,7 +565,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['headPic'] = 'upload/user/' . $this->upload->data('file_name');
+                    $headPic = 'upload/user/' . $this->upload->data('file_name');
+                    $data['headPic'] = qiniu($headPic, 'userHeader');
+                    unlink($headPic);
                 }
             }
             if ($this->public_model->updata($this->salesUser,'id',$data['id'],$data)) {
@@ -703,7 +717,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['logo'] = 'upload/user/' . $this->upload->data('file_name');
+                    $logo = 'upload/user/' . $this->upload->data('file_name');
+                    $data['logo'] = qiniu($logo, 'bisinessLogo');
+                    unlink($logo);
                 }
             }
 
@@ -752,7 +768,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['logo'] = 'upload/user/' . $this->upload->data('file_name');
+                    $logo = 'upload/user/' . $this->upload->data('file_name');
+                    $data['logo'] = qiniu($logo, 'bisinessLogo');
+                    unlink($logo);
                 }
             }
            
@@ -906,7 +924,10 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['logo'] = 'upload/village/' . $this->upload->data('file_name');
+                    $logo = 'upload/village/' . $this->upload->data('file_name');
+                    $data['logo'] = qiniu($logo, 'villageLogo');
+                    unlink($logo);
+                    
                 }
             }
 
@@ -961,7 +982,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['logo'] = 'upload/village/' . $this->upload->data('file_name');
+                    $logo = 'upload/village/' . $this->upload->data('file_name');
+                    $data['logo'] = qiniu($logo, 'villageLogo');
+                    unlink($logo);
                 }
             }
 
@@ -1117,9 +1140,10 @@ class Post extends Default_Controller
                     exit;
                 } else {
                     $logo = 'upload/car/' . $this->upload->data('file_name');
+                    $data['logo'] = qiniu($logo, 'carPark');
+                    unlink($logo);
                 }
             }
-            $data['logo'] = qiniu($logo,'carPark');
 
             if ($this->public_model->insert($this->carPark, $data)) {
                 $arr = array(
@@ -1170,7 +1194,9 @@ class Post extends Default_Controller
                     echo "<script>alert('文件上传失败！');history.back(-1);</script>";
                     exit;
                 } else {
-                    $data['logo'] = 'upload/car/' . $this->upload->data('file_name');
+                    $logo = 'upload/car/' . $this->upload->data('file_name');
+                    $data['logo'] = qiniu($logo, 'carPark');
+                    unlink($logo);
                 }
             }
 
@@ -1214,27 +1240,73 @@ class Post extends Default_Controller
         }
     }
     
+    //删除车位
+    function delCarPark(){
+        if($_POST){
+            $data = $this->input->post();
+            if ($this->public_model->delete($this->carPark, 'carId', $data['id'])) {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '1',
+                    'log_message' => "删除车位信息成功,车位名称是：" . $data['name'] . ",车位id是:" . $data['id'],
+                );
+                add_system_log($arr);
+                echo "1";
+                exit;
+            } else {
+                $arr = array(
+                    'log_url' => $this->uri->uri_string(),
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
+                    'log_ip' => get_client_ip(),
+                    'log_status' => '0',
+                    'log_message' => "删除车位信息失败,车位名称是：" . $data['name'] . ",车位id是:" . $data['id'],
+                );
+                add_system_log($arr);
+                echo "2";
+                exit;
+            }
+            
+        }else{
+            echo "3";
+        }
+    }
 
 
     //上传图片
     function uploadImg()
     {
         $error = '0';
-        if (!empty($_FILES['img']['name'])) {
-            $config['upload_path'] = 'upload/news/';
-            $config['allowed_types'] = 'gif|jpg|png|jpeg';
-            $config['max_size'] = 5120;
-            $config['file_name'] = date('y-m-d_His');
-            $this->load->library('upload', $config);
+        $data = array();
+        $i  = '0';
+        foreach ($_FILES as $key => $value) {
+            if (!empty($value['name'])) {
+                $config['upload_path'] = 'upload/news/';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size'] = 5120;
+                $config['file_name'] = date('y-m-d_His');
+                $this->load->library('upload', $config);
             // 上传
-            if (!$this->upload->do_upload('img')) {
-                $error = "1";
-            } else {
-                $data[] = base_url() . 'upload/news/' . $this->upload->data('file_name');
+                if (!$this->upload->do_upload($key)) {
+                    $error = "1";
+                } else {
+                    $imgfile = 'upload/news/' . $this->upload->data('file_name');
+                    // var_dump($imgfile);
+                    $data[$i]['url'] = qiniu($imgfile, 'carPark');
+                    unlink($imgfile);
+                    time_sleep_until(time()+1);
+                }
             }
+            $i++;
         }
-        $arr = array('errno' => $error, 'data' => $data);
-        echo json_encode($arr);
+        // var_dump($data);
+        if(!empty($data)){
+            $arr = $data;
+            echo json_encode($arr);
+        }
     }
 
 
