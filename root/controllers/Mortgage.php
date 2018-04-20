@@ -14,16 +14,21 @@ class Mortgage extends Default_Controller
 
     // 按揭申请
     function applyList(){
-        $this->load->view('mortgage/applyList.html');
+        $data['menu'] ='applyList';
+        $this->load->view('mortgage/applyList.html',$data);
     }
     
     //业务提成
     function commision(){
-        $this->load->view('mortgage/commision.html');
+        $data['menu'] = array('member', 'commision');
+    
+        $this->load->view('mortgage/commision.html',$data);
     }
     //小区提成
     function villageCommision(){
-        $this->load->view('mortgage/villageCommision.html');
+        $data['menu'] = array('member', 'villageCommision');
+
+        $this->load->view('mortgage/villageCommision.html',$data);
     }
 
 

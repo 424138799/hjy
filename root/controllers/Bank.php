@@ -71,8 +71,8 @@ class Bank extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->Public_model->select_page($this->bank,'id' ,$current_page, $config['per_page']);
         $this->pagination->initialize($config);
-
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+        $menu = array('village', 'bankList');
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
      
         $this->load->view('bank/bankList.html',$data);
     }
@@ -232,8 +232,8 @@ class Bank extends Default_Controller
         $this->pagination->initialize($config);
         //获取所有人员
         $bankUser = $this->Public_model->select($this->bank,'id','desc');
-
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'bankUser'=> $bankUser);
+        $menu = array('village', 'bankPersonnel');
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'bankUser'=> $bankUser,'menu'=>$menu);
 
         $this->load->view('bank/bankUser.html', $data);
     }

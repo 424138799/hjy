@@ -4,25 +4,26 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>采薇网 - 用户管理 </title>
-    <meta name="description" content="这是一个 index 页面">
-    <meta name="keywords" content="index">
+    <title>
+        <?php echo name;?> - 用户群组管理 </title>
+    <meta name="description" content="<?php echo name;?>">
+    <meta name="keywords" content="<?php echo name;?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="icon" type="image/png" href="<?php echo base_url('/style/root');?>/i/favicon.png">
-    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('/style/root');?>/i/app-icon72x72@2x.png">
-    <meta name="apple-mobile-web-app-title" content="" /> 
-    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/amazeui.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/amazeui.datatables.min.css" />
-    <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/app.css">
-    <!-- <link rel="stylesheet" href="<?php echo base_url('/style/root');?>/css/admin.css"> -->
-    <script src="<?php echo base_url('/style/root');?>/js/jquery.min.js"></script>
+    <link rel="icon" type="image/png" href="<?php echo ROOTCSS;?>/img/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo ROOTCSS;?>/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/app.css">
+    <!-- <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/admin.css"> -->
+    <script src="<?php echo ROOTCSS;?>/js/jquery.min.js"></script>
 
 </head>
 
 <body data-type="index">
-    <script src="<?php echo base_url('/style/root');?>/js/theme.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/theme.js"></script>
     <div class="am-g tpl-g">
         <?php $this->load->view('header.html');?>
         <!-- 内容区域 -->
@@ -32,7 +33,7 @@
                     <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
-                                <div class="widget-title  am-cf">用户管理列表</div>
+                                <div class="widget-title  am-cf">用户群组列表</div>
                             </div>
                             <div class="widget-body  am-fr">
                                 <div style="margin-bottom: 20px">
@@ -44,7 +45,8 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>用户组名称</th>
-                                               
+                                                <th>状态</th>
+                                                <th>创建时间</th>
                                                 <th>操作</th>
                                             </tr>
                                         </thead>
@@ -53,8 +55,13 @@
                                                 <?php foreach($group as $v):?>
                                             <tr class="gradeX">
                                                 <td class="gid"><?php echo $v['gid'];?></td>
-                                                <td class="groupName"><?php echo $v['group_name'];?></td>
-                                              
+                                                <td class="groupName"><?php echo $v['groupName'];?></td>
+                                                <td><?php echo $v['addtime'];?></td>
+                                                <?php if($v['status'] == '1'):?>
+                                                    <td class="status"><input type="hidden" value="1" id="groupStaus"/>正常</td>
+                                                <?php else:?>
+                                                    <td class="status"><input type="hidden" value="0" id="groupStaus" />冻结</td>
+                                                <?php endif;?>
                                                 <td>
                                                    <div class="am-btn-toolbar">
                                                         <div class="am-btn-group am-btn-group-xs">
@@ -94,7 +101,7 @@
                         <div class="am-form-group">
                             <label for="userName" class="am-u-sm-3 am-form-label">用户组名称</label>
                             <div class="am-u-sm-9">
-                            <input type="text" id="group_name" name="group_name" value="" placeholder="用户组名称">
+                            <input type="text" id="groupName" name="groupName" value="" placeholder="用户组名称">
                             </div>
                         </div>   
                     </div>
@@ -117,9 +124,18 @@
                         <div class="am-form-group">
                             <label for="userName" class="am-u-sm-3 am-form-label">用户组名称</label>
                             <div class="am-u-sm-9">
-                            <input type="text" id="userName" name="group_name" value="" placeholder="输入你的用户名">
+                            <input type="text" id="userName" name="groupName" value="" placeholder="输入你的用户名">
                             </div>
                         </div> 
+                        <div class="am-form-group">
+                            <label for="userName" class="am-u-sm-3 am-form-label">用户组状态</label>
+                            <div class="am-u-sm-9">
+                                <select name="status" class="selectS">
+                                    <option value="1">正常</option>
+                                    <option value="0">冻结</option>
+                                </select>
+                            </div>
+                        </div>
                       
                         
                     </div>
@@ -136,7 +152,7 @@
           <div class="am-modal-dialog">
             <div class="am-modal-hd">删除提示</div>
             <div class="am-modal-bd">
-              你，确定要删除这条记录吗？
+              删除时会删除该用户组下所有管理用户，确定要删除这条记录吗？
             </div>
             <div class="am-modal-footer">
               <span class="am-modal-btn" data-am-modal-cancel>取消</span>
@@ -184,27 +200,14 @@
                 on('click', function () {
                     $('#userName').val($(this).parentsUntil('tbody').find('.groupName').html());
                     
-                    $('#groupId').val($(this).parentsUntil('tbody').find('.gid').html())
+                    $('#groupId').val($(this).parentsUntil('tbody').find('.gid').html());
+                    var gid = $(this).parentsUntil('tbody').find('#groupStaus').val();
+                    // console.log(gid);
+                    $(".selectS").find("option[value='" + gid + "']").attr("selected", true);
                     // $('#integral').val($(this).parentsUntil('tbody').find('.integral').html())
                     $('#my-update-confirm').modal({
                         relatedTarget: this,
-                    //     onConfirm: function (options) {
-                    //         var $link = $(this.relatedTarget).one('a');
-                    //         var updateEmail = $('#updateEmail').val();
-                    //         var updateQQ = $('#updateQQ').val();
-                    //         var updatePsd = $('#updatePsd').val();
-                          
-                    //         // var data = { updateName: updateName, updateController: updateController, id: $link.data('id') }
-                    //         // console.log(data)
-                    //         // $.post("URL", data, function (result) {
-                    //         //     $("span").html(result);
-                    //         //     window.location.reload()
-                    //         // });
-                    //     },
-
-                    //     closeOnConfirm: false,
-                    //     onCancel: function () { 
-                    //     }
+              
                     });
                 }); 
         });
@@ -246,10 +249,10 @@
        
 
     </script>
-    <script src="<?php echo base_url('/style/root');?>/js/amazeui.min.js"></script>
-    <script src="<?php echo base_url('/style/root');?>/js/amazeui.datatables.min.js"></script>
-    <script src="<?php echo base_url('/style/root');?>/js/dataTables.responsive.min.js"></script>
-    <script src="<?php echo base_url('/style/root');?>/js/app.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.datatables.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/app.js"></script>
 
 </body>
 

@@ -17,51 +17,13 @@ class Home extends Default_Controller
 	function index(){
 
 		//获取用户信息
-		// $users = $this->session->users;
+		// var_dump($)
+		$power = $this->public_model->select_info('admin_user_group','gid',$this->session->users['gId']);
 
-		// //判断是否是超级管理员
-		// if($users['super_admin'] == '1'){
-		// 	//获取所有权限
-		// 	$list = $this->public_model->select($this->table,'id');
-		// 	$menus = subtree($list);
-        // 	//$power = json_encode(subtree($list),JSON_UNESCAPED_UNICODE);
-        // 	// $this->session->users['power'] = json_encode($menus);
-		// }else{
-		// 	//获取用户组权限
-		// 	$power = $this->public_model->select_info('wxCatchv1_system_group','gid',$users['g_id']);
-		// 	if(!empty($power)){
-		// 		$plateid = json_decode($power['perm'],true);
-		// 		foreach ($plateid as $key => $value) {
-	    //             $query = $this->db->where('id',$value)->get($this->table);
-	    //             $menu[] = $query->row_array();
-	    //         }
-	    //         $arr = array();
-	          
-	    //         $menus = subtree($menu);
-	    //     }else{
-        //     	echo "<script>alert('该用户权限为空，请联系超级管理员！');window.location.href='".site_url('/Login/index')."'</script>";exit;
+		$this->session->set_userdata('menus',$power['perm']);
 
-	    //     }
-		// }
-		
-		// $menus_data = array();
-		
-		// foreach($menus as $key=>$value){
-		// 	if($value['status'] == '1'){
-		// 		if($value['pid'] == '0'){
-		// 			$menus_data[$value['id']]['value'] = $value;
-		// 		}else{
-		// 			$menus_data[$value['pid']]['value']['chick'][] = $value;
-		// 		}
-		// 	}
-		// }
-
-
-		// $this->session->set_userdata('menus',json_encode($menus_data));
-
-
-
-		$this->load->view('index.html');
+		$data['menu'] = 'index';
+		$this->load->view('index.html',$data);
 	}
 
 	//囚牛
