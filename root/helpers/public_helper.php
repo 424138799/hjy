@@ -183,7 +183,6 @@ function qiniu($path,$data)
     $uploadMgr = new Qiniu\Storage\UploadManager();
 
     list($ret, $err) = $uploadMgr->putFile($token, $key, $path);
-    echo "\n====> putFile result: \n";
     if ($err !== null) {
         echo "2";
     } else {

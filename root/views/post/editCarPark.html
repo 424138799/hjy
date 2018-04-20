@@ -389,10 +389,23 @@
     }
     //设置图片大小
     editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+    editor.customConfig.uploadImgMaxLength = 5
+
     // 下面两个配置，使用其中一个即可显示“上传图片”的tab。但是两者不要同时使用！！！
     // editor.customConfig.uploadImgShowBase64 = true   // 使用 base64 保存图片
     editor.customConfig.uploadImgServer = '<?php echo site_url("/Post/uploadImg");?>'  // 上传图片到服务器
-    editor.customConfig.uploadFileName = 'img'
+    editor.customConfig.uploadImgHooks = {
+        customInsert: function (insertImg, result, editor) {
+            // 图片上传并返回结果，自定义插入图片的事件（而不是编辑器自动插入图片！！！）
+            // insertImg 是插入图片的函数，editor 是编辑器对象，result 是服务器端返回的结果
+            // 举例：假如上传图片成功后，服务器端返回的是 {url:'....'} 这种格式，即可这样插入图片：
+            for (var i = 0; i < result.length; i++) {
+
+                var url = result[i].url
+                insertImg(url)
+            }
+        }
+    }
 
     editor.create()
     $content.val(editor.txt.html())
