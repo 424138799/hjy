@@ -920,11 +920,12 @@ class Post extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->public_model->select_page($this->village, 'updataTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
+
+
+
         $menu = array('village', 'village');
 
         $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
-
-        
         $this->load->view('post/village.html',$data);
     }
 
@@ -981,9 +982,26 @@ class Post extends Default_Controller
             //获取银行
             $data['bank'] = $this->public_model->select($this->bank,'createTime','desc');
             $data['devel'] = $this->public_model->select($this->developers,'createTime','desc');
+                    //获取销售公司
+            $data['company'] = $this->public_model->select_where($this->company, 'isDel', '0', 'createTime', 'desc');
+           
             $data['menu'] = array('village', 'village');
 
             $this->load->view('post/addVillage.html',$data);
+        }
+    }
+    //返回销售人员
+    function retSalesUser(){
+        if($_POST){
+            $id = $this->input->post('cId');
+            $salesUser = $this->public_model->select_where_many($this->salesUser,'c_id',$id, 'isDel','0','createTime','desc');
+            if(!empty($salesUser)){
+                echo json_encode($salesUser);
+            }else{
+                echo "2";
+            }
+        }else{
+            echo "2";
         }
     }
 
@@ -1042,6 +1060,9 @@ class Post extends Default_Controller
                   //获取银行
                 $data['bank'] = $this->public_model->select($this->bank, 'createTime', 'desc');
                 $data['devel'] = $this->public_model->select($this->developers, 'createTime', 'desc');
+                $data['company'] = $this->public_model->select_where($this->company, 'isDel', '0', 'createTime', 'desc');
+                $data['salesUser'] = $this->public_model->select_where_many($this->salesUser,'c_id',$data['village']['salesCompany'] ,'isDel', '0', 'createTime', 'desc');
+
                 $data['menu'] = array('village', 'village');
 
                 $this->load->view('post/editVillage.html', $data);
@@ -1227,7 +1248,7 @@ class Post extends Default_Controller
                     unlink($logo);
                 }
             }
-
+ 
             if ($this->public_model->updata($this->carPark,'carId',$data['carId'], $data)) {
                 $arr = array(
                     'log_url' => $this->uri->uri_string(),

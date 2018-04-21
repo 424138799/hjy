@@ -10,6 +10,7 @@ class Bank extends Default_Controller
     //
     public $bank = 'bank';
     public $bankUser = 'bank_user';
+    public $adminUser = 'admin_user';
 
 
     function __construct()
@@ -71,8 +72,13 @@ class Bank extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->Public_model->select_page($this->bank,'id' ,$current_page, $config['per_page']);
         $this->pagination->initialize($config);
+
+        //获取负责人
+        $duty = $this->public_model->select_where($this->adminUser,'status','1', 'createTime','desc');
+
+
         $menu = array('village', 'bankList');
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu,'duty'=>$duty);
      
         $this->load->view('bank/bankList.html',$data);
     }
