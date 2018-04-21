@@ -16,6 +16,41 @@ class Api extends CI_Controller
        $this->load->model('public_model');
    }
 
+   //七牛上传token
+   function QiniuToken(){
+       if($_POST){
+            $this->load->library('Qiniu');
+            $accessKey = "qjWkScOlHQsxnSMyAYScOwCBgWljlwaOuqMmXAg2";
+            $secretKey = "hj-sLlpzxyKIbGd4T97iXQscj9UG2-Yx2siA0kXg";
+            $bucket = "hengjiyuan-wx";
+
+            $auth = new Qiniu\Auth($accessKey, $secretKey);
+            $token = $auth->uploadToken($bucket);
+            if (!empty($token)) {
+                $arr = array(
+                    'error' => '0',
+                    'data' => $token,
+                );
+                echo json_encode($arr);
+            } else {
+                $arr = array(
+                    'error' => '2',
+                    'data' => '',
+                );
+                echo json_encode($arr);
+            }
+
+       }else{
+            $arr = array(
+                'error' => '2',
+                'errorData' => '请求错误！',
+                'data' => '',
+            );
+            echo json_encode($arr); 
+       }
+    
+   }
+
    //login小程序登陆
    function salesUserLogin(){
         if($_POST){
@@ -264,5 +299,86 @@ class Api extends CI_Controller
        }
    }
 
+
+   //修改密码
+   function editUserPwd(){
+       if($_POST){
+            $data = $this->input->post();
+            //获取用户信息
+            $user = $this->public_model->select_info($this->salesUser,'phone',$data['phone']);
+            //判断密码是否正常
+            if($user['password'] == md5($data['password'])){
+               $arr = array('password'=>md5($data['pwd']));
+               if($this->public_model->updata($this->salesUser,'phone',$data['phone'],$arr)){
+                    $arr = array(
+                        'error' => '0',
+                        'errorData' => '',
+                        'data' => '修改成功！',
+                    );
+                    echo json_encode($arr);
+               }else{
+                    $arr = array(
+                        'error' => '2',
+                        'errorData' => '修改失败！',
+                        'data' => '',
+                    );
+                    echo json_encode($arr);
+               }
+            }else{
+                $arr = array(
+                    'error' => '2',
+                    'errorData' => '原密码错误',
+                    'data' => '',
+                );
+                echo json_encode($arr);
+            }
+       }else{
+            $arr = array(
+                'error' => '2',
+                'errorData' => '请求错误！',
+                'data' => '',
+            );
+            echo json_encode($arr);
+       }
+
+    }
+
+           
+    //按揭详情
+    function sendApplyInfo()
+    {
+        if($_POST){
+            $id = $this->input->post('mId');
+            $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+            $this->db->from('hj_send_apply as a', 'left');
+            $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+            $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+            $query = $this->db->where('a.mId', $id)->get();
+            $list = $query->row_array();
+            if (!empty($list)) {
+                $arr = array(
+                    'error' => '0',
+                    'errorData' => '',
+                    'data' => $list,
+                );
+                echo json_encode($arr);
+            } else {
+                $arr = array(
+                    'error' => '2',
+                    'errorData' => '暂无数据！',
+                    'data' => '',
+                );
+                echo json_encode($arr);
+            }
+
+        }else{
+            $arr = array(
+                'error' => '2',
+                'errorData' => '请求错误！',
+                'data' => '',
+            );
+            echo json_encode($arr);
+        }
+    }
 
 }
