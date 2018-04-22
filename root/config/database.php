@@ -152,15 +152,13 @@ $db['default'] = array(
 
 	'dsn'	=> '',
 
-
-
 	'hostname' => 'localhost',
 
-	'username' => 'root',
+	'username' => 'xcxAPI_MYSQL',
 
-	'password' => '',
+	'password' => 'xcxAPI_MYSQL',
 
-	'database' => 'hengjiyuan',
+	'database' => 'xcxAPI_MYSQL',
 
 	'dbdriver' => 'mysqli',
 
