@@ -99,6 +99,27 @@ class public_model extends CI_Model
         $query = $this->db->where($where, $id)->where('uId !=', $id2)->get($table);
         return $query->row_array();
     }
+    //但字段模糊搜索
+    function searchLike($table,$zi,$sear){
+        $query = $this->db->like($zi,$sear,'both')->get($table);
+        return $query->result_array();
+    }
+    function searchLikePage($table,$zi,$sear,$size,$page){
+        $query = $this->db->like($zi,$sear,'both')->limit($size,$page)->get($table);
+        return $query->result_array();
+    }
+    //
+    function searchManyLike($table, $zi,$tow, $sear)
+    {
+        $query = $this->db->like($zi, $sear, 'both')->or_like($tow,$sear,'both')->get($table);
+        return $query->result_array();
+    }
+    function searchManyLikePage($table, $zi,$tow, $sear, $size, $page)
+    {
+        $query = $this->db->like($zi, $sear, 'both')->or_like($tow, $sear, 'both')->limit($size, $page)->get($table);
+        return $query->result_array();
+    }
+
 
 
     //返回按揭申请

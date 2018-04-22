@@ -82,6 +82,72 @@ class Post extends Default_Controller
 
         $this->load->view('post/developers.html',$data);
     }
+    //开发商搜索
+    function searchDevel(){
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->input->get("size"));//index.php 后数第4个/
+        $sear = $this->input->get('sear');
+        //分页配置
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '下一页';
+
+        $config['prev_link'] = '上一页';
+
+        $config['last_link'] = '末页';
+
+        $list = $this->public_model->searchLike($this->developers,'title',$sear);
+       
+        $config['total_rows'] = count($list);
+
+        $config['page_query_string'] = true;//关键配置
+        // $config['reuse_query_string'] = FALSE;
+        $config['query_string_segment'] = 'size';
+        $config['base_url'] = site_url('/Post/searchDevel?') . "sear=" . $sear;
+
+        // //分页数据\
+        $listpage = $this->public_model->searchLikePage($this->developers, 'title',$sear, $config['per_page'], $current_page);
+        $this->load->library('pagination');//加载ci pagination类
+
+        $this->pagination->initialize($config);
+
+        // var_dump($data);
+        $menu = array('village', 'developers');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'menu' => $menu);
+        $this->load->view('post/developers.html', $data);
+
+    }
+
+
 
     //新增开发商信息
     function addDevel(){
@@ -296,6 +362,72 @@ class Post extends Default_Controller
 
         $this->load->view('post/salesCompany.html',$data);
     }
+    //搜索销售公司
+    function searchSalesCompany(){
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->input->get("size"));//index.php 后数第4个/
+        $sear = $this->input->get('sear');
+        //分页配置
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '下一页';
+
+        $config['prev_link'] = '上一页';
+
+        $config['last_link'] = '末页';
+
+        $list = $this->public_model->searchLike($this->company, 'companyName', $sear);
+
+        $config['total_rows'] = count($list);
+
+        $config['page_query_string'] = true;//关键配置
+        // $config['reuse_query_string'] = FALSE;
+        $config['query_string_segment'] = 'size';
+        $config['base_url'] = site_url('/Post/searchSalesCompany?') . "sear=" . $sear;
+
+        // //分页数据\
+        $listpage = $this->public_model->searchLikePage($this->company, 'companyName', $sear, $config['per_page'], $current_page);
+        $this->load->library('pagination');//加载ci pagination类
+
+        $this->pagination->initialize($config);
+
+        // var_dump($data);
+        $menu = array('village', 'salesCompany');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'menu' => $menu);
+        $this->load->view('post/salesCompany.html', $data);
+
+    }
+
+
 
     //新增销售公司
     function AddCompany(){
@@ -507,6 +639,69 @@ class Post extends Default_Controller
 
         $this->load->view('post/salesUser.html',$data);
     }
+    //销售人员
+    function searchSalesUser(){
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->input->get("size"));//index.php 后数第4个/
+        $sear = $this->input->get('sear');
+        //分页配置
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '下一页';
+
+        $config['prev_link'] = '上一页';
+
+        $config['last_link'] = '末页';
+
+        $list = $this->public_model->searchManyLike($this->salesUser, 'userName','phone', $sear);
+
+        $config['total_rows'] = count($list);
+
+        $config['page_query_string'] = true;//关键配置
+        // $config['reuse_query_string'] = FALSE;
+        $config['query_string_segment'] = 'size';
+        $config['base_url'] = site_url('/Post/searchSalesUser?') . "sear=" . $sear;
+
+        // //分页数据\
+        $listpage = $this->public_model->searchManyLikePage($this->salesUser, 'userName','phone', $sear, $config['per_page'], $current_page);
+        $this->load->library('pagination');//加载ci pagination类
+
+        $this->pagination->initialize($config);
+
+        // var_dump($data);
+        $menu = array('village', 'salesUser');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'menu' => $menu);
+        $this->load->view('post/salesUser.html', $data);
+    }
 
     //新增销售人员
     function addSalesUser(){
@@ -717,6 +912,71 @@ class Post extends Default_Controller
 
         $this->load->view('post/business.html',$data);
     }
+    //搜索商家
+    function searchBusiness(){
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->input->get("size"));//index.php 后数第4个/
+        $sear = $this->input->get('sear');
+        //分页配置
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '下一页';
+
+        $config['prev_link'] = '上一页';
+
+        $config['last_link'] = '末页';
+
+        $list = $this->public_model->searchLike($this->business, 'title', $sear);
+
+        $config['total_rows'] = count($list);
+
+        $config['page_query_string'] = true;//关键配置
+        // $config['reuse_query_string'] = FALSE;
+        $config['query_string_segment'] = 'size';
+        $config['base_url'] = site_url('/Post/searchBusiness?') . "sear=" . $sear;
+
+        // //分页数据\
+        $listpage = $this->public_model->searchLikePage($this->business, 'title', $sear, $config['per_page'], $current_page);
+        $this->load->library('pagination');//加载ci pagination类
+
+        $this->pagination->initialize($config);
+
+        // var_dump($data);
+        $menu = array('village', 'business');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'menu' => $menu);
+        $this->load->view('post/business.html', $data);
+    }
+
+
 
     //新增商家
     function addHusiness(){
@@ -927,6 +1187,70 @@ class Post extends Default_Controller
 
         $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
         $this->load->view('post/village.html',$data);
+    }
+    //搜索小区
+    function searchVillage()
+    {
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->input->get("size"));//index.php 后数第4个/
+        $sear = $this->input->get('sear');
+        //分页配置
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '下一页';
+
+        $config['prev_link'] = '上一页';
+
+        $config['last_link'] = '末页';
+
+        $list = $this->public_model->searchLike($this->village, 'villageTitle', $sear);
+
+        $config['total_rows'] = count($list);
+
+        $config['page_query_string'] = true;//关键配置
+        // $config['reuse_query_string'] = FALSE;
+        $config['query_string_segment'] = 'size';
+        $config['base_url'] = site_url('/Post/searchVillage?') . "sear=" . $sear;
+
+        // //分页数据\
+        $listpage = $this->public_model->searchLikePage($this->village, 'villageTitle', $sear, $config['per_page'], $current_page);
+        $this->load->library('pagination');//加载ci pagination类
+
+        $this->pagination->initialize($config);
+
+        // var_dump($data);
+        $menu = array('village', 'village');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'menu' => $menu);
+        $this->load->view('post/village.html', $data);
     }
 
     //新增小区信息
@@ -1170,6 +1494,72 @@ class Post extends Default_Controller
 
         $this->load->view('post/carPark.html',$data);
     } 
+
+      //搜索车位
+    function searchCarPark()
+    {
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->input->get("size"));//index.php 后数第4个/
+        $sear = $this->input->get('sear');
+        //分页配置
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '下一页';
+
+        $config['prev_link'] = '上一页';
+
+        $config['last_link'] = '末页';
+
+        $list = $this->public_model->searchLike($this->carPark, 'carTitle', $sear);
+
+        $config['total_rows'] = count($list);
+
+        $config['page_query_string'] = true;//关键配置
+        // $config['reuse_query_string'] = FALSE;
+        $config['query_string_segment'] = 'size';
+        $config['base_url'] = site_url('/Post/searchCarPark?') . "sear=" . $sear;
+
+        // //分页数据\
+        $listpage = $this->public_model->searchLikePage($this->carPark, 'carTitle', $sear, $config['per_page'], $current_page);
+        $this->load->library('pagination');//加载ci pagination类
+
+        $this->pagination->initialize($config);
+
+        // var_dump($data);
+        $menu = array('village', 'carPark');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'menu' => $menu);
+        $this->load->view('post/carPark.html', $data);
+    }
+
     //新增车位
     function addCarPark(){
         if($_POST){
