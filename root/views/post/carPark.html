@@ -102,8 +102,6 @@
                                                 <th>均价</th>
                                                 <th>价格</th>
                                                 <th>优惠价格</th>
-                                                <th>开始时间</th>
-                                                <th>结束时间</th>
                                                 <th>logo</th>
                                                 <th>创建时间</th>
                                                 <th>创建人</th>
@@ -145,13 +143,6 @@
                                                 <td>
                                                     <?php echo $v['discountPrice'];?>
                                                 </td>
-                                              
-                                                <td>
-                                                    <?php echo $v['startTime'];?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $v['endTime'];?>
-                                                </td>
                                             
                                                 <td>
                                                     <?php if(!empty($v['logo'])):?>
@@ -162,7 +153,7 @@
                                                     <?php echo $v['createTime'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['createUser'];?>
+                                                    <?php $U = retUsername($v['createUser']); echo $U['userName'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['remarks'];?>

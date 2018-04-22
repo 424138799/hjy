@@ -41,7 +41,7 @@ class Login extends CI_Controller
 							} else {
 								$this->session->set_tempdata('users', $user, 7200);
 								$this->session->set_userdata('menus', $user['perm']);
-								$this->session->set_tempdata('uId', $user['userId'], 7200);
+								$this->session->set_tempdata('uId', '1', 7200);
 
 						//  $this->session->mark_as_temp('users', 7200);
 								redirect('Home/index');
@@ -91,7 +91,7 @@ class Login extends CI_Controller
 								$this->load->view('login.html', $error);
 							} else {
 								$this->session->set_tempdata('users', $user, 7200);
-								$this->session->set_tempdata('uId', $user['uId'], 7200);
+								$this->session->set_tempdata('uId', '2', 7200);
 								$menu = '{"2": {"value": {
 													"id": "2",
 													"name": "按揭申请管理",

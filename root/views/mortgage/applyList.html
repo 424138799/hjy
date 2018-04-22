@@ -38,41 +38,12 @@
                             <div class="widget-body  am-fr">
 
                     
-                                <form action="<?php echo site_url('/Member/search_member');?>" method="get">
-
-                                    <div style="margin-top:20px;" class="am-padding-left">
-                                        <div class="am-u-sm-2 am-u-md-1 am-u-lg-1 am-fl" style="text-align:right;">搜索：</div>
-                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3" style="margin-left:-47px;">
-                                            <div class="am-form-group tpl-table-list-select">
-                                                <select data-am-selected="{btnSize: 'sm'}" name="status">
-                                                    <option value="">全部</option>
-                                                    <option value="1">正常</option>
-                                                    <option value="2">封禁</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
-
-                                            <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
-                                                <input type="text" name="sear" class="am-form-field" placeholder="邮箱">
-                                                <!--  <span class="am-input-group-btn">
-                                                <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" type="button"></button>
-                                            </span> -->
-                                            </div>
-                                        </div>
-                                        <div class="am-u-sm-12 am-u-md-2 am-u-lg-2 am-fl"></div>
-                                    </div>
-                                    <div class="am-g am-padding-left">
-
-                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
-                                            <button type="submit" class="am-btn am-btn-primary am-radius">确定</button>
-                                        </div>
-                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-2">
-
-                                        </div>
-                                    </div>
-                                </form>
+                               
                                 <div class="am-u-sm-12">
+                                    <div style="margin-bottom: 20px">
+                                        <a href="<?php echo site_url('/Mortgage/downApply/1');?>" class="am-btn am-btn-default am-btn-primary">
+                                            <span class="am-icon-arrow-down"></span> 导出</a>
+                                    </div>
                                   
                                     <style>
                                         .am-table>thead>tr>th {
@@ -116,13 +87,19 @@
                                                     <td>
                                                         <div class="am-btn-toolbar" style="width:150px;">
                                                             <div class="am-btn-group am-btn-group-xs">
-                                                                <?php if($v['examineState'] == '0'):?>
-                                                                <a href="#" class="update am-btn am-btn-warning">
-                                                                    <span class="am-icon-edit"></span> 审核</a>
-                                                                <?php endif;?>
-
-                                                                <a data-id="#" name="#" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
-                                                                    <span class="am-icon-trash"></span> 删除</a>
+                                                                <?php if($this->session->uId == '1'):?>
+                                                                    <a data-id="<?php echo $v['mId'];?>" name="<?php echo $v['name'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                                        <span class="am-icon-trash"></span> 删除</a>
+                                                                
+                                                                <?php elseif($this->session->uId == '2'):?>
+                                                                    <?php if($v['examineState'] == '0'):?>
+                                                                    <a href="#" class="update am-btn am-btn-warning">
+                                                                        <span class="am-icon-edit"></span> 审核</a>
+                                                                        <?php else:?>
+                                                                        <a href="#" class="am-btn am-btn-success">
+                                                                            <span class="am-icon-edit"></span> 已审核</a>
+                                                                    <?php endif;?>
+                                                                <?php endif;?>                                                             
                                                             </div>
                                                         </div>
                                                     </td>
@@ -179,7 +156,7 @@
                                                     <?php endif;?>
                                                     <td>
                                                         <?php if(!empty($v['bankId'])):?>
-                                                            <?php echo $v['bankId'];?>
+                                                            <?php echo getBankUserName($v['bankId']);?>
                                                         <?php endif;?>
                                                     </td>
                                                     <td>
@@ -246,7 +223,7 @@
                 <div class="am-form-group">
                     <label for="username" class="am-u-sm-3 am-form-label">审核人</label>
                     <div class="am-u-sm-9">
-                        <input type="hidden"  name="bankId" value="<?php echo $this->session->uId;?>">
+                        <input type="hidden"  name="bankId" value="<?php echo $this->session->users['uId'];?>">
                         <input type="text"  readonly value="<?php echo $this->session->users['userName'];?>" >
                     </div>
                 </div>

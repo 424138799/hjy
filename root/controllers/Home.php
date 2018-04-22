@@ -166,7 +166,65 @@ class Home extends Default_Controller
 			echo "3";
 		}
 	}
+	//系统操作日志
+	function systemLog(){
+		$config['per_page'] = 20;
+        //获取页码
+		$current_page = intval($this->uri->segment(3));//index.php 后数第4个/
+        //配置
+		$config['base_url'] = site_url('/Home/systemLog');
+        //分页配置
 
+		$config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
+
+		$config['full_tag_close'] = '</ul>';
+
+		$config['first_tag_open'] = '<li>';
+
+		$config['first_tag_close'] = '</li>';
+
+		$config['prev_tag_open'] = '<li>';
+
+		$config['prev_tag_close'] = '</li>';
+
+		$config['next_tag_open'] = '<li>';
+
+		$config['next_tag_close'] = '</li>';
+
+		$config['cur_tag_open'] = '<li class="am-active"><a>';
+
+		$config['cur_tag_close'] = '</a></li>';
+
+		$config['last_tag_open'] = '<li>';
+
+		$config['last_tag_close'] = '</li>';
+
+		$config['num_tag_open'] = '<li>';
+
+		$config['num_tag_close'] = '</li>';
+
+		$config['first_link'] = '首页';
+
+		$config['next_link'] = '»';
+
+		$config['prev_link'] = '«';
+
+		$config['last_link'] = '末页';
+		$config['num_links'] = 4;
+
+		$total = count($this->public_model->select('system_log', 'log_time'));
+		$config['total_rows'] = $total;
+
+		$this->load->library('pagination');//加载ci pagination类
+		$listpage = $this->public_model->select_page('system_log', 'log_time', $current_page, $config['per_page']);
+		$this->pagination->initialize($config);
+
+		$menu = array('system', 'systemLog');
+		$data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),  'menu' => $menu);
+
+		$this->load->view('systemLog.html', $data);
+
+	}
 
 
 }

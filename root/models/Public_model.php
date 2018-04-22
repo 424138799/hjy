@@ -122,6 +122,29 @@ class public_model extends CI_Model
         return $query->result_array();
     }
 
+    //跟据银行返回数据
+    function retBankApply($id){
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('c.bankId',$id)->get();
+
+        return $query->result_array();
+    }
+    function retBankApplyPage($id,$size, $page)
+    {
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('c.bankId', $id)->limit($page,$size)->get();
+
+        return $query->result_array();
+    }
+
+
+
 
 
 
