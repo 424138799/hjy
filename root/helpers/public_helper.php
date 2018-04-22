@@ -109,7 +109,14 @@ function getBankName($id){
     $res = $query->row_array();
     return $res['bankName'];
 }
-
+//审核人员minc
+function getBankUserName($id)
+{
+    $CI = &get_instance();
+    $query = $CI->db->where('uId', $id)->get('hj_bank_user');
+    $res = $query->row_array();
+    return $res['userName'];
+}
 
 //返回用户信息
 function retUsername($id){

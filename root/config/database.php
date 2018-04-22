@@ -158,7 +158,7 @@ $db['default'] = array(
 
 	'username' => 'root',
 
-	'password' => 'root',
+	'password' => '',
 
 	'database' => 'hengjiyuan',
 

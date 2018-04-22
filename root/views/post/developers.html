@@ -120,10 +120,10 @@
                                                     <img src="<?php echo $v['licensePic'];?>" style="width: 100px;height:100px;" alt="">
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['blameId'];?>
+                                                    <?php $user = retUsername($v['blameId']); echo $user['userName'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['license'];?>
+                                                    <?php echo $user['phone'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['linkman'];?>

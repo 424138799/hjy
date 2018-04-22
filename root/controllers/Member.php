@@ -11,6 +11,7 @@ class Member extends Default_Controller
 	public $group = "admin_user_group";
     public $company = 'admin_company';
     public $department = 'admin_department';
+    public $systemNav = 'system_nav';
 	function __construct()
 	{
 		parent::__construct();
@@ -71,8 +72,9 @@ class Member extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->public_model->select_page($this->company, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
+        $menu = array('member', 'company');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
 	
         $this->load->view('member/companyList.html', $data);
     }
@@ -232,9 +234,10 @@ class Member extends Default_Controller
         //获取用户
         $user = $this->public_model->select($this->member, 'createTime');
 
+        $menu = array('member', 'department');
 
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'company'=>$company,'users'=>$user);
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'company'=>$company,'users'=>$user,'menu'=>$menu);
 
         $this->load->view('member/department.html', $data);
     }
@@ -335,168 +338,6 @@ class Member extends Default_Controller
     
     }
 
-
-	//用户列表
-	function index(){
-        $config['per_page'] = 10;
-        //获取页码
-        $current_page=intval($this->uri->segment(3));//index.php 后数第4个/
-        //配置
-        $config['base_url'] = site_url('/Member/index');
-        //分页配置
-
-        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
-
-        $config['full_tag_close'] = '</ul>';
-
-        $config['first_tag_open'] = '<li>';
-
-        $config['first_tag_close'] = '</li>';
-
-        $config['prev_tag_open'] = '<li>';
-
-        $config['prev_tag_close'] = '</li>';
-
-        $config['next_tag_open'] = '<li>';
-
-        $config['next_tag_close'] = '</li>';
-
-        $config['cur_tag_open'] = '<li class="am-active"><a>';
-
-        $config['cur_tag_close'] = '</a></li>';
-
-        $config['last_tag_open'] = '<li>';
-
-        $config['last_tag_close'] = '</li>';
-
-        $config['num_tag_open'] = '<li>';
-
-        $config['num_tag_close'] = '</li>';
-
-        $config['first_link']= '首页';
-
-        $config['next_link']= '»';
-
-        $config['prev_link']= '«';
-
-        $config['last_link']= '末页';
-        $config['num_links'] = 4;
-        
-        $total = count($this->public_model->select($this->member,'createTime'));
-        $config['total_rows'] = $total;
-    
-        $this->load->library('pagination');//加载ci pagination类
-        $listpage =  $this->public_model->select_page($this->member,'createTime',$current_page,$config['per_page']);
-		$this->pagination->initialize($config);
-
-        $data = array('lists'=>$listpage,'pages' => $this->pagination->create_links());
-		//获取我的公众号
-  //       echo "<pre>";
-  //       var_dump($data);
-		// exit;
-         $data['menu'] = 'memberList';
-		$this->load->view('userAdmin/users.html',$data);
-	}
-
-	//编辑用户
-	function edit_users(){
-		if($_POST){
-			$data = $this->input->post();
-
-			if($data['password'] == ''){
-				unset($data['password']);
-			}else{
-				$data['password'] = md5($data['password']);
-			}
-
-			//根据用户名获取用户
-			$user = $this->public_model->ret_userInfo($this->member,'username',$data['username'],$data['user_id']);
-			if(!empty($user)){
-				echo "<script>alert('用户名已注册！');window.location.href='".site_url('/Member/index')."'</script>";exit;
-				
-			}else{
-				$users = $this->public_model->ret_userInfo($this->member,'email',$data['email'],$data['user_id']);
-				if(!empty($users)){
-					echo "<script>alert('邮箱已注册！');window.location.href='".site_url('/Member/index')."'</script>";exit;
-				}else{
-
-					if($this->public_model->updata($this->member,'user_id',$data['user_id'],$data)){
-                       
-					   	$arr = array(
-			                'log_url'=>$this->uri->uri_string(),
-			                'user_id'=> $this->session->users['id'],
-			                'username'=>$this->session->users['username'],
-			                'log_ip'=>get_client_ip(),
-			                'log_status'=>'1',
-			                'log_message'=>"修改用户信息成功,用户站内id是".$data['user_id'],
-			            );
-	                    add_system_log($arr);
-	                    echo "<script>alert('操作成功！');window.location.href='".site_url('/Member/index')."'</script>";exit;
-					}else{
-						$arr = array(
-			                'log_url'=>$this->uri->uri_string(),
-			                'user_id'=> $this->session->users['id'],
-			                'username'=>$this->session->users['username'],
-			                'log_ip'=>get_client_ip(),
-			                'log_status'=>'o',
-			                'log_message'=>"修改了用户信息失败,用户站内id是".$data['user_id'],
-			            );
-	                    add_system_log($arr);
-						echo "<script>alert('操作失败！');window.location.href='".site_url('/Member/index')."'</script>";exit;
-
-					}
-				}
-			}
-	
-		}else{
-			$this->load->view('404.html');
-		}
-	}
-
-	//修改用户状态
-	function editState(){
-		$id = intval($this->uri->segment(3));
-		$state = intval($this->uri->segment(4));
-
-		if($id == '0' || $state == '0'){
-			$this->load->view('404.html');
-		}else{
-			$title = '';
-			if($state == '1'){
-				$title = '正常';
-			}else if($state == '2'){
-				$title = '封禁';
-			}
-			if(!empty($title)){
-				$data['status'] = $state;
-				if($this->public_model->updata($this->member,"user_id",$id,$data)){
-					$arr = array(
-		                'log_url'=>$this->uri->uri_string(),
-		                'user_id'=> $this->session->users['id'],
-		                'username'=>$this->session->users['username'],
-		                'log_ip'=>get_client_ip(),
-		                'log_status'=>'o',
-		                'log_message'=>"修改了用户状态为".$title.",用户站内id是".$id,
-		            );
-	                add_system_log($arr);
-					echo "<script>alert('操作成功！');window.location.href='".site_url('/Member/index')."'</script>";exit;
-
-				}else{
-					$arr = array(
-		                'log_url'=>$this->uri->uri_string(),
-		                'user_id'=> $this->session->users['id'],
-		                'username'=>$this->session->users['username'],
-		                'log_ip'=>get_client_ip(),
-		                'log_status'=>'0',
-		                'log_message'=>"修改了用户状态为".$title.",用户站内id是".$id,
-		            );
-	                add_system_log($arr);
-					echo "<script>alert('操作失败！');window.location.href='".site_url('/Member/index')."'</script>";exit;
-				}
-			}
-		}
-	}
-
 	//搜索用户
 	function search_member(){
 
@@ -576,175 +417,25 @@ class Member extends Default_Controller
 
 	}
 
-	    //权限管理
-    function power(){
-        $list = $this->public_model->select($this->table,'id');
-        $menus = subtree($list);
-        // echo "<pre>";
-        // var_dump($menus);
-        // exit;
-
-        $data['menu'] = array('Jurisdiction','power');
-        $data['list'] = $menus;
-        $this->load->view('userAdmin/power.html',$data);
-    }
-
-    //新增权限
-    function add_power(){
-        if($_POST){
-            $data = $this->input->post();
-            if($this->public_model->insert($this->table,$data)){
-                //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(), 
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'1',
-                    'log_message'=>"新增权限成功,权限名称为".$data['name'],
-                );
-                add_system_log($arr);
-                
-                echo "<script>alert('操作成功！');window.location.href='".site_url('/Member/power')."'</script>";
-            }else{
-                  //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"新增权限失败,权限名称为".$data['name'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败！');window.location.href='".site_url('/Member/power')."'</script>";
-            }
-        }else{
-            $this->load->view('404.html');
-        }
-    }
-    //新增子权限
-    function add_power_level(){
-        
-        if($_POST){
-             $data = $this->input->post();
-            if($this->public_model->insert($this->table,$data)){
-                //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'1',
-                    'log_message'=>"新增权限成功,权限名称为".$data['name'],
-                );
-                add_system_log($arr);
-                echo "1";
-            }else{
-                  //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"新增权限失败,权限名称为".$data['name'],
-                );
-                add_system_log($arr);
-                echo "2";
-            }
-        }else{
-            echo "2";
-        }
-    }
-
-    //编辑权限
-    function edit_power(){
-           
-        if($_POST){
-             $data = $this->input->post();
-            if($this->public_model->updata($this->table,'id',$data['id'],$data)){
-                //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'1',
-                    'log_message'=>"编辑权限成功,权限名称为".$data['name'],
-                );
-                add_system_log($arr);
-                echo "1";
-            }else{
-                  //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"编辑权限失败,权限名称为".$data['name'],
-                );
-                add_system_log($arr);
-                echo "2";
-            }
-        }else{
-            echo "2";
-        }
-    }
-
-
-    //删除权限
-    function del_power(){
-        if($_POST){
-              $data = $this->input->post();
-               if($this->public_model->delete($this->table,'id',$data['id'])){
-                //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                   'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'1',
-                    'log_message'=>"删除权限成功",
-                );
-                add_system_log($arr);
-                echo "1";
-            }else{
-                  //日志
-                $arr = array(
-                    'log_url'=>$this->uri->uri_string(),
-                     'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
-                    'log_ip'=>get_client_ip(),
-                    'log_status'=>'0',
-                    'log_message'=>"编辑权限失败",
-                );
-                add_system_log($arr);
-                echo "2";
-            }
-        }else{
-            echo "2";
-        }
-    }
 
     //用户组
     function group(){
 
-        $data['group'] = $this->public_model->select('wxCatchv1_system_group','');
-        $data['menu'] = array('Jurisdiction','group');
-        $this->load->view('userAdmin/group.html',$data);
+        $data['group'] = $this->public_model->select($this->group,'');
+        $data['menu'] = array('member', 'group');
+
+        $this->load->view('member/group.html',$data);
     }
 
     //新增用户组
     function addGroup(){
         if($_POST){
             $data = $this->input->post();
-            if($this->public_model->insert('wxCatchv1_system_group',$data)){
+            if($this->public_model->insert($this->group,$data)){
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id'=> $this->session->users['userId'],
+                    'username'=>$this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'1',
                     'log_message'=>'新增用户组成功',
@@ -754,8 +445,8 @@ class Member extends Default_Controller
             }else{
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'0',
                     'log_message'=>'新增用户组失败',
@@ -769,11 +460,11 @@ class Member extends Default_Controller
         if($_POST){
             $data = $this->input->post();
             
-            if($this->public_model->updata('wxCatchv1_system_group','gid',$data['gid'],$data)){
+            if($this->public_model->updata($this->group,'gid',$data['gid'],$data)){
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'1',
                     'log_message'=>'编辑用户组成功',
@@ -783,8 +474,8 @@ class Member extends Default_Controller
             }else{
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'0',
                     'log_message'=>'编辑用户组失败',
@@ -801,12 +492,12 @@ class Member extends Default_Controller
                 echo "3";
                 exit;
             }
-            if($this->public_model->delete('wxCatchv1_system_group','gid',$id)){
-                $this->public_model->delete('wxCatchv1_system_user','g_id',$id);
+            if($this->public_model->delete($this->group,'gid',$id)){
+                $this->public_model->delete($this->member,'gId',$id);
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'1',
                     'log_message'=>'删除用户组成功',
@@ -816,8 +507,8 @@ class Member extends Default_Controller
             }else{
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'0',
                     'log_message'=>'删除用户组失败',
@@ -835,29 +526,50 @@ class Member extends Default_Controller
         if($id == '0'){
             echo "<script>alert('请求错误！');window.location.href='".site_url('/Member/group')."'</script>";exit;
         }else{
-            $group = $this->public_model->select_info('wxCatchv1_system_group','gid',$id);
+            $group = $this->public_model->select_info($this->group,'gid',$id);
 
             $group_permission = json_decode($group['perm'],true);
 
             //
-            $list = $this->public_model->select($this->table,'id');
+            $list = $this->public_model->select($this->systemNav,'id');
             $menus = subtree($list,$group_permission);
             $data['gid'] = $id;
 
-            $data['menu'] = array('Jurisdiction','group');
+            $data['menu'] = array('Member','group');
             $data['list'] = $menus;
-            $this->load->view('userAdmin/jurisdiction.html',$data);
+            $this->load->view('Member/jurisdiction.html',$data);
         }
     }
      function editJurisdiction(){
         if($_POST){
             $data = $this->input->post();
+            $plateid = json_decode($data['perm'],true);
+
+            foreach ($plateid as $key => $value) {
+                
+                $query = $this->db->where('id',$value)->get($this->systemNav);
+                $menu[] = $query->row_array();
+            }
+            $arr = array();
             
-            if($this->public_model->updata('wxCatchv1_system_group','gid',$data['gid'],$data)){
+            $menus = subtree($menu);
+
+            foreach($menus as $key=>$value){
+                if($value['status'] == '1'){
+                    if($value['pid'] == '0'){
+                        $menus_data[$value['id']]['value'] = $value;
+                    }else{
+                        $menus_data[$value['pid']]['value']['chick'][] = $value;
+                    }
+                }
+		    }
+            $data['perm'] = json_encode($menus_data);
+         
+            if($this->public_model->updata($this->group,'gid',$data['gid'],$data)){
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'1',
                     'log_message'=>'编辑用户组成功',
@@ -867,8 +579,8 @@ class Member extends Default_Controller
             }else{
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
-                    'user_id'=> $this->session->users['id'],
-                    'username'=>$this->session->users['username'],
+                    'user_id' => $this->session->users['userId'],
+                    'username' => $this->session->users['userName'],
                     'log_ip'=>get_client_ip(),
                     'log_status'=>'0',
                     'log_message'=>'编辑用户组失败',
@@ -886,7 +598,7 @@ class Member extends Default_Controller
         //获取页码
         $current_page = intval($this->uri->segment(3));//index.php 后数第4个/
         //配置
-        $config['base_url'] = site_url('/Member/index');
+        $config['base_url'] = site_url('/Member/adminUser');
         //分页配置
 
         $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
@@ -934,8 +646,9 @@ class Member extends Default_Controller
         $this->pagination->initialize($config);
 
         $group = $this->public_model->select($this->group, 'gid', 'desc');
+        $menu = array('member', 'adminUser');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'group'=>$group);
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'group'=>$group,'menu'=>$menu);
         $this->load->view('member/adminUser.html',$data);
     }
 
@@ -983,6 +696,8 @@ class Member extends Default_Controller
         }else{
             $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
             $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+            $data['menu'] = array('Member', 'adminUser');
+
             $this->load->view('member/addUser.html', $data);
         }
     }
@@ -1046,6 +761,8 @@ class Member extends Default_Controller
                 
                 $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
                 $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+                $data['menu'] = array('Member', 'adminUser');
+
                 $this->load->view('member/editUser.html', $data);
             }else{
                 $this->load->view('404.html');
@@ -1089,6 +806,5 @@ class Member extends Default_Controller
 
         }
     }
-
 }
  ?>

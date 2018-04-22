@@ -75,8 +75,9 @@ class Post extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->public_model->select_page($this->developers, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
+        $menu = array('village', 'developers');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
 
 
         $this->load->view('post/developers.html',$data);
@@ -133,6 +134,8 @@ class Post extends Default_Controller
         }else{
             //获取用户
             $data['users'] = $this->public_model->select($this->member,'userId','desc');
+            $data['menu'] = array('village', 'developers');
+
             $this->load->view('post/addDevel.html',$data);
         }
     }
@@ -190,6 +193,8 @@ class Post extends Default_Controller
                 $data['devel'] = $this->public_model->select_info($this->developers,'id',$id);
                 //获取用户
                 $data['users'] = $this->public_model->select($this->member, 'userId', 'desc');
+                $data['menu'] = array('village', 'developers');
+
                 $this->load->view('post/editDevel.html', $data);
             }else{
                 $this->load->view('404.html');
@@ -285,8 +290,9 @@ class Post extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->public_model->select_page($this->company, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
+        $menu = array('village', 'salesCompany');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
 
         $this->load->view('post/salesCompany.html',$data);
     }
@@ -340,6 +346,8 @@ class Post extends Default_Controller
         }else{
             //获取用户
             $data['users'] = $this->public_model->select($this->member, 'userId', 'desc');
+            $data['menu'] = array('village', 'salesCompany');
+
             $this->load->view('post/addCompany.html', $data);
         }
     }
@@ -397,6 +405,8 @@ class Post extends Default_Controller
                 $data['company'] = $this->public_model->select_info($this->company,'id',$id);
                 //
                 $data['users'] = $this->public_model->select($this->member, 'userId', 'desc');
+                $data['menu'] = array('village', 'salesCompany');
+
                 $this->load->view('post/editCompany.html', $data);
             }else{
                 $this->load->view('404.html');
@@ -491,8 +501,9 @@ class Post extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->public_model->select_page($this->salesUser, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
+        $menu = array('village', 'salesUser');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
 
         $this->load->view('post/salesUser.html',$data);
     }
@@ -546,6 +557,8 @@ class Post extends Default_Controller
         } else {
             //获取用户
             $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+            $data['menu'] = array('village', 'salesUser');
+
             $this->load->view('post/addSalesUser.html', $data);
         }
     }
@@ -601,6 +614,8 @@ class Post extends Default_Controller
                 $data['users'] = $this->public_model->select_info($this->salesUser,'id',$id); 
                  //获取用户
                 $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+                $data['menu'] = array('village', 'salesUser');
+
                 $this->load->view('post/editSalesUser.html', $data);
             }else{
                 $this->load->view('404.html');
@@ -696,8 +711,9 @@ class Post extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->public_model->select_page($this->business, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
+        $menu = array('village', 'business');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
 
         $this->load->view('post/business.html',$data);
     }
@@ -749,7 +765,9 @@ class Post extends Default_Controller
                 exit;
             }                            
         }else{
-            $this->load->view('post/addBusiness.html');
+            $data['menu'] = array('village', 'business');
+
+            $this->load->view('post/addBusiness.html',$data);
         }
     }
 
@@ -805,7 +823,8 @@ class Post extends Default_Controller
                 //获取信息
                 $data['buesion'] = $this->public_model->select_info($this->business,'id',$id);
 
-                
+                $data['menu'] = array('village', 'business');
+
                 $this->load->view('post/editBusiness.html',$data);
             }else{
                 $this->load->view('404.html');
@@ -902,9 +921,11 @@ class Post extends Default_Controller
         $listpage = $this->public_model->select_page($this->village, 'updataTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
 
-        
+
+        $menu = array('village', 'village');
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
         $this->load->view('post/village.html',$data);
     }
 
@@ -961,7 +982,26 @@ class Post extends Default_Controller
             //获取银行
             $data['bank'] = $this->public_model->select($this->bank,'createTime','desc');
             $data['devel'] = $this->public_model->select($this->developers,'createTime','desc');
+                    //获取销售公司
+            $data['company'] = $this->public_model->select_where($this->company, 'isDel', '0', 'createTime', 'desc');
+           
+            $data['menu'] = array('village', 'village');
+
             $this->load->view('post/addVillage.html',$data);
+        }
+    }
+    //返回销售人员
+    function retSalesUser(){
+        if($_POST){
+            $id = $this->input->post('cId');
+            $salesUser = $this->public_model->select_where_many($this->salesUser,'c_id',$id, 'isDel','0','createTime','desc');
+            if(!empty($salesUser)){
+                echo json_encode($salesUser);
+            }else{
+                echo "2";
+            }
+        }else{
+            echo "2";
         }
     }
 
@@ -1020,6 +1060,11 @@ class Post extends Default_Controller
                   //获取银行
                 $data['bank'] = $this->public_model->select($this->bank, 'createTime', 'desc');
                 $data['devel'] = $this->public_model->select($this->developers, 'createTime', 'desc');
+                $data['company'] = $this->public_model->select_where($this->company, 'isDel', '0', 'createTime', 'desc');
+                $data['salesUser'] = $this->public_model->select_where_many($this->salesUser,'c_id',$data['village']['salesCompany'] ,'isDel', '0', 'createTime', 'desc');
+
+                $data['menu'] = array('village', 'village');
+
                 $this->load->view('post/editVillage.html', $data);
             }else{
                 $this->load->view('404.html');
@@ -1072,7 +1117,7 @@ class Post extends Default_Controller
         //获取页码
         $current_page = intval($this->uri->segment(3));//index.php 后数第4个/
         //配置
-        $config['base_url'] = site_url('/Post/village');
+        $config['base_url'] = site_url('/Post/carPark');
         //分页配置
 
         $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
@@ -1118,8 +1163,10 @@ class Post extends Default_Controller
         $this->load->library('pagination');//加载ci pagination类
         $listpage = $this->public_model->select_page($this->carPark, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
+        $menu = array('village', 'carPark');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links());
+        
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(),'menu'=>$menu);
 
         $this->load->view('post/carPark.html',$data);
     } 
@@ -1173,6 +1220,8 @@ class Post extends Default_Controller
         }else{
             //获取小区信息
             $data['village'] = $this->public_model->select($this->village,'createTime','desc');
+            $data['menu'] = array('village', 'carPark');
+
             $this->load->view('post/addCarPark.html',$data);
         }
     }
@@ -1199,7 +1248,7 @@ class Post extends Default_Controller
                     unlink($logo);
                 }
             }
-
+ 
             if ($this->public_model->updata($this->carPark,'carId',$data['carId'], $data)) {
                 $arr = array(
                     'log_url' => $this->uri->uri_string(),
@@ -1232,6 +1281,7 @@ class Post extends Default_Controller
 
 
                 $data['village'] = $this->public_model->select($this->village, 'createTime', 'desc');
+                $data['menu'] = array('village', 'carPark');
 
                 $this->load->view('post/editCarPark.html',$data);
             }else{

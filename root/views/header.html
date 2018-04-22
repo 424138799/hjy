@@ -2,7 +2,7 @@
         <header>
             <!-- logo -->
             <div class="am-fl tpl-header-logo">
-                <a href="javascript:;"><img src="<?php echo base_url('/assets');?>/img/loginlogo.png" alt=""></a>
+                <!-- <a href="javascript:;"><img src="<?php echo base_url('/assets');?>/img/loginlogo.png" alt=""></a> -->
             </div>
             
             <!-- 右侧内容 -->
@@ -50,14 +50,14 @@
             <!-- 菜单 -->
             <ul class="sidebar-nav">
                 <li class="sidebar-nav-link">
-                    <a href="<?php echo site_url('/Home/index');?>">
-                    <!-- <?php if($menu == 'index'){echo "class='active'";}?> -->
+                    <a href="<?php echo site_url('/Home/index');?>" <?php if($menu == 'index'){echo "class='active'";}?>>
+                   
                         <i class="am-icon-home sidebar-nav-link-logo"></i> 管理中心
                     </a>
                 </li>
-                <!-- <?php 
-                $menus = json_decode($this->session->menus,true);
-                ?>
+                 <?php 
+                $menus = json_decode($this->session->menus,true);?>
+                
 
                 <?php foreach($menus as $val):?>
                     <?php if(isset($val['value']['chick'])):?>
@@ -83,140 +83,7 @@
                             </a>
                         </li>
                     <?php endif;?>
-                <?php endforeach;?> -->
-               
-                <li class="sidebar-nav-link">
-                    <a href="javascript:;" class="sidebar-nav-sub-title">
-                        <i class="am-icon-table sidebar-nav-link-logo"></i>
-                        小区管理
-                        <span class="am-icon-chevron-up am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-                    </a>
-                    <ul class="sidebar-nav sidebar-nav-sub" style="display: block;" >
-                       
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Bank/bankList');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 银行管理
-                            </a>
-                        </li>
-
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Bank/bankPersonnel');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 银行人员管理
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Post/developers');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 开发商管理
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Post/salesCompany');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 销售公司管理
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Post/salesUser');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 销售人员管理
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Post/business');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 商家管理
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Post/village');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 小区管理
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Post/carPark');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 车位管理
-                            </a>
-                        </li>
-
-                    
-                      
-                    </ul>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="<?php echo site_url('/Mortgage/applyList');?>">
-                        <i class="am-icon-calendar sidebar-nav-link-logo"></i> 按揭申请管理
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="javascript:;" class="sidebar-nav-sub-title">
-                        <i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 基础资料
-                        <span class="am-icon-chevron-up am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-                    </a>
-                    <ul class="sidebar-nav sidebar-nav-sub">
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Mortgage/commision');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span>业务提成
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Mortgage/villageCommision');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span>小区提成
-                            </a>
-                        </li>
-                
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Member/company');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 公司管理
-                            </a>
-                        </li>
-                
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Member/department');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 部门管理
-                            </a>
-                        </li>
-                        <!-- <li class="sidebar-nav-link">
-                            <a href="#">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 角色管理
-                            </a>
-                        </li> -->
-                        <li class="sidebar-nav-link">
-                            <a href="#">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 用户组管理
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="<?php echo site_url('/Member/adminUser');?>">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 用户管理
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-nav-link">
-                  
-                        <a href="javascript:;" class="sidebar-nav-sub-title">
-                             <i class="am-icon-tv sidebar-nav-link-logo"></i> 系统设置                           
-                             <span class="am-icon-chevron-up am-fr am-margin-right-sm sidebar-nav-sub-ico sidebar-nav-sub-ico-rotate"></span>
-                        </a>
-                    <ul class="sidebar-nav sidebar-nav-sub">
-                    
-                        <li class="sidebar-nav-link">
-                            <a href="#">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 小程序banner
-                            </a>
-                        </li>
-                    
-                        <li class="sidebar-nav-link">
-                            <a href="#">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 个人中心背景图
-                            </a>
-                        </li>
-                        <li class="sidebar-nav-link">
-                            <a href="#">
-                                <span class="am-icon-angle-right sidebar-nav-link-logo"></span> 系统日志
-                            </a>
-                        </li>
-                    
-                    </ul>
-                </li>
-
+                <?php endforeach;?> 
+              
             </ul>
         </div>

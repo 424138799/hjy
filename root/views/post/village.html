@@ -156,13 +156,13 @@
                                                     <?php echo $v['brokerage'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['createUser'];?>
+                                                    <?php $cuser = retUsername($v['createUser']); echo $cuser['userName'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['createTime'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['updataUser'];?>
+                                                    <?php $upuser = retUsername($v['updataUser']); echo $upuser['userName']; ?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['updataTime'];?>

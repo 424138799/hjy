@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-04-19 22:29:12
+Date: 2018-04-21 16:00:12
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -87,12 +87,13 @@ CREATE TABLE `hj_admin_user` (
   `password` varchar(32) DEFAULT NULL COMMENT '密码',
   `userCode` varchar(20) DEFAULT NULL COMMENT '用户工号',
   PRIMARY KEY (`userId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_admin_user
 -- ----------------------------
 INSERT INTO `hj_admin_user` VALUES ('1', 'admin', '系统创建者', '1', '1528277232', null, null, '1', null, null, '34', '1', '0000-00-00 00:00:00', null, '', 'e10adc3949ba59abbe56e057f20f883e', null);
+INSERT INTO `hj_admin_user` VALUES ('2', 'admin123', 'chenh', '1', '1582827547', '', '424138799@qq.com', '3', '3', '0', '', '1', '2018-04-20 18:30:30', null, '', '9cbf8a4dcb8e30682b927f352d6559a0', '02554');
 
 -- ----------------------------
 -- Table structure for hj_admin_user_group
@@ -105,12 +106,13 @@ CREATE TABLE `hj_admin_user_group` (
   `addtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `status` int(1) DEFAULT '1' COMMENT '用户组状态1正常0冻结不能登陆',
   PRIMARY KEY (`gid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_admin_user_group
 -- ----------------------------
-INSERT INTO `hj_admin_user_group` VALUES ('1', '超级管理员', '', '2018-04-17 09:57:25', '1');
+INSERT INTO `hj_admin_user_group` VALUES ('1', '超级管理员', '{\"1\":{\"value\":{\"id\":\"1\",\"name\":\"\\u5c0f\\u533a\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"0\",\"addtime\":null,\"url\":\"village\",\"style\":\"\",\"other\":null,\"lev\":1,\"chick\":[{\"id\":\"5\",\"name\":\"\\u94f6\\u884c\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Bank\\/bankList\",\"style\":null,\"other\":\"bankList\",\"lev\":2},{\"id\":\"6\",\"name\":\"\\u94f6\\u884c\\u4eba\\u5458\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Bank\\/bankPersonnel\",\"style\":null,\"other\":\"bankPersonnel\",\"lev\":2},{\"id\":\"7\",\"name\":\"\\u5f00\\u53d1\\u5546\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Post\\/developers\",\"style\":null,\"other\":\"developers\",\"lev\":2},{\"id\":\"8\",\"name\":\"\\u9500\\u552e\\u516c\\u53f8\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Post\\/salesCompany\",\"style\":null,\"other\":\"salesCompany\",\"lev\":2},{\"id\":\"9\",\"name\":\"\\u9500\\u552e\\u4eba\\u5458\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Post\\/salesUser\",\"style\":null,\"other\":\"salesUser\",\"lev\":2},{\"id\":\"10\",\"name\":\"\\u5546\\u5bb6\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Post\\/business\",\"style\":null,\"other\":\"business\",\"lev\":2},{\"id\":\"11\",\"name\":\"\\u5c0f\\u533a\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Post\\/village\",\"style\":null,\"other\":\"village\",\"lev\":2},{\"id\":\"12\",\"name\":\"\\u8f66\\u4f4d\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"1\",\"addtime\":null,\"url\":\"Post\\/carPark\",\"style\":null,\"other\":\"carPark\",\"lev\":2}]}},\"2\":{\"value\":{\"id\":\"2\",\"name\":\"\\u6309\\u63ed\\u7533\\u8bf7\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"0\",\"addtime\":null,\"url\":\"Mortgage\\/applyList\",\"style\":\"am-icon-calendar\",\"other\":\"applyList\",\"lev\":1}},\"3\":{\"value\":{\"id\":\"3\",\"name\":\"\\u57fa\\u7840\\u8d44\\u6599\",\"status\":\"1\",\"pid\":\"0\",\"addtime\":null,\"url\":\"member\",\"style\":null,\"other\":null,\"lev\":1,\"chick\":[{\"id\":\"13\",\"name\":\"\\u4e1a\\u52a1\\u63d0\\u6210\",\"status\":\"1\",\"pid\":\"3\",\"addtime\":null,\"url\":\"Mortgage\\/commision\",\"style\":null,\"other\":\"commision\",\"lev\":2},{\"id\":\"14\",\"name\":\"\\u5c0f\\u533a\\u63d0\\u6210\",\"status\":\"1\",\"pid\":\"3\",\"addtime\":null,\"url\":\"Mortgage\\/villageCommision\",\"style\":null,\"other\":\"villageCommision\",\"lev\":2},{\"id\":\"15\",\"name\":\"\\u516c\\u53f8\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"3\",\"addtime\":null,\"url\":\"Member\\/company\",\"style\":null,\"other\":\"company\",\"lev\":2},{\"id\":\"16\",\"name\":\"\\u90e8\\u95e8\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"3\",\"addtime\":null,\"url\":\"Member\\/department\",\"style\":null,\"other\":\"department\",\"lev\":2},{\"id\":\"17\",\"name\":\"\\u7528\\u6237\\u7ec4\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"3\",\"addtime\":null,\"url\":\"Member\\/group\",\"style\":null,\"other\":\"group\",\"lev\":2},{\"id\":\"18\",\"name\":\"\\u7528\\u6237\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"3\",\"addtime\":null,\"url\":\"Member\\/adminUser\",\"style\":null,\"other\":\"adminUser\",\"lev\":2}]}},\"4\":{\"value\":{\"id\":\"4\",\"name\":\"\\u7cfb\\u7edf\\u8bbe\\u7f6e\",\"status\":\"1\",\"pid\":\"0\",\"addtime\":null,\"url\":\"system\",\"style\":null,\"other\":null,\"lev\":1,\"chick\":[{\"id\":\"19\",\"name\":\"\\u5c0f\\u7a0b\\u5e8fbanner\",\"status\":\"1\",\"pid\":\"4\",\"addtime\":null,\"url\":\"Home\\/bannerList\",\"style\":null,\"other\":\"bannerList\",\"lev\":2},{\"id\":\"20\",\"name\":\"\\u7cfb\\u7edf\\u65e5\\u5fd7\",\"status\":\"1\",\"pid\":\"4\",\"addtime\":null,\"url\":\"#\",\"style\":null,\"other\":null,\"lev\":2}]}}}', '2018-04-17 09:57:25', '1');
+INSERT INTO `hj_admin_user_group` VALUES ('3', '银行', '{\"2\":{\"value\":{\"id\":\"2\",\"name\":\"\\u6309\\u63ed\\u7533\\u8bf7\\u7ba1\\u7406\",\"status\":\"1\",\"pid\":\"0\",\"addtime\":null,\"url\":\"Mortgage\\/applyList\",\"style\":\"am-icon-calendar\",\"other\":\"applyList\",\"lev\":1}}}', '2018-04-20 18:29:37', '1');
 
 -- ----------------------------
 -- Table structure for hj_bank
@@ -123,14 +125,15 @@ CREATE TABLE `hj_bank` (
   `linkPhone` varchar(11) DEFAULT NULL COMMENT '联系电话',
   `remarks` varchar(50) DEFAULT NULL COMMENT '备注',
   `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `dutyId` int(11) DEFAULT NULL COMMENT '负责人ID 银行经理',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_bank
 -- ----------------------------
-INSERT INTO `hj_bank` VALUES ('2', '兴业银行', '马西纳', '15282455745', '', '2018-04-17 15:26:14');
-INSERT INTO `hj_bank` VALUES ('3', '招商银行1', '地方', '12584457445', '', '2018-04-17 15:26:14');
+INSERT INTO `hj_bank` VALUES ('2', '兴业银行', '马西纳', '15282455745', '', '2018-04-17 15:26:14', '1');
+INSERT INTO `hj_bank` VALUES ('3', '招商银行1', '地方', '12584457445', '', '2018-04-17 15:26:14', '2');
 
 -- ----------------------------
 -- Table structure for hj_bank_user
@@ -144,14 +147,16 @@ CREATE TABLE `hj_bank_user` (
   `linkPhone` varchar(11) DEFAULT NULL COMMENT '联系电话',
   `isDel` int(1) DEFAULT '1' COMMENT '状态  1正常  0删除',
   `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `password` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`uId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_bank_user
 -- ----------------------------
-INSERT INTO `hj_bank_user` VALUES ('2', '3', '32424', '2', '32434', '1', '2018-04-17 16:21:59');
-INSERT INTO `hj_bank_user` VALUES ('3', '2', '从', '1', '5656', '0', '2018-04-17 16:21:59');
+INSERT INTO `hj_bank_user` VALUES ('2', '3', '32424', '2', '32434', '1', '2018-04-17 16:21:59', null);
+INSERT INTO `hj_bank_user` VALUES ('3', '3', '从', '1', '1234443', '0', '2018-04-17 16:21:59', '9cbf8a4dcb8e30682b927f352d6559a0');
+INSERT INTO `hj_bank_user` VALUES ('4', '2', '沉重', '2', '15825755477', '1', '2018-04-20 16:22:02', '9cbf8a4dcb8e30682b927f352d6559a0');
 
 -- ----------------------------
 -- Table structure for hj_business
@@ -199,13 +204,14 @@ CREATE TABLE `hj_car_parking` (
   `carPrice` float DEFAULT NULL COMMENT '均价',
   `createUser` int(11) DEFAULT NULL COMMENT '创建人',
   PRIMARY KEY (`carId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_car_parking
 -- ----------------------------
 INSERT INTO `hj_car_parking` VALUES ('2', '1', '美岸001', '34545', 'upload/car/18-04-19_184520.png', '4545', '154', '0', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '<p>4534535242424</p><p><br></p>', '4534532434', '0', '0', '45566', null);
 INSERT INTO `hj_car_parking` VALUES ('3', '1', '34242', '4234242', 'https://img.hengjiyuankeji.com/2018-04-19_21:48:45.jpg', '4234230', '242334242', '23423432', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '<p>4353453535345</p>', '', '2147483647', '4242', '4234320000', '1');
+INSERT INTO `hj_car_parking` VALUES ('4', '2', '4234', '234', 'https://img.hengjiyuankeji.com/carPark1524281782.jpg', '344', '0', '443', null, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '<p>2342424</p>', '', '343', '3434', '3434', '1');
 
 -- ----------------------------
 -- Table structure for hj_developers
@@ -253,12 +259,13 @@ CREATE TABLE `hj_sales_company` (
   `isDel` int(2) DEFAULT '0' COMMENT '是否删除  1是 0否',
   `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_sales_company
 -- ----------------------------
 INSERT INTO `hj_sales_company` VALUES ('2', '的方式发送', '34535', '', '1', '4455345', '345', '25475734dsfsfs', 'upload/company/18-04-19_112348.jpg', '3453', '5353535', '0', '0', '2018-04-19 11:23:48');
+INSERT INTO `hj_sales_company` VALUES ('3', '测试公司', '', '', '2', '', '', '1215455454', null, '', '', '0', '0', '2018-04-21 10:46:11');
 
 -- ----------------------------
 -- Table structure for hj_sales_user
@@ -276,13 +283,65 @@ CREATE TABLE `hj_sales_user` (
   `sort` int(20) DEFAULT '200' COMMENT '排序 从小到大 ',
   `isDel` int(2) DEFAULT '0' COMMENT '是否删除  1是 0否',
   `createTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `password` varchar(32) DEFAULT NULL COMMENT '密码',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_sales_user
 -- ----------------------------
-INSERT INTO `hj_sales_user` VALUES ('2', '2', '海运费', '2', '19958575', '23424', '4234', 'upload/user/18-04-19_142833.jpg', '200', '0', '2018-04-19 14:28:33');
+INSERT INTO `hj_sales_user` VALUES ('2', '2', '海运费', '2', '19958575', '15828277232', '4234', 'upload/user/18-04-19_142833.jpg', '200', '0', '2018-04-19 14:28:33', 'e10adc3949ba59abbe56e057f20f883e');
+
+-- ----------------------------
+-- Table structure for hj_send_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `hj_send_apply`;
+CREATE TABLE `hj_send_apply` (
+  `mId` int(11) NOT NULL AUTO_INCREMENT COMMENT '按揭申请表',
+  `salesId` int(11) DEFAULT NULL COMMENT '销售人员ID',
+  `carId` int(11) DEFAULT NULL COMMENT '车位Id',
+  `name` varchar(50) DEFAULT NULL COMMENT '姓名',
+  `idCard` varchar(50) DEFAULT NULL COMMENT '身份证号码',
+  `cardPositive` varchar(500) DEFAULT NULL COMMENT '身份证正面',
+  `cardOpposite` varchar(500) DEFAULT NULL COMMENT '反面',
+  `holdCard` varchar(500) DEFAULT NULL COMMENT '手持身份证',
+  `salesman` varchar(500) DEFAULT NULL COMMENT '营业员照片',
+  `duty` varchar(100) DEFAULT NULL COMMENT '岗位',
+  `income` varchar(20) DEFAULT NULL COMMENT '收入',
+  `workUnit` varchar(255) DEFAULT NULL COMMENT '工作单位',
+  `phone` varchar(12) DEFAULT NULL COMMENT '联系电话',
+  `sendTime` timestamp NULL DEFAULT NULL COMMENT '申请时间',
+  `examineState` int(11) DEFAULT NULL COMMENT '审核状态',
+  `bankId` int(11) DEFAULT NULL COMMENT '审核人员',
+  `examineTime` timestamp NULL DEFAULT NULL COMMENT '审核时间',
+  `examineContent` varchar(500) DEFAULT NULL COMMENT '审核意见',
+  PRIMARY KEY (`mId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hj_send_apply
+-- ----------------------------
+INSERT INTO `hj_send_apply` VALUES ('1', '2', '1', '陈华一', '211554445', '', '', '', '', '34234', '200', '32424', '1582587547', '2018-04-21 15:48:32', null, null, null, null);
+INSERT INTO `hj_send_apply` VALUES ('2', '2', '1', '陈华一', '211554445', '', '', '', '', '34234', '200', '32424', '1582587547', '2018-04-21 09:47:45', null, null, null, null);
+INSERT INTO `hj_send_apply` VALUES ('3', '2', '1', '陈华一', '211554445', '', '', '', '', '34234', '200', '32424', '1582587547', '2018-04-21 09:48:46', null, null, null, null);
+
+-- ----------------------------
+-- Table structure for hj_system_banner
+-- ----------------------------
+DROP TABLE IF EXISTS `hj_system_banner`;
+CREATE TABLE `hj_system_banner` (
+  `bannerId` int(10) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) DEFAULT NULL,
+  `bannerUrl` varchar(500) DEFAULT NULL,
+  `linkPath` varchar(500) DEFAULT '',
+  `createTime` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`bannerId`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hj_system_banner
+-- ----------------------------
+INSERT INTO `hj_system_banner` VALUES ('1', '34242', 'https://img.hengjiyuankeji.com/banner1524223996.jpg', '#', null);
 
 -- ----------------------------
 -- Table structure for hj_system_log
@@ -298,69 +357,79 @@ CREATE TABLE `hj_system_log` (
   `log_message` text,
   `log_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_system_log
 -- ----------------------------
-INSERT INTO `hj_system_log` VALUES ('1', 'Bank/addBank', '1', '系统创建者', '::1', '1', '新增公告成功,公告内容：342', '2018-04-17 14:36:17');
-INSERT INTO `hj_system_log` VALUES ('2', 'Bank/addBank', '1', '系统创建者', '::1', '1', '新增银行成功,银行名称：兴业银行', '2018-04-17 14:51:40');
-INSERT INTO `hj_system_log` VALUES ('3', 'Bank/addBank', '1', '系统创建者', '::1', '1', '新增银行成功,银行名称：招商银行', '2018-04-17 14:52:15');
-INSERT INTO `hj_system_log` VALUES ('4', 'Bank/editBank', '1', '系统创建者', '::1', '1', '编辑银行成功,银行名称：招商银行1', '2018-04-17 15:08:30');
-INSERT INTO `hj_system_log` VALUES ('5', 'Bank/delBank', '1', '系统创建者', '::1', '1', '编辑银行成功,银行名称：', '2018-04-17 15:15:05');
-INSERT INTO `hj_system_log` VALUES ('6', 'Bank/delBank', '1', '系统创建者', '::1', '1', '编辑银行成功,银行名称：', '2018-04-17 15:15:21');
-INSERT INTO `hj_system_log` VALUES ('7', 'Bank/delBank', '1', '系统创建者', '::1', '1', '删除银行成功,银行编号是：1', '2018-04-17 15:16:38');
-INSERT INTO `hj_system_log` VALUES ('8', 'Bank/addBank', '1', '系统创建者', '::1', '1', '新增银行成功,银行名称：', '2018-04-17 15:49:46');
-INSERT INTO `hj_system_log` VALUES ('9', 'Bank/delBank', '1', '系统创建者', '::1', '1', '删除银行成功,银行编号是：4', '2018-04-17 15:50:55');
-INSERT INTO `hj_system_log` VALUES ('10', 'Bank/addBankUser', '1', '系统创建者', '::1', '1', '新增银行管理人员成功,银行编号是：3,银行管理人员名称是：34', '2018-04-17 16:07:32');
-INSERT INTO `hj_system_log` VALUES ('11', 'Bank/addBankUser', '1', '系统创建者', '::1', '1', '新增银行管理人员成功,银行编号是：3,银行管理人员名称是：32424', '2018-04-17 16:10:24');
-INSERT INTO `hj_system_log` VALUES ('12', 'Bank/addBankUser', '1', '系统创建者', '::1', '1', '新增银行管理人员成功,银行编号是：2,银行管理人员名称是：456654', '2018-04-17 16:20:09');
-INSERT INTO `hj_system_log` VALUES ('13', 'Bank/editBankUser', '1', '系统创建者', '::1', '1', '编辑银行管理人员成功,银行编号是：2,银行管理人员名称是：从', '2018-04-17 17:00:59');
-INSERT INTO `hj_system_log` VALUES ('14', 'Bank/delBankUser', '1', '系统创建者', '::1', '1', '删除银行管理人员成功,银行人员编号是：1', '2018-04-17 17:31:08');
-INSERT INTO `hj_system_log` VALUES ('15', 'Member/AddCompany', null, null, '::1', '1', '新增公司信息成功,公司名称是46464', '2018-04-18 09:54:54');
-INSERT INTO `hj_system_log` VALUES ('16', 'Member/editCompany', null, null, '::1', '1', '新增公司信息成功,公司名称是中原公司', '2018-04-18 10:06:25');
-INSERT INTO `hj_system_log` VALUES ('17', 'Member/editCompany', null, null, '::1', '1', '修改公司信息成功,公司名称是中原公司', '2018-04-18 10:07:01');
-INSERT INTO `hj_system_log` VALUES ('18', 'Member/editCompany', '1', '系统创建者', '::1', '1', '修改公司信息成功,公司名称是中原公司', '2018-04-18 10:07:53');
-INSERT INTO `hj_system_log` VALUES ('19', 'Member/AddCompany', '1', '系统创建者', '::1', '1', '新增公司信息成功,公司名称是123', '2018-04-18 10:10:35');
-INSERT INTO `hj_system_log` VALUES ('20', 'Member/delCompany', '1', '系统创建者', '::1', '1', '修改公司信息成功,公司名称是', '2018-04-18 10:10:44');
-INSERT INTO `hj_system_log` VALUES ('21', 'Member/AddCompany', '1', '系统创建者', '::1', '1', '新增公司信息成功,公司名称是中原n', '2018-04-18 10:11:39');
-INSERT INTO `hj_system_log` VALUES ('22', 'Member/addDepartment', '1', '系统创建者', '::1', '1', '新增部门信息成功,部门名称是cnsk点卡积分', '2018-04-18 10:57:20');
-INSERT INTO `hj_system_log` VALUES ('23', 'Member/editDepartment', '1', '系统创建者', '::1', '1', '新增部门信息成功,部门名称是cnsk点卡积分', '2018-04-18 11:16:16');
-INSERT INTO `hj_system_log` VALUES ('24', 'Member/editDepartment', '1', '系统创建者', '::1', '1', '新增部门信息成功,部门名称是cnsk点卡积分', '2018-04-18 11:16:16');
-INSERT INTO `hj_system_log` VALUES ('25', 'Member/editDepartment', '1', '系统创建者', '::1', '1', '新增部门信息成功,部门名称是cnsk点卡积分', '2018-04-18 11:17:52');
-INSERT INTO `hj_system_log` VALUES ('26', 'Member/addDepartment', '1', '系统创建者', '::1', '1', '新增部门信息成功,部门名称是34534', '2018-04-18 11:21:07');
-INSERT INTO `hj_system_log` VALUES ('27', 'Member/delDepartment', '1', '系统创建者', '::1', '1', '删除部门信息成功,部门id是2', '2018-04-18 11:21:12');
-INSERT INTO `hj_system_log` VALUES ('28', 'Member/AddUser', '1', '系统创建者', '::1', '1', '新增用户信息成功,用户登陆账户是admin12', '2018-04-18 16:14:15');
-INSERT INTO `hj_system_log` VALUES ('29', 'Member/EditUser', '1', '系统创建者', '::1', '1', '编辑用户成功,用户id是:2', '2018-04-18 17:10:48');
-INSERT INTO `hj_system_log` VALUES ('30', 'Member/EditUser', '1', '系统创建者', '::1', '1', '编辑用户成功,用户id是:2', '2018-04-18 17:11:04');
-INSERT INTO `hj_system_log` VALUES ('31', 'Member/delUser', '1', '系统创建者', '::1', '1', '删除用户成功,用户id是:2,用户名称是王姐', '2018-04-18 17:17:14');
-INSERT INTO `hj_system_log` VALUES ('32', 'Post/addDevel', '1', '系统创建者', '::1', '1', '新增开发商成功,开发商名称是：包里', '2018-04-18 19:34:59');
-INSERT INTO `hj_system_log` VALUES ('33', 'Post/addDevel', '1', '系统创建者', '::1', '1', '新增开发商成功,开发商名称是：测试', '2018-04-18 19:44:03');
-INSERT INTO `hj_system_log` VALUES ('34', 'Post/editDevelopers', '1', '系统创建者', '::1', '1', '编辑开发商成功,开发商名称是：包里2,开发商id是：1', '2018-04-19 10:06:44');
-INSERT INTO `hj_system_log` VALUES ('35', 'Post/editDevelopers', '1', '系统创建者', '::1', '1', '编辑开发商成功,开发商名称是：包里2,开发商id是：1', '2018-04-19 10:07:46');
-INSERT INTO `hj_system_log` VALUES ('36', 'Post/delDevelopers', '1', '系统创建者', '::1', '1', '删除开发商成功,开发商名称是：测试,开发商id是：2', '2018-04-19 10:16:59');
-INSERT INTO `hj_system_log` VALUES ('37', 'Post/AddCompany', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：测试而微软', '2018-04-19 10:42:40');
-INSERT INTO `hj_system_log` VALUES ('38', 'Post/editCompany', '1', '系统创建者', '::1', '1', '编辑销售公司成功,销售公司名称是：测试而微软', '2018-04-19 11:22:46');
-INSERT INTO `hj_system_log` VALUES ('39', 'Post/AddCompany', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：的方式发送', '2018-04-19 11:23:48');
-INSERT INTO `hj_system_log` VALUES ('40', 'Post/editCompany', '1', '系统创建者', '::1', '1', '编辑销售公司成功,销售公司名称是：的方式发送', '2018-04-19 11:24:03');
-INSERT INTO `hj_system_log` VALUES ('41', 'Post/delCompany', '1', '系统创建者', '::1', '1', '删除销售公司成功,销售公司名称是：测试而微软,开发商id是：1', '2018-04-19 11:31:39');
-INSERT INTO `hj_system_log` VALUES ('42', 'Post/addSalesUser', '1', '系统创建者', '::1', '1', '新增销售人员成功,销售公司名称是：2,销售人员名称是：车话', '2018-04-19 13:47:48');
-INSERT INTO `hj_system_log` VALUES ('43', 'Post/editSalesUser', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：', '2018-04-19 14:14:12');
-INSERT INTO `hj_system_log` VALUES ('44', 'Post/addSalesUser', '1', '系统创建者', '::1', '1', '新增销售人员成功,销售公司名称是：2,销售人员名称是：海运费', '2018-04-19 14:28:33');
-INSERT INTO `hj_system_log` VALUES ('45', 'Post/delSalesUser', '1', '系统创建者', '::1', '1', '删除销售人员成功,销售人员id是：1,销售人员名称是：景色', '2018-04-19 14:28:39');
-INSERT INTO `hj_system_log` VALUES ('46', 'Post/addHusiness', '1', '系统创建者', '::1', '1', '新增商家成功,商家名称是：恒纪元', '2018-04-19 15:10:38');
-INSERT INTO `hj_system_log` VALUES ('47', 'Post/editHusiness', '1', '系统创建者', '::1', '1', '编辑商家成功,商家名称是：恒纪元1,商家id是：', '2018-04-19 15:28:27');
-INSERT INTO `hj_system_log` VALUES ('48', 'Post/editHusiness', '1', '系统创建者', '::1', '1', '编辑商家成功,商家名称是：恒纪元1,商家id是：1', '2018-04-19 15:33:27');
-INSERT INTO `hj_system_log` VALUES ('49', 'Post/editHusiness', '1', '系统创建者', '::1', '1', '编辑商家成功,商家名称是：恒纪元1,商家id是：1', '2018-04-19 15:36:12');
-INSERT INTO `hj_system_log` VALUES ('50', 'Post/addHusiness', '1', '系统创建者', '::1', '1', '新增商家成功,商家名称是：客人', '2018-04-19 15:43:58');
-INSERT INTO `hj_system_log` VALUES ('51', 'Post/delHusiness', '1', '系统创建者', '::1', '1', '删除商家成功,商家名称是：恒纪元1,商家id是：1', '2018-04-19 15:44:03');
-INSERT INTO `hj_system_log` VALUES ('52', 'Post/addVillage', '1', '系统创建者', '::1', '1', '新增小区信息成功,小区名称是：美年', '2018-04-19 16:57:15');
-INSERT INTO `hj_system_log` VALUES ('53', 'Post/editVillage', '1', '系统创建者', '::1', '1', '新增小区信息成功,小区名称是：美年1', '2018-04-19 18:03:48');
-INSERT INTO `hj_system_log` VALUES ('54', 'Post/addVillage', '1', '系统创建者', '::1', '1', '新增小区信息成功,小区名称是：3434', '2018-04-19 18:10:26');
-INSERT INTO `hj_system_log` VALUES ('55', 'Post/delVillage', '1', '系统创建者', '::1', '1', '删除小区信息成功,小区名称是：3434,小区编号是:2', '2018-04-19 18:10:32');
-INSERT INTO `hj_system_log` VALUES ('56', 'Post/addCarPark', '1', '系统创建者', '::1', '1', '新增车位信息成功,车位名称是：', '2018-04-19 18:45:20');
-INSERT INTO `hj_system_log` VALUES ('57', 'Post/editCarPark', '1', '系统创建者', '::1', '1', '编辑车位信息成功,车位名称是：美岸001,车位id是：2', '2018-04-19 19:26:48');
-INSERT INTO `hj_system_log` VALUES ('58', 'Post/addCarPark', '1', '系统创建者', '::1', '1', '新增车位信息成功,车位名称是：34242', '2018-04-19 21:48:46');
+INSERT INTO `hj_system_log` VALUES ('59', 'Member/addGroup', '1', '系统创建者', '::1', '1', '新增用户组成功', '2018-04-20 14:14:47');
+INSERT INTO `hj_system_log` VALUES ('60', 'Member/editGroup', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 14:16:01');
+INSERT INTO `hj_system_log` VALUES ('61', 'Member/editGroup', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 14:22:11');
+INSERT INTO `hj_system_log` VALUES ('62', 'Member/delGroup', '1', '系统创建者', '::1', '1', '删除用户组成功', '2018-04-20 14:22:42');
+INSERT INTO `hj_system_log` VALUES ('63', 'Member/editJurisdiction', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 15:06:49');
+INSERT INTO `hj_system_log` VALUES ('64', 'Member/editJurisdiction', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 15:17:26');
+INSERT INTO `hj_system_log` VALUES ('65', 'Member/editJurisdiction', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 15:38:52');
+INSERT INTO `hj_system_log` VALUES ('66', 'Member/editJurisdiction', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 15:42:15');
+INSERT INTO `hj_system_log` VALUES ('67', 'Bank/addBankUser', '1', '系统创建者', '::1', '1', '新增银行管理人员成功,银行编号是：2,银行管理人员名称是：沉重', '2018-04-20 16:22:02');
+INSERT INTO `hj_system_log` VALUES ('68', 'Bank/editBankUser', '1', '系统创建者', '::1', '1', '编辑银行管理人员成功,银行编号是：2,银行管理人员名称是：从', '2018-04-20 16:26:59');
+INSERT INTO `hj_system_log` VALUES ('69', 'Bank/editBankUser', '1', '系统创建者', '::1', '1', '编辑银行管理人员成功,银行编号是：2,银行管理人员名称是：从', '2018-04-20 16:27:26');
+INSERT INTO `hj_system_log` VALUES ('70', 'Bank/editBankUser', '1', '系统创建者', '::1', '1', '编辑银行管理人员成功,银行编号是：2,银行管理人员名称是：从', '2018-04-20 16:28:27');
+INSERT INTO `hj_system_log` VALUES ('71', 'Bank/editBankUser', '1', '系统创建者', '::1', '1', '编辑银行管理人员成功,银行编号是：2,银行管理人员名称是：沉重', '2018-04-20 16:29:57');
+INSERT INTO `hj_system_log` VALUES ('72', 'Bank/editBankUser', '1', '系统创建者', '::1', '1', '编辑银行管理人员成功,银行编号是：3,银行管理人员名称是：从', '2018-04-20 16:30:08');
+INSERT INTO `hj_system_log` VALUES ('73', 'Member/addGroup', '1', '系统创建者', '::1', '1', '新增用户组成功', '2018-04-20 18:29:38');
+INSERT INTO `hj_system_log` VALUES ('74', 'Member/editJurisdiction', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 18:29:45');
+INSERT INTO `hj_system_log` VALUES ('75', 'Member/AddUser', '1', '系统创建者', '::1', '1', '新增用户信息成功,用户登陆账户是admin123', '2018-04-20 18:30:30');
+INSERT INTO `hj_system_log` VALUES ('76', 'Member/editJurisdiction', '1', '系统创建者', '::1', '1', '编辑用户组成功', '2018-04-20 18:51:53');
+INSERT INTO `hj_system_log` VALUES ('77', 'Home/addBanner', '1', '系统创建者', '::1', '1', '新增banner成功,banner名称是：34242', '2018-04-20 19:10:18');
+INSERT INTO `hj_system_log` VALUES ('78', 'Home/editBanner', '1', '系统创建者', '::1', '1', '编辑banner成功,banner名称是：34242,bannerId是:1', '2018-04-20 19:33:17');
+INSERT INTO `hj_system_log` VALUES ('79', 'Home/addBanner', '1', '系统创建者', '::1', '1', '新增banner成功,banner名称是：34234', '2018-04-20 19:40:14');
+INSERT INTO `hj_system_log` VALUES ('80', 'Home/delBanner', '1', '系统创建者', '::1', '1', '删除banner成功,bannerId是:', '2018-04-20 19:40:22');
+INSERT INTO `hj_system_log` VALUES ('81', 'Bank/editBank', '1', '系统创建者', '::1', '1', '编辑银行成功,银行名称：招商银行1', '2018-04-21 10:22:27');
+INSERT INTO `hj_system_log` VALUES ('82', 'Bank/editBank', '1', '系统创建者', '::1', '1', '编辑银行成功,银行名称：兴业银行', '2018-04-21 10:22:38');
+INSERT INTO `hj_system_log` VALUES ('83', 'Post/AddCompany', '1', '系统创建者', '::1', '1', '新增销售公司成功,销售公司名称是：测试公司', '2018-04-21 10:46:11');
+INSERT INTO `hj_system_log` VALUES ('84', 'Post/editVillage', '1', '系统创建者', '::1', '1', '编辑小区信息成功,小区名称是：美年1,小区编号是:1', '2018-04-21 10:57:52');
+INSERT INTO `hj_system_log` VALUES ('85', 'Post/addVillage', '1', '系统创建者', '::1', '1', '新增小区信息成功,小区名称是：问打', '2018-04-21 11:35:58');
+INSERT INTO `hj_system_log` VALUES ('86', 'Post/addCarPark', '1', '系统创建者', '::1', '1', '新增车位信息成功,车位名称是：4234', '2018-04-21 11:36:23');
+
+-- ----------------------------
+-- Table structure for hj_system_nav
+-- ----------------------------
+DROP TABLE IF EXISTS `hj_system_nav`;
+CREATE TABLE `hj_system_nav` (
+  `id` int(10) NOT NULL COMMENT '系统权限',
+  `name` varchar(20) DEFAULT NULL,
+  `status` int(1) DEFAULT NULL,
+  `pid` int(10) DEFAULT NULL,
+  `addtime` timestamp NULL DEFAULT NULL,
+  `url` varchar(500) DEFAULT NULL,
+  `style` varchar(500) DEFAULT NULL,
+  `other` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of hj_system_nav
+-- ----------------------------
+INSERT INTO `hj_system_nav` VALUES ('1', '小区管理', '1', '0', null, 'village', '', null);
+INSERT INTO `hj_system_nav` VALUES ('2', '按揭申请管理', '1', '0', null, 'Mortgage/applyList', 'am-icon-calendar', 'applyList');
+INSERT INTO `hj_system_nav` VALUES ('3', '基础资料', '1', '0', null, 'member', null, null);
+INSERT INTO `hj_system_nav` VALUES ('4', '系统设置', '1', '0', null, 'system', null, null);
+INSERT INTO `hj_system_nav` VALUES ('5', '银行管理', '1', '1', null, 'Bank/bankList', null, 'bankList');
+INSERT INTO `hj_system_nav` VALUES ('6', '银行人员管理', '1', '1', null, 'Bank/bankPersonnel', null, 'bankPersonnel');
+INSERT INTO `hj_system_nav` VALUES ('7', '开发商管理', '1', '1', null, 'Post/developers', null, 'developers');
+INSERT INTO `hj_system_nav` VALUES ('8', '销售公司管理', '1', '1', null, 'Post/salesCompany', null, 'salesCompany');
+INSERT INTO `hj_system_nav` VALUES ('9', '销售人员管理', '1', '1', null, 'Post/salesUser', null, 'salesUser');
+INSERT INTO `hj_system_nav` VALUES ('10', '商家管理', '1', '1', null, 'Post/business', null, 'business');
+INSERT INTO `hj_system_nav` VALUES ('11', '小区管理', '1', '1', null, 'Post/village', null, 'village');
+INSERT INTO `hj_system_nav` VALUES ('12', '车位管理', '1', '1', null, 'Post/carPark', null, 'carPark');
+INSERT INTO `hj_system_nav` VALUES ('13', '业务提成', '1', '3', null, 'Mortgage/commision', null, 'commision');
+INSERT INTO `hj_system_nav` VALUES ('14', '小区提成', '1', '3', null, 'Mortgage/villageCommision', null, 'villageCommision');
+INSERT INTO `hj_system_nav` VALUES ('15', '公司管理', '1', '3', null, 'Member/company', null, 'company');
+INSERT INTO `hj_system_nav` VALUES ('16', '部门管理', '1', '3', null, 'Member/department', null, 'department');
+INSERT INTO `hj_system_nav` VALUES ('17', '用户组管理', '1', '3', null, 'Member/group', null, 'group');
+INSERT INTO `hj_system_nav` VALUES ('18', '用户管理', '1', '3', null, 'Member/adminUser', null, 'adminUser');
+INSERT INTO `hj_system_nav` VALUES ('19', '小程序banner', '1', '4', null, 'Home/bannerList', null, 'bannerList');
+INSERT INTO `hj_system_nav` VALUES ('20', '系统日志', '1', '4', null, '#', null, null);
 
 -- ----------------------------
 -- Table structure for hj_village
@@ -389,10 +458,14 @@ CREATE TABLE `hj_village` (
   `updataTime` timestamp NULL DEFAULT NULL COMMENT '修改用户时间',
   `brokerage` float DEFAULT NULL COMMENT '佣金',
   `carWashNum` int(11) DEFAULT NULL COMMENT '赠送洗车卷数量',
+  `recommend` int(11) DEFAULT '0' COMMENT '首页推荐 1推荐  0不推荐',
+  `salesUserId` int(11) DEFAULT NULL COMMENT '所属销售人员Id',
+  `salesCompany` int(11) DEFAULT NULL COMMENT '销售公司',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of hj_village
 -- ----------------------------
-INSERT INTO `hj_village` VALUES ('1', '3', '1', '美年1', '撒娇看到那句', '李先生', '2147483647', '2300', '300', '1200', 'upload/village/18-04-19_165715.png', null, '<p>啊啊大大大<img src=\"http://localhost/hjy/upload/news/18-04-19_165713.png\" style=\"font-size: 1.6rem; max-width: 100%;\"></p><p><br></p>', '是的方式的', '1', '130000', null, null, '1', '2018-04-19 18:03:48', '500', '3');
+INSERT INTO `hj_village` VALUES ('1', '3', '1', '美年1', '撒娇看到那句', '李先生', '2147483647', '2300', '300', '1200', 'https://img.hengjiyuankeji.com/villageLogo1524279472.jpg', null, '<p>啊啊大大大<img src=\"http://localhost/hjy/upload/news/18-04-19_165713.png\" style=\"font-size: 1.6rem; max-width: 100%;\"></p><p><br></p>', '是的方式的', '1', '130000', null, null, '1', '2018-04-21 10:57:51', '500', '3', '1', '2', '2');
+INSERT INTO `hj_village` VALUES ('2', '3', '1', '问打', '324243', '23424', '234234', '23434', '3434', '23', null, null, '<p>342342424</p>', '34', '1', '434', '1', null, null, null, '34', '0', '0', '2', '2');

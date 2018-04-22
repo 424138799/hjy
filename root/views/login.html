@@ -27,38 +27,102 @@
                 <div class="">
                     <h1 style="text-align: center;">恒纪元后台管理系统</h1>
                 </div>
-                <form class="am-form tpl-form-line-form" action="<?php echo site_url('/Login/land');?>" method="post">
-                    <div class="am-form-group">
-                        <input type="text" name="name" class="tpl-form-input" id="user-name" placeholder="请输入账号">
+                <div data-am-widget="tabs" class="am-tabs am-tabs-default">
+                    <ul class="am-tabs-nav am-cf">
+                        <li class="am-active">
+                            <a href="[data-tab-panel-0]">管理员登陆</a>
+                        </li>
+                        <li class="">
+                            <a href="[data-tab-panel-1]">银行人员登陆</a>
+                        </li>
+                     
+                    </ul>
+                    <div class="am-tabs-bd">
+                        <div data-tab-panel-0 class="am-tab-panel am-active">
+                            <form class="am-form tpl-form-line-form" action="<?php echo site_url('/Login/land');?>" method="post">
+                                <div class="am-form-group">
+                                    <input type="text" name="name" class="tpl-form-input" id="user-name" placeholder="请输入账号">
+                            
+                                </div>
+                            
+                                <div class="am-form-group">
+                                    <input type="password" name="pass" class="tpl-form-input" id="user-name" placeholder="请输入密码">
+                            
+                                </div>
+                                <?php if(!empty($error)){?>
+                            
+                                <div class="am-form-group" id="error">
+                            
+                                    <span style="color:red;">
+                                        <?php echo $error;?>
+                                    </span>
+                            
+                                </div>
+                            
+                                <script>  setTimeout(function () {//5秒后隐藏
 
+                                        $("#error").fadeOut();
+
+                                    }, 5000);</script>
+                            
+                                <?php }?>
+                            
+                                <div class="am-form-group">
+                            
+                                    <button type="submit" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn">提交</button>
+                            
+                                </div>
+                            </form>   
+                        </div>
+                        <div data-tab-panel-1 class="am-tab-panel ">
+                            <style>
+                                input::-webkit-outer-spin-button,
+                                input::-webkit-inner-spin-button {
+                                -webkit-appearance: none;
+                                }
+                                input[type="number"]{
+                                -moz-appearance: textfield;
+                                }
+                            </style>
+                            <form class="am-form tpl-form-line-form" action="<?php echo site_url('/Login/bankLogin');?>" method="post">
+                                <div class="am-form-group">
+                                    <input type="number" name="phone" class="tpl-form-input" placeholder="请输入账号" >
+                            
+                                </div>
+                            
+                                <div class="am-form-group">
+                                    <input type="password" name="pass" class="tpl-form-input" placeholder="请输入密码">
+                            
+                                </div>
+                                <?php if(!empty($error)){?>
+                            
+                                <div class="am-form-group" id="bankerror">
+                            
+                                    <span style="color:red;">
+                                        <?php echo $error;?>
+                                    </span>
+                            
+                                </div>
+                            
+                                <script>  setTimeout(function () {//5秒后隐藏
+
+                                        $("#bankerror").fadeOut();
+
+                                    }, 5000);</script>
+                            
+                                <?php }?>
+                            
+                                <div class="am-form-group">
+                            
+                                    <button type="submit" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn">提交</button>
+                            
+                                </div>
+                            </form>    
+                        </div>
+                       
                     </div>
-
-                    <div class="am-form-group">
-                        <input type="password" name="pass" class="tpl-form-input" id="user-name" placeholder="请输入密码">
-
-                    </div>
-                    <?php if(!empty($error)){?>
-
-                    <div class="am-form-group" id="error">
-
-                       <span style="color:red;"><?php echo $error;?></span>
-
-                    </div>
-
-                    <script>  setTimeout(function(){//5秒后隐藏
-
-                        $("#error").fadeOut();
-
-                    }, 5000);</script>
-
-                    <?php }?>
-             
-                    <div class="am-form-group">
-
-                        <button type="submit" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn">提交</button>
-
-                    </div>
-                </form>
+                </div>
+                
             </div>
         </div>
     </div>

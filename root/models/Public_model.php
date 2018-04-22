@@ -48,7 +48,7 @@ class public_model extends CI_Model
     }
     //查询用户信息
     function select_admin_user($where){
-        $this->db->select('a.loginNum,a.userName,a.password,a.userId,a.status,a.gId,b.status as state');
+        $this->db->select('a.loginNum,a.userName,a.password,a.userId,a.status,a.gId,b.perm,b.status as state');
         $this->db->from('hj_admin_user as a','left');
         $this->db->from('hj_admin_user_group as b','inntr');
         $query = $this->db->where('a.loginNum',$where)->get();
@@ -93,68 +93,61 @@ class public_model extends CI_Model
         return $query->row_array();
     }
 
-
-
-    //返回文章数据
-    function retArticeleList_page($size,$page){
-        $sql = "select id,title from wxCatchv1_biz_news where status ='1' and isCollected='1' order by id desc limit $size,$page";
-        $query = $this->db->query($sql);
-        return $query->result_array();
-    }
-    function retArticeleList(){
-        $sql = "select id,title from wxCatchv1_biz_news where status ='1' and isCollected='1'";
-        $query = $this->db->query($sql);
-        $res= $query->result_array();
-        return count($res);
-    }
-
-
-	//分页多条件查询
-    function select_where_many_page($table,$where,$id,$where2,$id2,$sort,$desc,$size,$page){
-        $query = $this->db->where($where,$id)->where($where2,$id2)->order_by($sort,$desc)->limit($page,$size)->get($table);
-        return $query->result_array();
-    }
-    //functii
-    function select_like($table,$title,$id,$sear){
-        $query = $this->db->like($title,$sear,'both')->or_like($id,$sear,'both')->get($table);
-        return $query->result_array();
-    }
-    function select_like_page($table,$title,$id,$sear,$size,$page){
-        $query = $this->db->like($title,$sear,'both')->or_like($id,$sear,'both')->limit($page,$size)->get($table);
-        return $query->result_array();
-    }
-    //wehrelike
-    function select_wherelike($table,$title,$id,$sear,$status){
-        $query = $this->db->where('status',$status)->like($title,$sear,'both')->or_like($id,$sear,'both')->get($table);
-        return $query->result_array();
-    }
-    function select_wherelike_page($table,$title,$id,$sear,$status,$size,$page){
-        $query = $this->db->where('status',$status)->like($title,$sear,'both')->or_like($id,$sear,'both')->limit($page,$size)->get($table);
-        return $query->result_array();
-    }
-
-    //返回未爬的文章信息
-    function selectContNot($table,$where,$id){
-        $query = $this->db->where($where,$id)->where('isCollected','0')->get($table);
-        return $query->result_array();
-    }
-     
-    //返回文章条数
-    function retContentNum($table){
-        $sql = "SELECT count(*) FROM $table";
-        $query = $this->db->query($sql);
+    //银行人员id
+    function retBankUserInfo($table, $where, $id, $id2)
+    {
+        $query = $this->db->where($where, $id)->where('uId !=', $id2)->get($table);
         return $query->row_array();
     }
-    //查询推荐位
-    function recommendWechat($type,$bizid,$time){
-        $query = $this->db->where('type',$type)->where('bizId',$bizid)->where('endTime >=',$time)->get('wxCatchv1_biz_spread');
-        return $query->row_array();
+
+
+    //返回按揭申请
+    function retSendApply(){
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->get();
+
+        return $query->result_array();
     }
-    //编辑推荐
-    function editrecommendWechat($id,$type,$bizid,$time){
-        $query = $this->db->where('id !=',$id)->where('type',$type)->where('bizId',$bizid)->where('endTime >=',$time)->get('wxCatchv1_biz_spread');
-        return $query->row_array();
+    function retSendApplyPage($size,$page)
+    {
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->limit($page,$size)->get();
+
+        return $query->result_array();
     }
+
+    //跟据银行返回数据
+    function retBankApply($id){
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('c.bankId',$id)->get();
+
+        return $query->result_array();
+    }
+    function retBankApplyPage($id,$size, $page)
+    {
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('c.bankId', $id)->limit($page,$size)->get();
+
+        return $query->result_array();
+    }
+
+
+
+
+
+
 }
 
 
