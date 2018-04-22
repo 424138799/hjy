@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 */
 
-$config['base_url'] = 'http://www.hengjiyuankeji.com:6788/';
+$config['base_url'] = 'https://www.hengjiyuankeji.com/';
 
 
 

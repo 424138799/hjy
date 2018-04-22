@@ -537,7 +537,7 @@ class Member extends Default_Controller
 
             $data['menu'] = array('Member','group');
             $data['list'] = $menus;
-            $this->load->view('Member/jurisdiction.html',$data);
+            $this->load->view('member/jurisdiction.html',$data);
         }
     }
      function editJurisdiction(){
