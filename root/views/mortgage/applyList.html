@@ -36,14 +36,43 @@
                                 <div class="widget-title  am-cf">按揭申请列表</div>
                             </div>
                             <div class="widget-body  am-fr">
+                                <form action="<?php echo site_url('/Mortgage/searchApply');?>" method="get">
 
-                    
+                                    <div style="margin-top:20px;" class="am-padding-left">
+                                        <div class="am-u-sm-2 am-u-md-1 am-u-lg-1 am-fl" style="text-align:right;">搜索：</div>
+                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3" style="margin-left:-47px;">
+                                            <div class="am-form-group tpl-table-list-select">
+                                                <span for="" class="am-u-sm-5">审核状态:</span>
+                                                <select data-am-selected="{btnSize: 'sm'}" name="sear">
+                                                    <option value="5">全部</option>
+                                                    <option value="0">等待审核</option>
+                                                    <option value="1">审核通过</option>
+                                                    <option value="2">审核不通过</option>
+                                                    <option value="3">待定</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="am-u-sm-12 am-u-md-2 am-u-lg-2 am-fl"></div>
+                                    </div>
+                                    <div class="am-g am-padding-left">
+
+                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
+                                            <button type="submit" class="am-btn am-btn-primary am-radius">确定</button>
+                                        </div>
+                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-2">
+
+                                        </div>
+                                    </div>
+                                </form>
+                                
                                
                                 <div class="am-u-sm-12">
                                     <div style="margin-bottom: 20px">
                                         <a href="<?php echo site_url('/Mortgage/downApply/1');?>" class="am-btn am-btn-default am-btn-primary">
                                             <span class="am-icon-arrow-down"></span> 导出</a>
                                     </div>
+
                                   
                                     <style>
                                         .am-table>thead>tr>th {

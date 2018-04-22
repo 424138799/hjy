@@ -168,7 +168,7 @@ class Api extends CI_Controller
             // $this->db->from('hj_village as b', 'left');
             // $this->db->from('hj_car_parking as a','inner');
             // $query = $this->db->where('b.id', 'a.vId')->where('b.salesUserId',$id)->order_by('a.carId','desc')->get();
-            $sql = "SELECT `a`.`salesUserId`, `b`.* FROM `hj_village` as `a`, `hj_car_parking` as `b` WHERE `a`.`id` = `b`.`vId` AND `a`.`salesUserId` = '2' ORDER BY `b`.`carId` DESC";
+            $sql = "SELECT `a`.`salesUserId`, `b`.* FROM `hj_village` as `a`, `hj_car_parking` as `b` WHERE `a`.`id` = `b`.`vId` AND `a`.`salesUserId` = '".$id."' ORDER BY `b`.`carId` DESC";
             $query = $this->db->query($sql);
             $list = $query->result_array();
             
@@ -236,6 +236,17 @@ class Api extends CI_Controller
    function sendApply(){
         if($_POST){
              $data = $this->input->post();
+
+            //获取小区提成信息
+            $this->db->select('a.id,a.brokerage,b.vId');
+            $this->db->from('hj_car_parking as b','left');
+            $this->db->join('hj_village as a','a.id = b.vId','inner');
+            $query = $this->db->where('b.carId',$data['carId'])->get();
+            $vi = $query->row_array();
+
+            $data['extractPrice'] = $vi['brokerage'];
+
+
              $data['sendTime'] = date('Y-m-d H:i:s',time());
              if($this->public_model->insert($this->sendApply,$data)){
                 $arr = array(
@@ -271,7 +282,7 @@ class Api extends CI_Controller
             $this->db->from('hj_send_apply as a', 'left');
             $this->db->join('hj_car_parking as b','a.carId = b.carId','inner');
             $this->db->join('hj_village as c','b.vId = c.id','inner');
-            $query = $this->db->where('a.salesId',$userId)->get();
+            $query = $this->db->where('a.salesId',$userId)->order_by('a.sendTime','desc')->get();
             $list = $query->result_array();
             // $list = $this->public_model->select_where($this->sendApply, 'salesId',$userId,'sendTime','desc');
             if (!empty($list)) {
@@ -371,6 +382,128 @@ class Api extends CI_Controller
                 echo json_encode($arr);
             }
 
+        }else{
+            $arr = array(
+                'error' => '2',
+                'errorData' => '请求错误！',
+                'data' => '',
+            );
+            echo json_encode($arr);
+        }
+    }
+
+    //我的提成
+    function myExtractPrice(){
+        //
+        if($_POST){
+            $userId = $this->input->post('userId');
+            //获取我负责的小区
+            $village = $this->public_model->select_where('hj_village', 'salesUserId',$userId,'createTime','desc');
+            // $arr = array('thisMonth', 'lastMonth');
+            foreach ($village as $key => $val) {
+                $arr['thisMonth'][$key]['villageTitle'] = $val['villageTitle'];
+                $sql = "SELECT `a`.`mId`, `b`.`vId` FROM `hj_send_apply` as `a` INNER JOIN `hj_car_parking` as `b` ON `a`.`carId` = `b`.`carId` WHERE `b`.`vId` = '".$val['id']."' AND `salesId` = '".$userId. "' and DATE_FORMAT( a.sendTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )";
+               // $sql = "SELECT vid,extractPrice FROM hj_send_apply WHERE DATE_FORMAT( sendTime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and vId = '".$val['id']."'";
+                $num = count($this->db->query($sql)->result_array());
+                $arr['thisMonth'][$key]['num'] = $num;
+                $arr['thisMonth'][$key]['price'] = $val['brokerage'];
+                $arr['thisMonth'][$key]['amountPrice'] = $val['brokerage']*$num;
+                //获取上一个月
+                $arr['LastMonth'][$key]['villageTitle'] = $val['villageTitle'];
+
+                $sql1 = "SELECT `a`.`mId`, `b`.`vId` from `hj_send_apply` as `a` INNER JOIN `hj_car_parking` as `b` ON `a`.`carId` = `b`.`carId` where `b`.`vId` = '" . $val['id'] . "' AND `salesId` = '" . $userId . "' and date_format(a.sendTime,'%Y-%m')=date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m')";
+                $num1 = count($this->db->query($sql1)->result_array());
+            
+                $arr['LastMonth'][$key]['num'] = $num1;
+                $arr['LastMonth'][$key]['price'] = $val['brokerage'];
+                $arr['LastMonth'][$key]['amountPrice'] = $val['brokerage'] * $num1;
+                $month = date('m', strtotime('-1 month'));                
+            }
+            $month = date('m', strtotime('-1 month'));                
+            $forwork = $this->public_model->select_where_info('hj_sales_forwork', 'userId', $userId, 'month', $month);
+            if(!empty($forwork)){
+                $arr['LastStatus'] = '1';
+            }else{
+                $arr['LastStatus'] = '0';
+            }
+
+            if(!empty($arr)){
+                $data = array(
+                    'error' => '0',
+                    'errorData' => '',
+                    'data' => $arr,
+                );
+                echo json_encode($data);
+            }else{
+                $data = array(
+                    'error' => '2',
+                    'errorData' => '没有数据！',
+                    'data' => '',
+                );
+                echo json_encode($data);
+            }
+        }else{
+            $arr = array(
+                'error' => '2',
+                'errorData' => '请求错误！',
+                'data' => '',
+            );
+            echo json_encode($arr);
+        }
+    }
+
+    //申请体现
+    function sendRespons(){
+        if($_POST){
+            $data = $this->input->post();
+            $data['reflectTime'] = date('Y-m-d H:i:s');
+            $data['month'] = date('m', strtotime('-1 month'));
+          
+            if($this->public_model->insert('hj_sales_forwork',$data)){
+                $data = array(
+                    'error' => '0',
+                    'errorData' => '',
+                    'data' => '提交成功，等待审核',
+                );
+                echo json_encode($data);
+            }else{
+                $data = array(
+                    'error' => '2',
+                    'errorData' => '提交失败',
+                    'data' => '',
+                );
+                echo json_encode($data);
+            }
+        }else{
+            $arr = array(
+                'error' => '2',
+                'errorData' => '请求错误！',
+                'data' => '',
+            );
+            echo json_encode($arr);
+        }
+    }
+
+    //提现记录
+    function responsList(){
+        if($_POST){
+            $userId = $this->input->post('userId');
+            $list = $this->public_model->select('hj_sales_forwork', 'userId',$userId, 'reflectTime','desc');
+            if(!empty($list)){
+                $arr = array(
+                    'error' => '0',
+                    'errorData' => '',
+                    'data' => $list,
+                );
+                echo json_encode($arr);
+            }else{
+                $arr = array(
+                    'error' => '2',
+                    'errorData' => '没有数据!',
+                    'data' => '',
+                );
+                echo json_encode($arr);
+            }
         }else{
             $arr = array(
                 'error' => '2',

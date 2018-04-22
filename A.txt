@@ -90,3 +90,33 @@ banner列表
     userId 用户id
 返回值：{"error":"0","data":"qjWkScOlHQsxnSMyAYScOwCBgWljlwaOuqMmXAg2:B5rOv_v4csP3zA9tGuzTbLgeFB8=:eyJzY29wZSI6ImhlbmdqaXl1YW4td3giLCJkZWFkbGluZSI6MTUyNDMwNjk1OX0="}
 返回值说明：error=2 出错   errorData 错误信息   error=0  正常返回
+
+
+返回用户提成统计
+地址：http://192.168.1.9/hjy/index.php/Api/myExtractPrice
+方式：post
+参数：
+    userId 用户id
+返回值：{"error":"0","errorData":"","data":{"thisMonth":[{"villageTitle":"\u7f8e\u5e741","num":2,"price":"500","amountPrice":1000},{"villageTitle":"\u95ee\u6253","num":2,"price":"34","amountPrice":68}],"LastMonth":[{"villageTitle":"\u7f8e\u5e741","num":1,"price":"500","amountPrice":500},{"villageTitle":"\u95ee\u6253","num":0,"price":"34","amountPrice":0}]}}
+返回值说明：error=2 出错   errorData 错误信息   error=0  正常返回
+
+
+用户提现申请
+地址：http://192.168.1.9/hjy/index.php/Api/sendRespons
+方式：post
+参数：
+    userId 用户id
+    amountPrice 总金额
+返回值：{"error":"0","errorData":"","data":"\u63d0\u4ea4\u6210\u529f\uff0c\u7b49\u5f85\u5ba1\u6838"}
+返回值说明：error=2 出错   errorData 错误信息   error=0  正常返回
+
+
+用户提现记录
+地址：http://192.168.1.9/hjy/index.php/Api/responsList
+方式：post
+参数：
+    userId 用户id
+返回值：{"error":"0","errorData":"","data":[{"id":"1","userId":"2","amountPrice":"5000","status":"0","examine":null,"reflectTime":"2018-04-22 11:21:25","examineTime":null,"month":null}]}
+返回值说明：error=2 出错   errorData 错误信息   error=0  正常返回   status 状态  0待审核  1已审核  2审核错误
+
+

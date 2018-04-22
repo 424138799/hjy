@@ -99,6 +99,12 @@ class public_model extends CI_Model
         $query = $this->db->where($where, $id)->where('uId !=', $id2)->get($table);
         return $query->row_array();
     }
+    //销售
+    function retSalesUserInfo($table, $where, $id, $id2)
+    {
+        $query = $this->db->where($where, $id)->where('id !=', $id2)->get($table);
+        return $query->row_array();
+    }
     //但字段模糊搜索
     function searchLike($table,$zi,$sear){
         $query = $this->db->like($zi,$sear,'both')->get($table);
@@ -142,6 +148,27 @@ class public_model extends CI_Model
 
         return $query->result_array();
     }
+      //返回按揭申请
+    function searSendApply($state)
+    {
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('a.examineState',$state)->get();
+
+        return $query->result_array();
+    }
+    function searSendApplyPage($state,$size, $page)
+    {
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('a.examineState', $state)->limit($page, $size)->get();
+
+        return $query->result_array();
+    }
 
     //跟据银行返回数据
     function retBankApply($id){
@@ -160,6 +187,28 @@ class public_model extends CI_Model
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
         $query = $this->db->where('c.bankId', $id)->limit($page,$size)->get();
+
+        return $query->result_array();
+    }
+
+    //sear
+    function searBankApply($id,$state)
+    {
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('c.bankId', $id)->where('a.examineState',$state)->get();
+
+        return $query->result_array();
+    }
+    function searBankApplyPage($id,$state, $size, $page)
+    {
+        $this->db->select('a.*,b.vId,b.carNum,c.villageTitle');
+        $this->db->from('hj_send_apply as a', 'left');
+        $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
+        $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
+        $query = $this->db->where('c.bankId', $id)->where('a.examineState', $state)->limit($page, $size)->get();
 
         return $query->result_array();
     }
