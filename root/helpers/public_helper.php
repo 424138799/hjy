@@ -133,6 +133,14 @@ function retCompanyName($id)
     $res = $query->row_array();
     return $res;
 }
+//返回公司名称
+function retVillageName($id)
+{
+    $CI = &get_instance();
+    $query = $CI->db->where('id', $id)->get('village');
+    $res = $query->row_array();
+    return $res;
+}
 
 
 //获取配置

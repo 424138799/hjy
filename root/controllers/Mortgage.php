@@ -78,6 +78,95 @@ class Mortgage extends Default_Controller
 
         $this->load->view('mortgage/applyList.html',$data);
     }
+
+    //搜索审核信息
+    function searchApply(){
+        $config['per_page'] = 10;
+        //获取页码
+        $current_page = intval($this->input->get("size"));//index.php 后数第4个/
+        $sear = $this->input->get('sear');
+        //分页配置
+        $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination">';
+
+        $config['full_tag_close'] = '</ul>';
+
+        $config['first_tag_open'] = '<li>';
+
+        $config['first_tag_close'] = '</li>';
+
+        $config['prev_tag_open'] = '<li>';
+
+        $config['prev_tag_close'] = '</li>';
+
+        $config['next_tag_open'] = '<li>';
+
+        $config['next_tag_close'] = '</li>';
+
+        $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+        $config['cur_tag_close'] = '</a></li>';
+
+        $config['last_tag_open'] = '<li>';
+
+        $config['last_tag_close'] = '</li>';
+
+        $config['num_tag_open'] = '<li>';
+
+        $config['num_tag_close'] = '</li>';
+        $config['first_link'] = '首页';
+
+        $config['next_link'] = '下一页';
+
+        $config['prev_link'] = '上一页';
+
+        $config['last_link'] = '末页';
+
+        if($sear == '5'){
+            if ($this->session->uId == '1') {
+                $total = count($this->public_model->retSendApply());
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->retSendApplyPage($current_page, $config['per_page']);
+
+            } elseif ($this->session->uId == '2') {
+                $total = count($this->public_model->retBankApply($this->session->users['bankId']));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->retBankApplyPage($this->session->users['bankId'], $current_page, $config['per_page']);
+            }
+        }else{
+            if ($this->session->uId == '1') {
+                $list = $this->public_model->searSendApply($sear);
+                $config['total_rows'] = count($list);
+                $listpage = $this->public_model->searSendApplyPage($sear, $current_page, $config['per_page']);
+            } elseif ($this->session->uId == '2') {
+                $list = $this->public_model->searBankApply($this->session->users['bankId'],$sear);
+
+                $config['total_rows'] = count($list);
+                $listpage = $this->public_model->searBankApplyPage($this->session->users['bankId'] ,$sear,  $current_page, $config['per_page']);
+            }
+
+        }
+
+
+        $config['page_query_string'] = true;//关键配置
+        // $config['reuse_query_string'] = FALSE;
+        $config['query_string_segment'] = 'size';
+        $config['base_url'] = site_url('/Mortgage/searchApply?') . "sear=" . $sear;
+
+        // //分页数据\
+        $this->load->library('pagination');//加载ci pagination类
+
+        $this->pagination->initialize($config);
+
+        // var_dump($data);
+        $menu = 'applyList';
+
+        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'menu' => $menu);
+        $this->load->view('mortgage/applyList.html', $data);
+    }
+
+
+
+
     //审核
     function editApply(){
         if($_POST){

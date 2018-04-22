@@ -115,7 +115,7 @@
                                                     <?php echo $v['id'];?>
                                                 </td>
                                                 <td class="username">
-                                                    <?php echo $v['c_id'];?>
+                                                    <?php $com = retCompanyName($v['c_id']); echo $com['companyTitle'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['userName'];?>

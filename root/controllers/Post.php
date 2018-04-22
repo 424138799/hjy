@@ -707,47 +707,53 @@ class Post extends Default_Controller
     function addSalesUser(){
         if ($_POST) {
             $data = $this->input->post();
-            if (!empty($_FILES['file']['name'])) {
-                $config['upload_path'] = 'upload/user/';
-                $config['allowed_types'] = 'gif|jpg|png|jpeg';
-                $config['max_size'] = 5120;
-                $config['file_name'] = date('y-m-d_His');
-                $this->load->library('upload', $config);
-                // 上传
-                if (!$this->upload->do_upload('file')) {
-                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+            $user = $this->public_model->select_info($this->salesUser,'phone',$data['phone']);
+            if(!empty($user)){
+                echo "<script>alert('手机号已经邦有账户了！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";exit;
+            }else{
+                $data['password'] = md5($data['password']);
+                if (!empty($_FILES['file']['name'])) {
+                    $config['upload_path'] = 'upload/user/';
+                    $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                    $config['max_size'] = 5120;
+                    $config['file_name'] = date('y-m-d_His');
+                    $this->load->library('upload', $config);
+                    // 上传
+                    if (!$this->upload->do_upload('file')) {
+                        echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                        exit;
+                    } else {
+                        $headPic = 'upload/user/' . $this->upload->data('file_name');
+                        $data['headPic'] = qiniu($headPic, 'userHeader');
+                        unlink($headPic);
+                    }
+                }
+
+                if ($this->public_model->insert($this->salesUser, $data)) {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '1',
+                        'log_message' => "新增销售人员成功,销售公司名称是：" . $data['c_id'].',销售人员名称是：'.$data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
                     exit;
                 } else {
-                    $headPic = 'upload/user/' . $this->upload->data('file_name');
-                    $data['headPic'] = qiniu($headPic, 'userHeader');
-                    unlink($headPic);
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '0',
+                        'log_message' => "新增销售人员失败,销售公司名称是：" . $data['c_id'] . ',销售人员名称是：' . $data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
+                    exit;
                 }
-            }
-
-            if ($this->public_model->insert($this->salesUser, $data)) {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '1',
-                    'log_message' => "新增销售人员成功,销售公司名称是：" . $data['c_id'].',销售人员名称是：'.$data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
-                exit;
-            } else {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '0',
-                    'log_message' => "新增销售人员失败,销售公司名称是：" . $data['c_id'] . ',销售人员名称是：' . $data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
-                exit;
             }
         } else {
             //获取用户
@@ -762,47 +768,60 @@ class Post extends Default_Controller
     function editSalesUser(){
         if($_POST){
             $data = $this->input->post();
-            if (!empty($_FILES['file']['name'])) {
-                $config['upload_path'] = 'upload/user/';
-                $config['allowed_types'] = 'gif|jpg|png|jpeg';
-                $config['max_size'] = 5120;
-                $config['file_name'] = date('y-m-d_His');
-                $this->load->library('upload', $config);
-                // 上传
-                if (!$this->upload->do_upload('file')) {
-                    echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+            $user = $this->public_model->retSalesUserInfo($this->salesUser, 'phone', $data['phone'],$data['id']);
+            if(!empty($user)){
+                echo "<script>alert('手机号已经邦有账户了！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
+                exit;
+            }else{
+                if(!empty($data['password'])){
+                    $data['password'] = md5($data['password']);
+                }else{
+                    unset($data['password']);
+                }
+                if (!empty($_FILES['file']['name'])) {
+                    $config['upload_path'] = 'upload/user/';
+                    $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                    $config['max_size'] = 5120;
+                    $config['file_name'] = date('y-m-d_His');
+                    $this->load->library('upload', $config);
+                    // 上传
+                    if (!$this->upload->do_upload('file')) {
+                        echo "<script>alert('文件上传失败！');history.back(-1);</script>";
+                        exit;
+                    } else {
+                        $headPic = 'upload/user/' . $this->upload->data('file_name');
+                        $data['headPic'] = qiniu($headPic, 'userHeader');
+                        unlink($headPic);
+                    }
+                }
+                if ($this->public_model->updata($this->salesUser,'id',$data['id'],$data)) {
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '1',
+                        'log_message' => "编辑销售人员成功,销售公司ID是：" . $data['c_id'] . ',销售人员名称是：' . $data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
                     exit;
                 } else {
-                    $headPic = 'upload/user/' . $this->upload->data('file_name');
-                    $data['headPic'] = qiniu($headPic, 'userHeader');
-                    unlink($headPic);
+                    $arr = array(
+                        'log_url' => $this->uri->uri_string(),
+                        'user_id' => $this->session->users['userId'],
+                        'username' => $this->session->users['userName'],
+                        'log_ip' => get_client_ip(),
+                        'log_status' => '0',
+                        'log_message' => "编辑销售人员失败,销售公司ID是：" . $data['c_id'] . ',销售人员名称是：' . $data['userName'],
+                    );
+                    add_system_log($arr);
+                    echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
+                    exit;
                 }
+
             }
-            if ($this->public_model->updata($this->salesUser,'id',$data['id'],$data)) {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '1',
-                    'log_message' => "编辑销售人员成功,销售公司ID是：" . $data['c_id'] . ',销售人员名称是：' . $data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作成功！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
-                exit;
-            } else {
-                $arr = array(
-                    'log_url' => $this->uri->uri_string(),
-                    'user_id' => $this->session->users['userId'],
-                    'username' => $this->session->users['userName'],
-                    'log_ip' => get_client_ip(),
-                    'log_status' => '0',
-                    'log_message' => "编辑销售人员失败,销售公司ID是：" . $data['c_id'] . ',销售人员名称是：' . $data['userName'],
-                );
-                add_system_log($arr);
-                echo "<script>alert('操作失败！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";
-                exit;
-            }
+
         } else {
             $id = intval($this->uri->segment(3));
             if($id != '0'){
@@ -1306,6 +1325,7 @@ class Post extends Default_Controller
             //获取银行
             $data['bank'] = $this->public_model->select($this->bank,'createTime','desc');
             $data['devel'] = $this->public_model->select($this->developers,'createTime','desc');
+            $data['users'] = $this->public_model->select($this->member,'createTime','desc');
                     //获取销售公司
             $data['company'] = $this->public_model->select_where($this->company, 'isDel', '0', 'createTime', 'desc');
            
