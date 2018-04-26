@@ -127,17 +127,23 @@
                                                     <label for="respons" class="am-u-sm-3 am-form-label">负责人
                                                         <span class="red">*</span>：</label>
                                                     <div class="am-u-sm-8">
-                                                        <input type="text" minlength="2" placeholder="请输入2-15个字符" name="respons" value="<?php echo $village['respons'];?>" required onblur="validate(this,2,15,2)" />
-
+                                                        <select name="respons" required>
+                                                            <option value="">==请选择==</option>
+                                                            <?php foreach($users as $v):?>
+                                                            <option value="<?php echo $v['userId'];?>" <?php if($v['userId'] == $village['respons']){echo "selected";}?>>
+                                                                <?php echo $v['userName'];?>
+                                                            </option>
+                                                            <?php endforeach;?>
+                                                        </select>
                                                     </div>
                                                     <small class="am-u-sm-1 red redtips7" style="display: none;">
                                                         <i class="am-icon-close"></i>
                                                     </small>
-
+                                                
                                                     <small class="am-u-sm-1 green blacktips7" style="display: none;">
                                                         <i class="am-icon-check"></i>
                                                     </small>
-
+                                                
                                                 </div>
                                                 <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
                                                     <label for="linkPhone" class="am-u-sm-3 am-form-label">联系电话

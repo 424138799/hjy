@@ -89,6 +89,7 @@
                                         <table width="100%" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-hover" id="example-r">
                                         <thead>
                                             <tr>
+                                                <th>操作</th>
                                                 <th>ID</th>
                                                 <th>小区名称</th>
                                                 <th>车位名称</th>
@@ -103,13 +104,23 @@
                                                 <th>创建时间</th>
                                                 <th>创建人</th>
                                                 <th>备注</th>
-                                                <th>操作</th>
+                                              
                                             </tr>
                                         </thead>
                                         <tbody id="doc-modal-list">
                                             <?php if(!empty($lists)):?>
                                             <?php foreach($lists as $v):?>
                                             <tr class="gradeX">
+                                                <td>
+                                                    <div class="am-btn-toolbar" style="width: 150px;">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            <a href="<?php echo site_url('/Post/editCarPark/').$v['carId'];?>" class="update  am-btn am-btn-warning">
+                                                                <span class="am-icon-edit"></span> 修改</a>
+                                                            <a data-id="<?php echo $v['carId']?>" name="<?php echo $v['carTitle'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                                <span class="am-icon-trash"></span> 删除</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <td class="userid">
                                                     <?php echo $v['carId'];?>
                                                 </td>
@@ -156,16 +167,7 @@
                                                     <?php echo $v['remarks'];?>
                                                 </td>
                                                
-                                                <td>
-                                                    <div class="am-btn-toolbar" style="width: 150px;">
-                                                        <div class="am-btn-group am-btn-group-xs">
-                                                            <a href="<?php echo site_url('/Post/editCarPark/').$v['carId'];?>" class="update  am-btn am-btn-warning">
-                                                                <span class="am-icon-edit"></span> 修改</a>
-                                                            <a data-id="<?php echo $v['carId']?>" name="<?php echo $v['carTitle'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
-                                                                <span class="am-icon-trash"></span> 删除</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                               
                                             </tr>
                                             <?php endforeach;?>
                                             <?php else:?>

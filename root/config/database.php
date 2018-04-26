@@ -154,11 +154,11 @@ $db['default'] = array(
 
 	'hostname' => 'localhost',
 
-	'username' => 'xcxAPI_MYSQL',
+	'username' => 'root',
 
-	'password' => 'xcxAPI_MYSQL',
+	'password' => 'root',
 
-	'database' => 'xcxAPI_MYSQL',
+	'database' => 'hengjiyuan',
 
 	'dbdriver' => 'mysqli',
 

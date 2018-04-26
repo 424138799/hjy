@@ -50,7 +50,7 @@ class public_model extends CI_Model
     function select_admin_user($where){
         $this->db->select('a.loginNum,a.userName,a.password,a.userId,a.status,a.gId,b.perm,b.status as state');
         $this->db->from('hj_admin_user as a','left');
-        $this->db->from('hj_admin_user_group as b','inntr');
+        $this->db->join('hj_admin_user_group as b','a.gId = b.gid','inntr');
         $query = $this->db->where('a.loginNum',$where)->get();
         return $query->row_array();
     }
@@ -114,6 +114,17 @@ class public_model extends CI_Model
         $query = $this->db->like($zi,$sear,'both')->limit($size,$page)->get($table);
         return $query->result_array();
     }
+    //条件模糊搜索
+    function searchWhereLike($table, $where, $data, $zi, $sear,$sort)
+    {
+        $query = $this->db->like($zi, $sear, 'both')->order_by($sort,'desc')->get($table);
+        return $query->result_array();
+    }
+    function searchWhereLikePage($table, $where,$data,$zi, $sear, $size, $page, $sort)
+    {
+        $query = $this->db->like($zi, $sear, 'both')->limit($size, $page)->order_by($sort, 'desc')->get($table);
+        return $query->result_array();
+    }
     //
     function searchManyLike($table, $zi,$tow, $sear)
     {
@@ -134,7 +145,7 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->get();
+        $query = $this->db->order_by('a.sendTime','desc')->get();
 
         return $query->result_array();
     }
@@ -144,7 +155,7 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->limit($page,$size)->get();
+        $query = $this->db->order_by('a.sendTime', 'desc')->limit($page,$size)->get();
 
         return $query->result_array();
     }
@@ -155,7 +166,7 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->where('a.examineState',$state)->get();
+        $query = $this->db->where('a.examineState',$state)->order_by('a.sendTime', 'desc')->get();
 
         return $query->result_array();
     }
@@ -165,7 +176,7 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->where('a.examineState', $state)->limit($page, $size)->get();
+        $query = $this->db->where('a.examineState', $state)->order_by('a.sendTime', 'desc')->limit($page, $size)->get();
 
         return $query->result_array();
     }
@@ -176,7 +187,7 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->where('c.bankId',$id)->get();
+        $query = $this->db->where('c.bankId',$id)->order_by('a.sendTime', 'desc')->get();
 
         return $query->result_array();
     }
@@ -186,7 +197,7 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->where('c.bankId', $id)->limit($page,$size)->get();
+        $query = $this->db->where('c.bankId', $id)->order_by('a.sendTime', 'desc')->limit($page,$size)->get();
 
         return $query->result_array();
     }
@@ -198,7 +209,7 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->where('c.bankId', $id)->where('a.examineState',$state)->get();
+        $query = $this->db->where('c.bankId', $id)->where('a.examineState',$state)->order_by('a.sendTime', 'desc')->get();
 
         return $query->result_array();
     }
@@ -208,11 +219,15 @@ class public_model extends CI_Model
         $this->db->from('hj_send_apply as a', 'left');
         $this->db->join('hj_car_parking as b', 'a.carId = b.carId', 'inner');
         $this->db->join('hj_village as c', 'b.vId = c.id', 'inner');
-        $query = $this->db->where('c.bankId', $id)->where('a.examineState', $state)->limit($page, $size)->get();
+        $query = $this->db->where('c.bankId', $id)->where('a.examineState', $state)->order_by('a.sendTime', 'desc')->limit($page, $size)->get();
 
         return $query->result_array();
     }
 
+    // //获取小区统计信息
+    // function retVillageExtract(){
+    //     $this->db->select('a.*,b.userName as salesUserName,c.companyName');
+    // }
 
 
 

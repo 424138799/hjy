@@ -696,7 +696,7 @@ class Member extends Default_Controller
         }else{
             $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
             $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
-            $data['menu'] = array('Member', 'adminUser');
+            $data['menu'] = array('member', 'adminUser');
 
             $this->load->view('member/addUser.html', $data);
         }
@@ -761,7 +761,7 @@ class Member extends Default_Controller
                 
                 $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
                 $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
-                $data['menu'] = array('Member', 'adminUser');
+                $data['menu'] = array('member', 'adminUser');
 
                 $this->load->view('member/editUser.html', $data);
             }else{

@@ -238,14 +238,19 @@ class Api extends CI_Controller
              $data = $this->input->post();
 
             //获取小区提成信息
-            $this->db->select('a.id,a.brokerage,b.vId');
+            $this->db->select('a.id,a.brokerage,a.bankExtract,a.customerExtract,a.serviceExtract,b.vId,a.dId');
             $this->db->from('hj_car_parking as b','left');
             $this->db->join('hj_village as a','a.id = b.vId','inner');
             $query = $this->db->where('b.carId',$data['carId'])->get();
             $vi = $query->row_array();
 
-            $data['extractPrice'] = $vi['brokerage'];
-
+            $data['extractPrice'] = $vi['brokerage'];//销售提成
+            $data['serviceExtract'] = $vi['serviceExtract'];//业务提成
+            $data['customerExtract'] = $vi['customerExtract'];//客户提成
+            $data['bankExtract'] = $vi['bankExtract'];//银行提成
+            $data['dId'] = $vi['dId'];//银行提成
+            $data['vId'] = $vi['id'];//银行提成
+        
 
              $data['sendTime'] = date('Y-m-d H:i:s',time());
              if($this->public_model->insert($this->sendApply,$data)){

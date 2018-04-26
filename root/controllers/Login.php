@@ -30,7 +30,6 @@ class Login extends CI_Controller
                 $this->load->view('login.html',$error);
             }else{
 				//获取用户
-				
 				$user = $this->public_model->select_admin_user($username);
 				if (!empty($user)) {
 					if($user['status'] == '1' && $user['state'] == '1'){
@@ -42,8 +41,6 @@ class Login extends CI_Controller
 								$this->session->set_tempdata('users', $user, 7200);
 								$this->session->set_userdata('menus', $user['perm']);
 								$this->session->set_tempdata('uId', '1', 7200);
-
-						//  $this->session->mark_as_temp('users', 7200);
 								redirect('Home/index');
 							}
 						} else {

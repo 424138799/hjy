@@ -36,43 +36,52 @@
                                 <div class="widget-title  am-cf">业务提成列表</div>
                             </div>
                             <div class="widget-body  am-fr">
+                                <div class="am-alert am-alert-danger" id="my-alert" style="display: none">
+                                    <p>开始日期应小于结束日期！</p>
+                                </div>
 
-
-                                <form action="<?php echo site_url('/Member/search_member');?>" method="get">
-
-                                    <div style="margin-top:20px;" class="am-padding-left">
-                                        <div class="am-u-sm-2 am-u-md-1 am-u-lg-1 am-fl" style="text-align:right;">搜索：</div>
-                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3" style="margin-left:-47px;">
+                                <form action="<?php echo site_url('/Mortgage/searchCommision');?>" method="get">
+                                    <div class="am-g am-padding-left">
+                                        
+                                        <div class="am-u-sm-6 am-u-md-6 am-u-lg-3">
+                                            时间：
+                                            <button type="button" class="am-btn am-btn-default am-margin-right" id="my-start">
+                                                <span class="am-icon-calendar"></span>
+                                                <input type="hidden" name="time" value="" id="startTime">
+                                            </button>
+                                            <span id="my-startDate">开始日期</span>
+                                        </div>
+                                        <div class="am-u-sm-6 am-u-md-3 am-u-lg-3">
+                                            <button type="button" class="am-btn am-btn-default am-margin-right" id="my-end">
+                                                <span class="am-icon-calendar"></span>
+                                                <input type="hidden" name="endtime" value="" id="endTime">
+                                            </button>
+                                            <span id="my-endDate">结束日期</span>
+                                        </div>
+                                        <div class="am-u-sm-6 am-u-md-6 am-u-lg-3">
                                             <div class="am-form-group tpl-table-list-select">
-                                                <select data-am-selected="{btnSize: 'sm'}" name="status">
-                                                    <option value="">全部</option>
-                                                    <option value="1">正常</option>
-                                                    <option value="2">封禁</option>
+                                                用户类型：
+                                                <select data-am-selected="{btnSize: 'sm'}" name="type">
+                                                    <option value="0">==请选择==</option>
+                                                    <option value="1">销售经理</option>
+                                                    <option value="2">银行经理</option>
+                                                    <option value="3">业务经理</option>
+                                                    <option value="4">客户经理</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="am-u-sm-12 am-u-md-12 am-u-lg-3">
-
-                                            <div class="am-input-group am-input-group-sm tpl-form-border-form cl-p">
-                                                <input type="text" name="sear" class="am-form-field" placeholder="邮箱">
-                                                <!--  <span class="am-input-group-btn">
-                                                <button class="am-btn  am-btn-default am-btn-success tpl-table-list-field am-icon-search" type="button"></button>
-                                            </span> -->
-                                            </div>
-                                        </div>
-                                        <div class="am-u-sm-12 am-u-md-2 am-u-lg-2 am-fl"></div>
-                                    </div>
-                                    <div class="am-g am-padding-left">
-
-                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3">
+                                        <div class="am-u-sm-6 am-u-md-6 am-u-lg-3">
                                             <button type="submit" class="am-btn am-btn-primary am-radius">确定</button>
                                         </div>
-                                        <div class="am-u-sm-12 am-u-md-6 am-u-lg-2">
-
-                                        </div>
+                                    
                                     </div>
+                                  
                                 </form>
                                 <div class="am-u-sm-12">
+                                    <div style="margin-bottom: 20px">
+                                        <a href="#" data-am-modal="{target: '#my-prompt'}" class="am-btn am-btn-default am-btn-primary">
+                                            <span class="am-icon-arrow-down"></span> 导出</a>
+                                    </div>
 
                                     <style>
                                         .am-table>thead>tr>th {
@@ -83,100 +92,215 @@
                                             padding: .3rem;
                                         }
                                     </style>
-                                    <div class="am-scrollable-horizontal">
+                                    <div style="margin-top:20px;" class="am-scrollable-horizontal">
                                         <table width="100%" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-hover">
                                             <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>姓名</th>
-                                                    <th>部门</th>
-                                                    <th>岗位</th>
-                                                    <th>开始时间</th>
-                                                    <th>截至时间</th>
-                                                    <th>业务量</th>
-                                                    <th>单位提成</th>
-                                                    <th>提成总金额</th>
-                                                   
-                                                    <th>操作</th>
-
-                                                </tr>
+                                                <?php if($type =='1'):?>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>姓名</th>
+                                                        <th>销售公司名称</th>
+                                                        <th>岗位</th>
+                                                        <th>开始时间</th>
+                                                        <th>截至时间</th>
+                                                        <th>业务量</th>
+                                                        <!-- <th>单位提成</th> -->
+                                                        <th>提成总金额</th>
+                                                    
+                                                        <!-- <th>操作</th> -->
+                                                    
+                                                    </tr>
+                                                <?php elseif($type == '2'):?>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>姓名</th>
+                                                        <th>银行名称</th>
+                                                        <th>岗位</th>
+                                                        <th>开始时间</th>
+                                                        <th>截至时间</th>
+                                                        <th>业务量</th>
+                                                        
+                                                        <th>提成总金额</th>
+                                                    
+                                                        <!-- <th>操作</th> -->
+                                                    
+                                                    </tr>
+                                                <?php elseif($type == '3'):?>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>开发商名称</th>
+                                                        <th>姓名</th>
+                                                        <th>部门</th>
+                                                        <th>岗位</th>
+                                                        <th>开始时间</th>
+                                                        <th>截至时间</th>
+                                                        <th>业务量</th>
+                                                        <th>提成总金额</th>
+                                                    
+                                                    
+                                                    </tr>
+                                                <?php elseif($type == '4'):?>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>小区名称</th>
+                                                        <th>姓名</th>
+                                                        <th>部门</th>
+                                                        <th>岗位</th>
+                                                        <th>开始时间</th>
+                                                        <th>截至时间</th>
+                                                        <th>业务量</th>
+                                                        <th>提成总金额</th>
+                                                        <!-- <th>操作</th> -->
+                                                    
+                                                    </tr>
+                                                <?php else:?>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>姓名</th>
+                                                        <th>部门</th>
+                                                        <th>岗位</th>
+                                                        <th>开始时间</th>
+                                                        <th>截至时间</th>
+                                                        <th>业务量</th>
+                                                        <th>提成总金额</th>
+                                                    
+                                                        <!-- <th>操作</th> -->
+                                                    
+                                                    </tr>
+                                                <?php endif;?>
                                             </thead>
                                             <tbody id="doc-modal-list">
                                                
                                                 <?php if(!empty($lists)):?>
-                                                <?php foreach($lists as $v):?>
-                                                <tr class="gradeX">
-                                                    <td>
-                                                        <div class="am-btn-toolbar" style="width:150px;">
-                                                            <div class="am-btn-group am-btn-group-xs">
-                                                                <a href="#" class="update  am-btn am-btn-warning">
-                                                                    <span class="am-icon-edit"></span> 审核</a>
-                                                                <a data-id="#" name="#" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
-                                                                    <span class="am-icon-trash"></span> 删除</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td class="userid">
-                                                        <?php echo $v['id'];?>
-                                                    </td>
-                                                    <td class="username">
-                                                        <?php echo $v['villageTitle'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['address'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['respons'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['linkPhone'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php if(!empty($v['logo'])):?>
-                                                        <img src="<?php echo base_url().$v['logo'];?>" width="100px" alt="">
-                                                        <?php endif;?>
-                                                    </td>
-                                                    <?php if($v['status'] == '1'):?>
-                                                    <td>显示</td>
-                                                    <?php else:?>
-                                                    <td>不显示</td>
-                                                    <?php endif;?>
-                                                    <td>
-                                                        <?php echo $v['carNum'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['soldNum'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['surplusNum'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['carPrice'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['brokerage'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['createUser'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['createTime'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['updataUser'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['updataTime'];?>
-                                                    </td>
-                                                    <td>
-                                                        <?php echo $v['remarks'];?>
-                                                    </td>
-
-                                                    <td>
-
-                                                    </td>
-                                                </tr>
+                                                <?php if($type == '1'):?>
+                                                <?php foreach($lists as $k=>$v):?>
+                                                    <tr class="gradeX">
+                                                        <td class="userid">
+                                                            <?php echo $k+1;?>
+                                                        </td>
+                                                        <td class="username">
+                                                            <?php echo $v['userName'];?>
+                                                        </td>
+                                                    
+                                                        <td>
+                                                            <?php $com = retSalesCompany($v['c_id']); echo $com['companyName'];?>
+                                                        </td>
+                                                        <td>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $time;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $endtime;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $v['num'];?>
+                                                        </td>
+                                                    
+                                                        <td>
+                                                            <?php echo $v['amount'];?>
+                                                        </td>
+                                                    </tr>
                                                 <?php endforeach;?>
+                                                <?php elseif($type == '2'):?>
+                                                <?php foreach($lists as $k=>$v):?>
+                                                    <tr class="gradeX">
+                                                        <td class="userid">
+                                                            <?php echo $k+1;?>
+                                                        </td>
+                                                        <td class="username">
+                                                            <?php echo $v['userName'];?>
+                                                        </td>
+                                                    
+                                                        <td>
+                                                            <?php $bankName = getBankName($v['uId']); echo $bankName;?>
+                                                        </td>
+                                                        <td>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $time;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $endtime;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $v['num'];?>
+                                                        </td>
+                                                    
+                                                        <td>
+                                                            <?php echo $v['amount'];?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach;?>
+                                                <?php elseif($type == '3'):?>
+                                                    <?php foreach($lists as $k=>$v):?>
+                                                    <tr class="gradeX">
+                                                        <td class="userid">
+                                                            <?php echo $k+1;?>
+                                                        </td>
+                                                      
+                                                    
+                                                        <td>
+                                                            <?php echo $v['title'];?>
+                                                        </td>
+                                                        <td class="username">
+                                                            <?php echo $v['userName'];?>
+                                                        </td>
+                                                        <td>
+                                                            <?php $bu = retUserDepartment($v['department']); echo $bu;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $v['duty'];?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $time;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $endtime;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $v['num'];?>
+                                                        </td>
+                                                    
+                                                        <td>
+                                                            <?php echo $v['amount'];?>
+                                                        </td>
+                                                    </tr>
+                                                    <?php endforeach;?>
+                                                <?php elseif($type == '4'):?>
+                                                    <?php foreach($lists as $k=>$v):?>
+                                                    <tr class="gradeX">
+                                                        <td class="userid">
+                                                            <?php echo $k+1;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $v['villageTitle'];?>
+                                                        </td>
+                                                        <td class="username">
+                                                            <?php echo $v['userName'];?>
+                                                        </td>
+                                                        <td>
+                                                            <?php $bu = retUserDepartment($v['department']); echo $bu;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $v['duty'];?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $time;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $endtime;?>
+                                                        </td>
+                                                        <td>
+                                                            <?php echo $v['num'];?>
+                                                        </td>
+                                                    
+                                                        <td>
+                                                            <?php echo $v['amount'];?>
+                                                        </td>
+                                                    </tr>
+                                                    <?php endforeach;?>
+                                                <?php endif;?>
                                                 <?php else:?>
                                                 <tr>
                                                     <td colspan="8">暂无内容！</td>
@@ -204,7 +328,55 @@
         </div>
     </div>
     </div>
+<!--  -->
 
+<!-- 新增 -->
+<div class="am-modal am-modal-confirm" tabindex="-1" id="my-prompt">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">导出信息</div>
+        <form class="am-form am-form-horizontal" action="<?php echo site_url('/Mortgage/downExtract');?>" method="post">
+            <div class="am-modal-bd">
+                <div class="am-form-group">
+                   
+                    <label for="dutyId" class="am-u-sm-2 am-form-label">时间</label>
+                    <div class="am-u-sm-10">
+                        <button type="button" class="am-btn am-btn-default am-margin-right" id="my-start1">
+                            <span class="am-icon-calendar"></span>
+                            <input type="hidden" name="time" value="" id="startTime1">
+                        </button>
+                        <span id="my-startDate1">开始日期</span>
+                   
+                        <button type="button" class="am-btn am-btn-default am-margin-right" id="my-end1">
+                            <span class="am-icon-calendar"></span>
+                            <input type="hidden" name="endtime" value="" id="endTime1">
+                        </button>
+                        <span id="my-endDate1">结束日期</span>
+                    </div>
+                </div>
+                <div class="am-form-group">
+                    <label for="dutyId" class="am-u-sm-2 am-form-label">用户类型</label>
+                    <div class="am-u-sm-10">
+                        <select name="type" required>
+                            <option value="">请选择</option>
+                            <option value="1">销售经理</option>
+                            <option value="2">银行经理</option>
+                            <option value="3">业务经理</option>
+                            <option value="4">客户经理</option>
+                        </select>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <button type="submit" style="padding:0;border:none;background:none;width: 100%;height: 100%;outline: none;">提交</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!--  -->
     <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">删除提示</div>
@@ -220,6 +392,68 @@
     <script>
 
         $(function () {
+            var startDate = new Date();
+            var endDate = null;
+            var $alert = $('#my-alert');
+            $('#my-start').datepicker().
+                on('changeDate.datepicker.amui', function (event) {
+                    if (endDate && event.date.valueOf() > endDate.valueOf()) {
+                        $alert.find('p').text('开始日期应小于结束日期！').end().show();
+                    } else {
+                        $alert.hide();
+                        startDate = new Date(event.date);
+                        $('#my-startDate').text($('#my-start').data('date'));
+                        $('#startTime').val($('#my-start').data('date'));
+                    }
+                    $(this).datepicker('close');
+                });
+
+            $('#my-end').datepicker().
+                on('changeDate.datepicker.amui', function (event) {
+                    if (event.date.valueOf() < startDate.valueOf()) {
+                        $alert.find('p').text('结束日期应大于开始日期！').end().show();
+                    } else {
+                        $alert.hide();
+                        endDate = new Date(event.date);
+                        $('#my-endDate').text($('#my-end').data('date'));
+                        $('#endTime').val($('#my-end').data('date'));
+                    }
+                    $(this).datepicker('close');
+                });
+
+            $('#my-start1').datepicker().
+                on('changeDate.datepicker.amui', function (event) {
+                    if (endDate && event.date.valueOf() > endDate.valueOf()) {
+                        $alert.find('p').text('开始日期应小于结束日期！').end().show();
+                    } else {
+                        $alert.hide();
+                        startDate = new Date(event.date);
+                        $('#my-startDate1').text($('#my-start1').data('date'));
+                        $('#startTime1').val($('#my-start1').data('date'));
+                    }
+                    $(this).datepicker('close');
+                });
+
+            $('#my-end1').datepicker().
+                on('changeDate.datepicker.amui', function (event) {
+                    if (event.date.valueOf() < startDate.valueOf()) {
+                        $alert.find('p').text('结束日期应大于开始日期！').end().show();
+                    } else {
+                        $alert.hide();
+                        endDate = new Date(event.date);
+                        $('#my-endDate1').text($('#my-end1').data('date'));
+                        $('#endTime1').val($('#my-end1').data('date'));
+                    }
+                    $(this).datepicker('close');
+                });
+
+
+
+
+
+
+
+
             $('#doc-modal-list').find('.tpl-table-black-operation-del').add('#doc-confirm-toggle').
                 on('click', function () {
                     $('#my-confirm').modal({

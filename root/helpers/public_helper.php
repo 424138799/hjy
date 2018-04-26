@@ -109,6 +109,21 @@ function getBankName($id){
     $res = $query->row_array();
     return $res['bankName'];
 }
+//返回销售公司名称
+function retSalesCompany($id){
+    $CI = &get_instance();
+    $query = $CI->db->where('id', $id)->get('hj_sales_company');
+    $res = $query->row_array();
+    return $res;
+}
+function retSalesUser($id)
+{
+    $CI = &get_instance();
+    $query = $CI->db->where('id', $id)->get('hj_sales_user');
+    $res = $query->row_array();
+    return $res;
+}
+
 //审核人员minc
 function getBankUserName($id)
 {
@@ -133,7 +148,16 @@ function retCompanyName($id)
     $res = $query->row_array();
     return $res;
 }
-//返回公司名称
+//返回部门
+function retUserDepartment($id)
+{
+    $CI = &get_instance();
+    $query = $CI->db->where('id', $id)->get('admin_department');
+    $res = $query->row_array();
+    return $res['department'];
+}
+
+//返回小区名称
 function retVillageName($id)
 {
     $CI = &get_instance();
@@ -142,6 +166,13 @@ function retVillageName($id)
     return $res;
 }
 
+//返回开发名称的负责人  
+function develNameUser($id){
+    $CI = &get_instance();
+    $query = $CI->db->where('id', $id)->get('developers');
+    $res = $query->row_array();
+    return $res;
+}
 
 //获取配置
 function get_option($name = '') {
@@ -205,9 +236,39 @@ function qiniu($path,$data)
     }
 }
 
+//获取人员提成
+function userExtract($where,$id,$t,$e,$price){
+    $CI = &get_instance();
+    $query = $CI->db->where($where,$id)->where('sendTime >=', $t)->where('sendTime <=', $e)->where('examineState','1')->get('hj_send_apply');
+    $list = $query->result_array();
 
+    $a = '0';
+    foreach($list as $v){
+        $a += $v[$price];
+    }
+    $arr = array('num'=>count($list),'price'=>$a);
 
+    return $arr;
+}
+//小区提成
+function villageExtract($where, $id, $t, $e)
+{
+    $CI = &get_instance();
+    $query = $CI->db->where($where, $id)->where('sendTime >=', $t)->where('sendTime <=', $e)->where('examineState', '1')->get('hj_send_apply');
+    $list = $query->result_array();
 
+    $arr = array('extractAmount'=>'0', 'customerAmount'=>'0', 'serviceAmount'=>'0', 'bankAmount'=>'0','num'=>'0','bankUser'=>'0');
+    foreach ($list as $v) {
+        $arr['extractAmount'] += $v['extractPrice'];
+        $arr['customerAmount'] += $v['customerExtract'];
+        $arr['serviceAmount'] += $v['serviceExtract'];
+        $arr['bankAmount'] += $v['bankExtract'];
+        $arr['bankUser'] += $v['bankId'];
+    }
+    $arr['num'] = count($list);
+
+    return $arr;
+}
 
 
 

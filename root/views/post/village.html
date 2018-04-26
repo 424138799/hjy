@@ -91,6 +91,7 @@
                                     <div class="am-scrollable-horizontal">
                                         <table width="100%" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-hover">  <thead>
                                             <tr>
+                                                <th>操作</th>
                                                 <th>ID</th>
                                                 <th>小区名称</th>
                                                 <th>小区地址</th>
@@ -108,13 +109,23 @@
                                                 <th>修改人姓名</th>
                                                 <th>修改时间</th>
                                                 <th>备注</th>
-                                                <th>操作</th>
+                                                
                                             </tr>
                                         </thead>
                                         <tbody id="doc-modal-list">
                                             <?php if(!empty($lists)):?>
                                             <?php foreach($lists as $v):?>
                                             <tr class="gradeX">
+                                                <td>
+                                                    <div class="am-btn-toolbar" style="width:150px;">
+                                                        <div class="am-btn-group am-btn-group-xs">
+                                                            <a href="<?php echo site_url('/Post/editVillage/').$v['id'];?>" class="update  am-btn am-btn-warning">
+                                                                <span class="am-icon-edit"></span> 修改</a>
+                                                            <a data-id="<?php echo $v['id']?>" name="<?php echo $v['villageTitle'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                                <span class="am-icon-trash"></span> 删除</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <td class="userid">
                                                     <?php echo $v['id'];?>
                                                 </td>
@@ -125,7 +136,7 @@
                                                     <?php echo $v['address'];?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $v['respons'];?>
+                                                    <?php $user = retUsername($v['respons']); echo $user['userName'];?>
                                                 </td>
                                                 <td>
                                                     <?php echo $v['linkPhone'];?>
@@ -171,16 +182,7 @@
                                                     <?php echo $v['remarks'];?>
                                                 </td>
                                               
-                                                <td>
-                                                    <div class="am-btn-toolbar" style="width:150px;">
-                                                        <div class="am-btn-group am-btn-group-xs">
-                                                            <a href="<?php echo site_url('/Post/editVillage/').$v['id'];?>" class="update  am-btn am-btn-warning">
-                                                                <span class="am-icon-edit"></span> 修改</a>
-                                                            <a data-id="<?php echo $v['id']?>" name="<?php echo $v['villageTitle'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
-                                                                <span class="am-icon-trash"></span> 删除</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                               
                                             </tr>
                                             <?php endforeach;?>
                                             <?php else:?>
