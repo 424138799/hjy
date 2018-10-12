@@ -24,6 +24,16 @@ function convertUrlQuery($query)
   }
   return $params;
 }
+function toString($arr)
+{
+    $str = '';
+    foreach ($arr as $v) {
+
+        $str .= $v['userId'] . ",";
+    }
+    $str = substr($str, 0, -1);  //利用字符串截取函数消除最后一个逗号      
+    return $str;
+}  
 
 //分类
 function subtree($arr,$a = '',$id=0,$lev=1) {
@@ -31,6 +41,7 @@ function subtree($arr,$a = '',$id=0,$lev=1) {
     foreach($arr as $k=>$v) {
         if(!empty($a)){
             if(deep_in_array($v['id'],$a)){
+                
                  $v['true'] = '1';
             }else{
                 $v['true'] = '0';
@@ -154,7 +165,7 @@ function retUserDepartment($id)
     $CI = &get_instance();
     $query = $CI->db->where('id', $id)->get('admin_department');
     $res = $query->row_array();
-    return $res['department'];
+    return $res;
 }
 
 //返回小区名称

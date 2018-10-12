@@ -15,6 +15,35 @@ class Api extends CI_Controller
        parent::__construct();
        $this->load->model('public_model');
    }
+   //根据公司返回职位
+    function retCompanyDear()
+    {
+        if ($_POST) {
+            $id = $this->input->post('cId');
+            $lists = $this->public_model->select_where('admin_department', 'cId', $id, 'id', 'desc');
+            if (!empty($lists)) {
+                echo json_encode($lists);
+            } else {
+                echo "2";
+            }
+        }
+    }
+
+    //
+    function retSalesUser()
+    {
+        if ($_POST) {
+            $id = $this->input->post('cId');
+            $salesUser = $this->public_model->select_where_many($this->salesUser, 'c_id', $id, 'isDel', '0', 'createTime', 'desc');
+            if (!empty($salesUser)) {
+                echo json_encode($salesUser);
+            } else {
+                echo "2";
+            }
+        } else {
+            echo "2";
+        }
+    }
 
    //七牛上传token
    function QiniuToken(){
@@ -132,8 +161,8 @@ class Api extends CI_Controller
    function villageList(){
        if($_POST){
             $id = $this->input->post('userId');
-            $list = $this->public_model->select_where_many($this->village, 'status', '1', 'salesUserId',$id, 'createTime', 'desc');
-            
+            $list = $this->public_model->select_where($this->village, 'status', '1',  'createTime', 'desc');
+            var_dump($list);
             if(!empty($list)){
                 $arr = array(
                     'error' => '0',
@@ -202,8 +231,10 @@ class Api extends CI_Controller
    function villageInfo(){
        if($_POST){
             $id = $this->input->post('vId');
-            $info = $this->public_model->select_info($this->village,'id',$id);
+            $info = $this->public_model->selectVig($id);
             $list = $this->public_model->select_where('hj_car_parking', 'vId', $id, 'carId', 'desc');
+            $info['respons'] = $info['userName'];
+           
             if (!empty($info)) {
                 $arr = array(
                     'error' => '0',
@@ -493,7 +524,7 @@ class Api extends CI_Controller
     function responsList(){
         if($_POST){
             $userId = $this->input->post('userId');
-            $list = $this->public_model->select('hj_sales_forwork', 'userId',$userId, 'reflectTime','desc');
+            $list = $this->public_model->select_where('hj_sales_forwork', 'userId',$userId, 'reflectTime','desc');
             if(!empty($list)){
                 $arr = array(
                     'error' => '0',

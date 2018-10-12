@@ -65,12 +65,44 @@ class Bank extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
+        if($this->session->users['type'] == '1'){
+            $total = count($this->Public_model->select($this->bank, 'id', 'desc'));
+            $config['total_rows'] = $total;
+            $listpage = $this->Public_model->select_page($this->bank, 'id', $current_page, $config['per_page']);
 
-        $total = count($this->Public_model->select($this->bank, 'id', 'desc'));
-        $config['total_rows'] = $total;
+        }else{
+            if ($this->session->users['pId'] == '0') {
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = " . $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if (!empty($list)) {
+                    $str = toString($list);
+
+                    $sql1 = "select id from hj_bank where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ")";
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_bank where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ") order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }else{
+                    $sql1 = "select id from hj_bank where createUserId = " . $this->session->users['userId'];
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_bank where createUserId = " . $this->session->users['userId'] . " order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }
+            } else {
+                //员工
+                $total = count($this->public_model->select_where($this->bank, 'createUserId', $this->session->users['userId'], 'createTime', 'desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->bank, 'createUserId', $this->session->users['userId'], 'createTime', 'desc', $current_page, $config['per_page']);
+            }
+        }   
+      
 
         $this->load->library('pagination');//加载ci pagination类
-        $listpage = $this->Public_model->select_page($this->bank,'id' ,$current_page, $config['per_page']);
         $this->pagination->initialize($config);
 
         //获取负责人
@@ -87,6 +119,7 @@ class Bank extends Default_Controller
     function addBank(){
         if ($_POST) {
             $data = $this->input->post();
+            $data['createUserId'] = $this->session->users['userId'];
             if ($this->Public_model->insert($this->bank, $data)) {
                 $arr = array(
                     'log_url' => $this->uri->uri_string(),
@@ -229,12 +262,45 @@ class Bank extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
+        if($this->session->users['type'] == '1'){
+            $total = count($this->Public_model->select($this->bankUser, 'uId', 'desc'));
+            $config['total_rows'] = $total;
+            $listpage = $this->Public_model->select_page($this->bankUser, 'uId', $current_page, $config['per_page']);
 
-        $total = count($this->Public_model->select($this->bankUser, 'uId', 'desc'));
-        $config['total_rows'] = $total;
+        }else{
+            if ($this->session->users['pId'] == '0') {
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = " . $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if(!empty($list)){
+                    $str = toString($list);
+                    $sql1 = "select uid from hj_bank_user where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ")";
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_bank_user where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ") order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+
+                }else{
+                    $sql1 = "select uid from hj_bank_user where createUserId = " . $this->session->users['userId'];
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_bank_user where createUserId = " . $this->session->users['userId']." order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }
+               
+            } else {
+                //员工
+                $total = count($this->public_model->select_where($this->bankUser, 'createUserId', $this->session->users['userId'], 'createTime', 'desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->bankUser, 'createUserId', $this->session->users['userId'], 'createTime', 'desc', $current_page, $config['per_page']);
+            }
+        }
+       
 
         $this->load->library('pagination');//加载ci pagination类
-        $listpage = $this->Public_model->select_page($this->bankUser, 'uId', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
         //获取所有人员
         $bankUser = $this->Public_model->select($this->bank,'id','desc');
@@ -248,6 +314,7 @@ class Bank extends Default_Controller
     function addBankUser(){
         if ($_POST) {
             $data = $this->input->post();
+            $data['createUserId'] = $this->session->users['userId'];
             $user = $this->public_model->select_info($this->bankUser, 'linkPhone', $data['linkPhone']);
             if (!empty($user)) {
                 echo "<script>alert('手机账户已注册！');window.location.href='" . site_url('/Bank/bankPersonnel') . "'</script>";

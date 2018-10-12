@@ -68,12 +68,46 @@ class Post extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
+        
+        if($this->session->users['type'] == 1){
+            //管理员
+            $total = count($this->public_model->select($this->developers, 'createTime'));
+            $config['total_rows'] = $total;
+            $listpage = $this->public_model->select_page($this->developers, 'createTime', $current_page, $config['per_page']);
 
-        $total = count($this->public_model->select($this->developers, 'createTime'));
-        $config['total_rows'] = $total;
+        }else{
+            //其他公司
+            if($this->session->users['pId'] == '0'){
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = ". $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if (!empty($list)) {
+                $str = toString($list);
+                
+                $sql1 = "select id from hj_developers where createUserId = ".$this->session->users['userId']. " or createUserId in(". $str .")";
+                $query = $this->db->query($sql1);
+                $config['total_rows'] = count($query->result_array());
+                $sql2 = "select * from hj_developers where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ") order by createTime desc";
+                $query1 = $this->db->query($sql2);
+                $listpage = $query1->result_array();
+                }else{
+                    $sql1 = "select id from hj_developers where createUserId = " . $this->session->users['userId'] ;
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_developers where createUserId = " . $this->session->users['userId'] . " order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }
+            }else{
+                //员工
+                $total = count($this->public_model->select_where($this->developers, 'createUserId',$this->session->users['userId'] ,'createTime','desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->developers, 'createUserId', $this->session->users['userId'], 'createTime', 'desc',$current_page, $config['per_page']);
+            }
+        }
 
         $this->load->library('pagination');//加载ci pagination类
-        $listpage = $this->public_model->select_page($this->developers, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
         $menu = array('village', 'developers');
 
@@ -153,6 +187,7 @@ class Post extends Default_Controller
     function addDevel(){
         if($_POST){
             $data = $this->input->post();
+            $data['createUserId'] = $this->session->users['userId'];
             if (!empty($_FILES['file']['name'])) {
                 $config['upload_path'] = 'upload/developers/';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -349,12 +384,44 @@ class Post extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
+        if($this->session->users['type'] == '1'){
+            $total = count($this->public_model->select($this->company, 'createTime'));
+            $config['total_rows'] = $total;
+            $listpage = $this->public_model->select_page($this->company, 'createTime', $current_page, $config['per_page']);
+        } else {
+            //其他公司
+            if ($this->session->users['pId'] == '0') {
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = " . $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if (!empty($list)) {
 
-        $total = count($this->public_model->select($this->company, 'createTime'));
-        $config['total_rows'] = $total;
+                    $str = toString($list);
 
+                    $sql1 = "select id from hj_sales_company where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ")";
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_sales_company where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ") order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }else{
+                    $sql1 = "select id from hj_sales_company where createUserId = " . $this->session->users['userId'] ;
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_sales_company where createUserId = " . $this->session->users['userId'] . " order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }
+            } else {
+                //员工
+                $total = count($this->public_model->select_where($this->company, 'createUserId', $this->session->users['userId'], 'createTime', 'desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->company, 'createUserId', $this->session->users['userId'], 'createTime', 'desc', $current_page, $config['per_page']);
+            }
+        }
+      
         $this->load->library('pagination');//加载ci pagination类
-        $listpage = $this->public_model->select_page($this->company, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
         $menu = array('village', 'salesCompany');
 
@@ -433,6 +500,7 @@ class Post extends Default_Controller
     function AddCompany(){
         if($_POST){
             $data = $this->input->post();
+            $data['createUserId'] = $this->session->users['userId'];
             if (!empty($_FILES['file']['name'])) {
                 $config['upload_path'] = 'upload/company/';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -627,11 +695,45 @@ class Post extends Default_Controller
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
 
-        $total = count($this->public_model->select($this->salesUser, 'createTime'));
-        $config['total_rows'] = $total;
+        if($this->session->users['type'] == '1'){
+            $total = count($this->public_model->select($this->salesUser, 'createTime'));
+            $config['total_rows'] = $total;
+            $listpage = $this->public_model->select_page($this->salesUser, 'createTime', $current_page, $config['per_page']);
+
+        }else{
+            if ($this->session->users['pId'] == '0') {
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = " . $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if (!empty($list)) {
+                    $str = toString($list);
+
+                    $sql1 = "select id from hj_sales_user where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ")";
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_sales_user where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ") order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }else{
+
+                    $sql1 = "select id from hj_sales_user where createUserId = " . $this->session->users['userId'];
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_sales_user where createUserId = " . $this->session->users['userId'] . " order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();  
+                }
+            } else {
+                //员工
+                $total = count($this->public_model->select_where($this->salesUser, 'createUserId', $this->session->users['userId'], 'createTime', 'desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->salesUser, 'createUserId', $this->session->users['userId'], 'createTime', 'desc', $current_page, $config['per_page']);
+            }
+        }
+       
 
         $this->load->library('pagination');//加载ci pagination类
-        $listpage = $this->public_model->select_page($this->salesUser, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
         $menu = array('village', 'salesUser');
 
@@ -707,6 +809,7 @@ class Post extends Default_Controller
     function addSalesUser(){
         if ($_POST) {
             $data = $this->input->post();
+            $data['createUserId'] = $this->session->users['userId'];
             $user = $this->public_model->select_info($this->salesUser,'phone',$data['phone']);
             if(!empty($user)){
                 echo "<script>alert('手机号已经邦有账户了！');window.location.href='" . site_url('/Post/salesUser') . "'</script>";exit;
@@ -794,6 +897,7 @@ class Post extends Default_Controller
                         unlink($headPic);
                     }
                 }
+               
                 if ($this->public_model->updata($this->salesUser,'id',$data['id'],$data)) {
                     $arr = array(
                         'log_url' => $this->uri->uri_string(),
@@ -918,12 +1022,43 @@ class Post extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
+        if($this->session->users['type'] == '1'){
+            $total = count($this->public_model->select($this->business, 'createTime'));
+            $config['total_rows'] = $total;
+            $listpage = $this->public_model->select_page($this->business, 'createTime', $current_page, $config['per_page']);
+        }else{
+            if ($this->session->users['pId'] == '0') {
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = " . $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if (!empty($list)) {
+                    $str = toString($list);
 
-        $total = count($this->public_model->select($this->business, 'createTime'));
-        $config['total_rows'] = $total;
+                    $sql1 = "select id from hj_business where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ")";
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_business where createUserId = " . $this->session->users['userId'] . " or createUserId in(" . $str . ") order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }else{
+                    $sql1 = "select id from hj_business where createUserId = " . $this->session->users['userId'] ;
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_business where createUserId = " . $this->session->users['userId'] ." order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }
+            } else {
+                //员工
+                $total = count($this->public_model->select_where($this->business, 'createUserId', $this->session->users['userId'], 'createTime', 'desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->business, 'createUserId', $this->session->users['userId'], 'createTime', 'desc', $current_page, $config['per_page']);
+            }
+        }
+       
 
         $this->load->library('pagination');//加载ci pagination类
-        $listpage = $this->public_model->select_page($this->business, 'createTime', $current_page, $config['per_page']);
         $this->pagination->initialize($config);
         $menu = array('village', 'business');
 
@@ -1001,6 +1136,7 @@ class Post extends Default_Controller
     function addHusiness(){
         if($_POST){
             $data = $this->input->post();
+            $data['createUserId'] = $this->session->users['userId'];
             if (!empty($_FILES['file']['name'])) {
                 $config['upload_path'] = 'upload/user/';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -1192,11 +1328,36 @@ class Post extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
-        if($this->session->users['gId'] !='1'){
-            $total = count($this->public_model->select_where($this->village,'createUser', $this->session->users['userId'], 'createTime','desc'));
-            $config['total_rows'] = $total;
-            $listpage = $this->public_model->select_where_page($this->village, 'createUser', $this->session->users['userId'], 'createTime','desc', $current_page, $config['per_page']);
-        }else{
+        if($this->session->users['type'] !='1'){
+            if ($this->session->users['pId'] == '0') {
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = " . $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if (!empty($list)) {
+                    $str = toString($list);
+
+                    $sql1 = "select id from hj_village where createUser = " . $this->session->users['userId'] . " or createUser in(" . $str . ")";
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_village where createUser = " . $this->session->users['userId'] . " or createUser in(" . $str . ") order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }else{
+                    $sql1 = "select id from hj_village where createUser = " . $this->session->users['userId'] ;
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_village where createUser = " . $this->session->users['userId'] . " order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }
+            } else {
+                //员工
+                $total = count($this->public_model->select_where($this->village, 'createUser', $this->session->users['userId'], 'createTime', 'desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->village, 'createUser', $this->session->users['userId'], 'createTime', 'desc', $current_page, $config['per_page']);
+            }
+       }else{
             $total = count($this->public_model->select($this->village, 'createTime'));
             $config['total_rows'] = $total;
             $listpage = $this->public_model->select_page($this->village, 'createTime', $current_page, $config['per_page']);
@@ -1262,15 +1423,11 @@ class Post extends Default_Controller
         $config['query_string_segment'] = 'size';
         $config['base_url'] = site_url('/Post/searchVillage?') . "sear=" . $sear;
 
-        if ($this->session->users['gId'] != '1') {
-            $total = count($this->public_model->searchWhereLike($this->village, 'createUser', $this->session->users['userId'], 'villageTitle', $sear, 'createTime'));
-            $config['total_rows'] = $total;
-            $listpage = $this->public_model->searchWhereLike($this->village, 'createUser', $this->session->users['userId'], 'villageTitle', $sear, $current_page, $config['per_page'], 'createTime');
-        } else {
-            $list = $this->public_model->searchLike($this->village,  'villageTitle', $sear);
-            $config['total_rows'] = count($list);
-            $listpage = $this->public_model->searchLikePage($this->village,  'villageTitle', $sear, $config['per_page'], $current_page);
-        }
+    
+        $list = $this->public_model->searchLike($this->village,  'villageTitle', $sear);
+        $config['total_rows'] = count($list);
+        $listpage = $this->public_model->searchLikePage($this->village,  'villageTitle', $sear, $config['per_page'], $current_page);
+    
 
         // //分页数据\
         $this->load->library('pagination');//加载ci pagination类
@@ -1289,6 +1446,8 @@ class Post extends Default_Controller
         if($_POST){
             $data = $this->input->post();
             $data['createUser'] = $this->session->users['userId'];
+            $data['salesUserId'] = json_encode($data['salesUserId']);
+           
             if (!empty($_FILES['file']['name'])) {
                 $config['upload_path'] = 'upload/village/';
                 $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -1337,7 +1496,8 @@ class Post extends Default_Controller
             //获取银行
             $data['bank'] = $this->public_model->select($this->bank,'createTime','desc');
             $data['devel'] = $this->public_model->select($this->developers,'createTime','desc');
-            $data['users'] = $this->public_model->select($this->member,'createTime','desc');
+            //获取客户尽力
+            $data['users'] = $this->public_model->select_where($this->member, 'department','5','createTime','desc');
                     //获取销售公司
             $data['company'] = $this->public_model->select_where($this->company, 'isDel', '0', 'createTime', 'desc');
            
@@ -1347,25 +1507,16 @@ class Post extends Default_Controller
         }
     }
     //返回销售人员
-    function retSalesUser(){
-        if($_POST){
-            $id = $this->input->post('cId');
-            $salesUser = $this->public_model->select_where_many($this->salesUser,'c_id',$id, 'isDel','0','createTime','desc');
-            if(!empty($salesUser)){
-                echo json_encode($salesUser);
-            }else{
-                echo "2";
-            }
-        }else{
-            echo "2";
-        }
-    }
 
     //修改小区
     function editVillage(){
         if ($_POST) {
             $data = $this->input->post();
             $data['updataUser'] = $this->session->users['userId'];
+            $data['salesUserId'] = json_encode($data['salesUserId']);
+            // VAR_DUMP($data);
+            // exit;
+
             $data['updataTime'] = date('Y-m-d H:i:s',time());
             if (!empty($_FILES['file']['name'])) {
                 $config['upload_path'] = 'upload/village/';
@@ -1418,7 +1569,7 @@ class Post extends Default_Controller
                 $data['devel'] = $this->public_model->select($this->developers, 'createTime', 'desc');
                 $data['company'] = $this->public_model->select_where($this->company, 'isDel', '0', 'createTime', 'desc');
                 $data['salesUser'] = $this->public_model->select_where_many($this->salesUser,'c_id',$data['village']['salesCompany'] ,'isDel', '0', 'createTime', 'desc');
-                $data['users'] = $this->public_model->select($this->member, 'createTime', 'desc');
+                $data['users'] = $this->public_model->select_where($this->member, 'department', '5', 'createTime', 'desc');
 
                 $data['menu'] = array('village', 'village');
 
@@ -1513,16 +1664,40 @@ class Post extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
-        if ($this->session->users['gId'] != '1') {
-            $total = count($this->public_model->select_where($this->carPark,'createUser',$this->session->users['userId'], 'createTime','desc','createTime'));
-            $config['total_rows'] = $total;
-            $listpage = $this->public_model->select_page($this->carPark, 'createUser', $this->session->users['userId'], 'createTime','desc',$current_page, $config['per_page'],"createTime");
+        if ($this->session->users['type'] != '1') {
+            if ($this->session->users['pId'] == '0') {
+                //总负责人
+                $sql = "select userId from hj_admin_user where createUser = " . $this->session->users['userId'];
+                $a = $this->db->query($sql);
+                $list = $a->result_array();
+                if(!empty($list)){
+                    $str = toString($list);
+                    $sql1 = "select carId from hj_car_parking where createUser = " . $this->session->users['userId'] . " or createUser in(" . $str . ")";
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_car_parking where createUser = " . $this->session->users['userId'] . " or createUser in(" . $str . ") order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }else{
+                    $sql1 = "select carId from hj_car_parking where createUser = " . $this->session->users['userId'] ;
+                    $query = $this->db->query($sql1);
+                    $config['total_rows'] = count($query->result_array());
+                    $sql2 = "select * from hj_car_parking where createUser = " . $this->session->users['userId'] . " order by createTime desc";
+                    $query1 = $this->db->query($sql2);
+                    $listpage = $query1->result_array();
+                }
+            } else {
+                //员工
+                $total = count($this->public_model->select_where($this->carPark, 'createUser', $this->session->users['userId'], 'createTime', 'desc'));
+                $config['total_rows'] = $total;
+                $listpage = $this->public_model->select_where_page($this->carPark, 'createUser', $this->session->users['userId'], 'createTime', 'desc', $current_page, $config['per_page']);
+            }
         }else{
             $total = count($this->public_model->select($this->carPark, 'createTime'));
             $config['total_rows'] = $total;
             $listpage = $this->public_model->select_page($this->carPark, 'createTime', $current_page, $config['per_page']);
         }
-
+      
 
         $this->load->library('pagination');//加载ci pagination类
         $this->pagination->initialize($config);
@@ -1576,16 +1751,10 @@ class Post extends Default_Controller
         $config['prev_link'] = '上一页';
 
         $config['last_link'] = '末页';
-        if ($this->session->users['gId'] != '1') {
-            $list = $this->public_model->searchWhereLike($this->carPark, 'createUser', $this->session->users['userId'],'carTitle', $sear.'createTime');
-            $config['total_rows'] = count($list);
-            $listpage = $this->public_model->searchWhereLikePage($this->carPark, 'createUser', $this->session->users['userId'],'carTitle', $sear, $config['per_page'], $current_page, 'createTime');
-   
-        }else{
+       
             $list = $this->public_model->searchLike($this->carPark, 'carTitle', $sear);
             $config['total_rows'] = count($list);
             $listpage = $this->public_model->searchLikePage($this->carPark, 'carTitle', $sear, $config['per_page'], $current_page);
-        }
         $config['page_query_string'] = true;//关键配置
         // $config['reuse_query_string'] = FALSE;
         $config['query_string_segment'] = 'size';
@@ -1652,7 +1821,13 @@ class Post extends Default_Controller
             }      
         }else{
             //获取小区信息
-            $data['village'] = $this->public_model->select($this->village,'createTime','desc');
+         
+            if ($this->session->users['type'] != '1') {
+                 $data['village'] = $this->public_model->select_where($this->village, 'createUser', $this->session->users['userId'] ,'createTime','desc');
+            }else{
+                $data['village'] = $this->public_model->select($this->village, 'createTime', 'desc');
+
+            }
             $data['menu'] = array('village', 'carPark');
 
             $this->load->view('post/addCarPark.html',$data);
@@ -1712,8 +1887,13 @@ class Post extends Default_Controller
             if($id != '0'){
                 $data['car'] = $this->public_model->select_info($this->carPark,'carId',$id);
 
+                if ($this->session->users['type'] != '1') {
+                    $data['village'] = $this->public_model->select_where($this->village, 'createUser', $this->session->users['userId'], 'createTime', 'desc');
+                } else {
+                    $data['village'] = $this->public_model->select($this->village, 'createTime', 'desc');
 
-                $data['village'] = $this->public_model->select($this->village, 'createTime', 'desc');
+                }
+                // $data['village'] = $this->public_model->select($this->village, 'createTime', 'desc');
                 $data['menu'] = array('village', 'carPark');
 
                 $this->load->view('post/editCarPark.html',$data);

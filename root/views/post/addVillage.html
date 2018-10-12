@@ -229,7 +229,7 @@
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12" id="secondYetai" style="clear: both;display: none;">
                                                     <label for="subcommercial_type_name" class="am-u-sm-3 am-form-label">销售人员：</label>
                                                     <div class="am-u-sm-8">
-                                                        <select name="salesUserId" id="secondYetaiSelect" onchange="validate(this,1,20,6)">
+                                                        <select name="salesUserId[]" id="secondYetaiSelect" multiple data-am-selected onchange="validate(this,1,20,6)">
                                                             <option value="">-=请选择一项=-</option>
                                                         </select>
                                                     </div>
@@ -320,6 +320,7 @@
                                                     </small>
 
                                                 </div>
+                                                <?php  if ($this->session->users['gId'] == '1'):?>                                                
                                                 <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-12">
                                                 
                                                     <label for="brokerage" class="am-u-sm-3 am-form-label">销售提成 ：</label>
@@ -415,6 +416,7 @@
                                                     </small>
                                                 
                                                 </div>
+                                                <?php endif;?>
                                                 <div class="am-form-group  am-u-sm-12 am-u-md-12 am-u-lg-12">
                                                     <label for="remarks" class="am-u-sm-3 am-form-label">备注</label>
                                                     <div class="am-u-sm-8">
@@ -502,7 +504,7 @@
             $("#secondYetaiSelect").html('<option value="">-=请选择一项=-</option>');
             $.ajax({
                 type: 'post',
-                url: '<?php echo site_url("/Post/retSalesUser");?>',
+                url: '<?php echo site_url("/Api/retSalesUser");?>',
                 data: 'cId=' + firstYetai,
                 success: function (data) {
                     var jsonData = eval(data);

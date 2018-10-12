@@ -40,6 +40,7 @@
                                 <div class="am-alert am-alert-danger" id="my-alert" style="display: none">
                                     <p>开始日期应小于结束日期！</p>
                                 </div>
+                                <?php if($this->session->users['type'] == '1'):?>
                                 <form action="<?php echo site_url('/Post/searchSalesCompany');?>" method="get">
 
                                     <div style="margin-top:20px;" class="am-padding-left">
@@ -74,6 +75,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                <?php endif;?>
                                 <div class="am-u-sm-12">
                                     <div style="margin-bottom: 20px">
                                         <a href="<?php echo site_url('/Post/AddCompany');?>" class="am-btn am-btn-default am-btn-success">
@@ -92,6 +94,7 @@
                                         <table  width="100%" class="am-table am-table-bordered am-table-striped am-text-nowrap am-table-hover">
                                         <thead>
                                             <tr>
+                                                <th>操作</th>
                                                 <th>ID</th>
                                                 <th>销售公司名称</th>
                                                 <th>销售公司地址</th>
@@ -106,13 +109,23 @@
                                                 <th>开户信息</th>
                                                 <th>排序</th>
                                                 <th>状态</th>
-                                                <th>操作</th>
+                                              
                                             </tr>
                                         </thead>
                                         <tbody id="doc-modal-list">
                                             <?php if(!empty($lists)):?>
                                             <?php foreach($lists as $v):?>
                                             <tr class="gradeX">
+                                                <td>
+                                                    <div class="am-btn-toolbar " style="width: 150px;">
+                                                        <div class="am-btn-group am-btn-group-xs ">
+                                                            <a href="<?php echo site_url('/Post/editCompany/').$v['id'];?>" class="update  am-btn am-btn-warning">
+                                                                <span class="am-icon-edit"></span> 修改</a>
+                                                            <a data-id="<?php echo $v['id']?>" name="<?php echo $v['companyName'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                                <span class="am-icon-trash"></span> 删除</a>
+                                                        </div>
+                                                    </div>
+                                                </td>
                                                 <td class="userid">
                                                     <?php echo $v['id'];?>
                                                 </td>
@@ -158,16 +171,7 @@
                                                 <?php else:?>
                                                 <td>删除</td>
                                                 <?php endif;?>
-                                                <td >
-                                                    <div class="am-btn-toolbar "  style="width: 150px;">
-                                                        <div class="am-btn-group am-btn-group-xs ">
-                                                            <a href="<?php echo site_url('/Post/editCompany/').$v['id'];?>" class="update  am-btn am-btn-warning">
-                                                                <span class="am-icon-edit"></span> 修改</a>
-                                                            <a data-id="<?php echo $v['id']?>" name="<?php echo $v['companyName'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
-                                                                <span class="am-icon-trash"></span> 删除</a>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                               
                                             </tr>
                                             <?php endforeach;?>
                                             <?php else:?>

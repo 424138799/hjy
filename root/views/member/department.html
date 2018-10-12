@@ -42,10 +42,10 @@
                                 </div>
 
                                 <div class="am-u-sm-12">
-                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
+                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " >
                                         <thead>
                                             <tr>
-                                                <th></th>
+                                                <th>ID</th>
                                                 <th>编码</th>
                                                 <th>部门名称</th>
                                                 <th>简称</th>
@@ -161,11 +161,11 @@
                             <select name="nature" required>
                                 <option value="综合性">综合性</option>
                                 <option value="协调性">协调性</option>
-                                <option value="咨询性">咨询性</option>
-                                <option value="生产">生产</option>
+                                <option value="营销性">营销性</option>
                                 <option value="IT">IT</option>
-                                <option value="维修">维修</option>
                                 <option value="点检">点检</option>
+                                <option value="财务">财务</option>
+                                <option value="运营">运营</option>
                             </select>
                         </div>
                     </div>
@@ -183,19 +183,19 @@
                     <div class="am-form-group">
                         <label for="gid" class="am-u-sm-2 am-form-label">联系电话</label>
                         <div class="am-u-sm-10">
-                            <input type="text" name="phone" value="" placeholder="输入公司联系电话">
+                            <input type="text" name="phone" value="" placeholder="输入联系电话">
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="gid" class="am-u-sm-2 am-form-label">传真</label>
                         <div class="am-u-sm-10">
-                            <input type="text" name="fax" value="" placeholder="输入公司传真">
+                            <input type="text" name="fax" value="" placeholder="输入传真">
                         </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="gid" class="am-u-sm-2 am-form-label">说明</label>
+                        <label for="gid" class="am-u-sm-2 am-form-label">岗位职责</label>
                         <div class="am-u-sm-10">
-                            <input type="text" name="remarks" value="" placeholder="输入公司描述">
+                            <input type="text" name="remarks" value="" placeholder="输入岗位职责">
                         </div>
                     </div>
 
@@ -249,13 +249,13 @@
                             <label for="gid" class="am-u-sm-2 am-form-label">公司性质</label>
                             <div class="am-u-sm-10">
                                 <select name="nature" class="nature" required>
-                                    <option value="综合性">综合性</option>
-                                    <option value="协调性">协调性</option>
-                                    <option value="咨询性">咨询性</option>
-                                    <option value="生产">生产</option>
-                                    <option value="IT">IT</option>
-                                    <option value="维修">维修</option>
-                                    <option value="点检">点检</option>
+                                        <option value="综合性">综合性</option>
+                                        <option value="协调性">协调性</option>
+                                        <option value="营销性">营销性</option>
+                                        <option value="IT">IT</option>
+                                        <option value="点检">点检</option>
+                                        <option value="财务">财务</option>
+                                        <option value="运营">运营</option>
                                 </select>
                             </div>
                         </div>
@@ -285,7 +285,7 @@
                             </div>
                         </div>
                         <div class="am-form-group">
-                            <label for="gid" class="am-u-sm-2 am-form-label">说明</label>
+                            <label for="gid" class="am-u-sm-2 am-form-label">岗位职责</label>
                             <div class="am-u-sm-10">
                                 <input type="text" id="remarks" name="remarks" value="" placeholder="输入公司描述">
                             </div>

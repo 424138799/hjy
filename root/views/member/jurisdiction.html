@@ -72,7 +72,6 @@
                                         </thead>
 
                                             <tbody id="dataList">
-
                                                 <?php foreach($list as $key=>$val):?>
 
                                                     <tr class="trClass" id="trClass<?php echo $val['id']?>" data-id="">
@@ -101,9 +100,8 @@
 
                                                      </tr>
 
-                                                    
-
                                             <?php endforeach;?>
+                                           
 
                                             </tbody>
 
@@ -210,7 +208,6 @@ $(function(){
 
 
 
-//加入达人推荐的ajax请求
 
 $('#save_edit').click(function(){
 
@@ -241,7 +238,7 @@ $('#save_edit').click(function(){
             data: 'perm='+goodsid+'&gid='+'<?php echo $gid;?>',
 
             success: function(data){
-                // console.log(data);
+                console.log(data);
 
                 if(data==1){
 

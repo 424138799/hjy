@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        <?php echo name;?> - 公司负责人管理 </title>
+    <meta name="description" content="<?php echo name;?>">
+    <meta name="keywords" content="<?php echo name;?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="<?php echo ROOTCSS;?>/img/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo ROOTCSS;?>/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/app.css">
+    <!-- <link rel="stylesheet" href="<?php echo ROOTCSS;?>/css/admin.css"> -->
+    <script src="<?php echo ROOTCSS;?>/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="index">
+    <script src="<?php echo ROOTCSS;?>/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <?php $this->load->view('header.html');?>
+        <!-- 内容区域 -->
+        <div class="tpl-content-wrapper">
+            <div class="row-content am-cf">
+                <div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title  am-cf">公司负责人管理列表</div>
+                            </div>
+                            <div class="widget-body  am-fr">
+                                <div class="am-u-sm-12">
+                                    <div style="margin-bottom: 20px">
+                                        <a href="<?php echo site_url('/Member/addCompanyUser');?>" class="am-btn am-btn-default am-btn-success">
+                                            <span class="am-icon-plus"></span> 添加负责用户</a>
+                                    </div>
+                                    <div class="am-scrollable-horizontal">
+                                        <table class="am-table am-table-bordered am-table-striped am-text-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>操作</th>
+                                                    <!-- <th>ID</th> -->
+                                                    <th>工号</th>
+                                                    <th>登陆账号</th>
+                                                    <th>姓名</th>
+                                                    <th>联系电话</th>
+                                                    <th>所在公司</th>
+                                                    <th>所在部门</th>
+                                                    <th>担任职务</th>
+                                                  
+                                                </tr>
+                                            </thead>
+                                            <tbody id="doc-modal-list">
+                                                <?php if(!empty($lists)):?>
+                                                <?php foreach($lists as $v):?>
+                                                <tr class="gradeX">
+                                                    <td>
+                                                        <div class="am-btn-toolbar">
+                                                            <div class="am-btn-group am-btn-group-xs">
+                                                                <a href="<?php echo site_url('/Member/editCompanyUser/').$v['id'];?>" class="update  am-btn am-btn-warning">
+                                                                    <span class="am-icon-edit"></span> 修改</a>
+                                                                <a data-id="<?php echo $v['id']?>" name="<?php echo $v['userName'];?>" href="#" class="delete am-btn am-btn-danger tpl-table-black-operation-del">
+                                                                    <span class="am-icon-trash"></span> 删除</a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <!-- <td class="userid">
+                                                        <?php echo $v['id'];?>
+                                                    </td> -->
+                                                    <td class="username">
+                                                        <?php echo $v['userCode'];?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo $v['loginNum'];?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo $v['userName'];?>
+                                                    </td>
+                                                
+                                                    <td>
+                                                        <?php echo $v['linkphone'];?>
+                                                    </td>
+                                                   
+                                                    <td>
+                                                        <?php $com =  retCompanyName($v['companyId']); echo $com['companyTitle'];?>
+                                                    </td>
+                                                    <td>
+                                                        <?php $us = retUserDepartment($v['department']); echo $us['department'].'-'.$us['info'];?>
+                                                    </td>
+                                                    <td>
+                                                        <?php echo $v['duty'];?>
+                                                    </td>
+                                                </tr>
+                                                <?php endforeach;?>
+                                                <?php else:?>
+                                                <tr>
+                                                    <td colspan="8">暂无内容！</td>
+                                                </tr>
+                                                <?php endif;?>
+
+                                                <!-- more data -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                                <div class="am-u-lg-12 am-cf">
+
+                                    <div class="am-fr">
+                                        <?php echo $pages;?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="am-modal am-modal-confirm" tabindex="-1" id="my-confirm">
+        <div class="am-modal-dialog">
+            <div class="am-modal-hd">删除提示</div>
+            <div class="am-modal-bd">
+                你，确定要删除这条记录吗？
+            </div>
+            <div class="am-modal-footer">
+                <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+                <span class="am-modal-btn" data-am-modal-confirm>确定</span>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $(function () {
+            $('#doc-modal-list').find('.tpl-table-black-operation-del').add('#doc-confirm-toggle').
+                on('click', function () {
+                    $('#my-confirm').modal({
+                        relatedTarget: this,
+                        onConfirm: function (options) {
+                            var $link = $(this.relatedTarget).prev('a');
+                            var uid = $(this.relatedTarget).attr('data-id');
+                            var name = $(this.relatedTarget).attr('name');
+                            var data = { id: uid, name: name }
+                            console.log(data)
+                            $.post("<?php echo site_url('/Member/delUser');?>", data, function (result) {
+                                if (result == 1) {
+                                    alert('操作成功！');
+                                    window.location.reload();
+
+                                } else if (result == '3') {
+                                    alert('超级管理员不能删除！');
+                                    window.location.reload();
+                                } else {
+                                    alert('操作失败！');
+                                    window.location.reload();
+                                }
+                            });
+                        },
+                        // closeOnConfirm: false,
+                        onCancel: function () {
+
+                        }
+                    });
+                });
+        });
+
+
+
+    </script>
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/amazeui.datatables.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo ROOTCSS;?>/js/app.js"></script>
+
+</body>
+
+</html>

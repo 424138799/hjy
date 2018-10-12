@@ -48,13 +48,20 @@ class public_model extends CI_Model
     }
     //查询用户信息
     function select_admin_user($where){
-        $this->db->select('a.loginNum,a.userName,a.password,a.userId,a.status,a.gId,b.perm,b.status as state');
+        $this->db->select('a.*,b.perm,b.user_power,b.pId,b.status as state');
         $this->db->from('hj_admin_user as a','left');
         $this->db->join('hj_admin_user_group as b','a.gId = b.gid','inntr');
         $query = $this->db->where('a.loginNum',$where)->get();
         return $query->row_array();
     }
-
+    // function select_comapny_user($where)
+    // {
+    //     $this->db->select('a.loginNum,a.userName,a.passWord,a.id,a.gId,b.perm,b.status as state');
+    //     $this->db->from('hj_company_user as a', 'left');
+    //     $this->db->join('hj_admin_user_group as b', 'a.gId = b.gid', 'inntr');
+    //     $query = $this->db->where('a.loginNum', $where)->get();
+    //     return $query->row_array();
+    // }
 
     //多条件查询一条数据
     function select_where_info($table,$where,$id,$where1,$id1){
@@ -92,7 +99,12 @@ class public_model extends CI_Model
     	$query = $this->db->where($where,$id)->where('userId !=',$id2)->get($table);
         return $query->row_array();
     }
-
+        //返回数据到用户
+    function ret_CompanyuserInfo($table, $where, $id, $id2)
+    {
+        $query = $this->db->where($where, $id)->where('id !=', $id2)->get($table);
+        return $query->row_array();
+    }
     //银行人员id
     function retBankUserInfo($table, $where, $id, $id2)
     {
@@ -137,6 +149,16 @@ class public_model extends CI_Model
         return $query->result_array();
     }
 
+
+    //返回小区信息
+    function selectVig($id){
+        $this->db->select('a.*,b.userName');
+        $this->db->from('hj_village as a', 'left');
+        $this->db->join('hj_admin_user as b', 'a.respons = b.userId', 'inner');
+        $query = $this->db->where('a.id',$id)->get();
+
+        return $query->row_array();
+    }
 
 
     //返回按揭申请

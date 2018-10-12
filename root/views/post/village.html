@@ -40,6 +40,7 @@
                                 <div class="am-alert am-alert-danger" id="my-alert" style="display: none">
                                     <p>开始日期应小于结束日期！</p>
                                 </div>
+                                <?php if($this->session->users['type'] == '1'):?>
                                 <form action="<?php echo site_url('/Post/searchVillage');?>" method="get">
 
                                     <div style="margin-top:20px;" class="am-padding-left">
@@ -74,6 +75,7 @@
                                         </div>
                                     </div>
                                 </form>
+                                <?php endif;?>
                                 <div class="am-u-sm-12">
                                     <div style="margin-bottom: 20px">
                                         <a href="<?php echo site_url('/Post/addVillage');?>" class="am-btn am-btn-default am-btn-success">

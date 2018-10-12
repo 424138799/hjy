@@ -158,7 +158,7 @@ $db['default'] = array(
 
 	'password' => 'root',
 
-	'database' => 'hengjiyuan',
+	'database' => 'hjy',
 
 	'dbdriver' => 'mysqli',
 

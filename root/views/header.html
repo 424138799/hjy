@@ -17,7 +17,8 @@
                     <ul>
                         <!-- 欢迎语 -->
                         <li class="am-text-sm tpl-header-navbar-welcome">
-                            <a href="javascript:;">欢迎你, <span><?php echo $this->session->users['userName'];?></span> </a>
+                            <a href="<?php echo site_url('/Login/editInfo');?>">欢迎你, <span><?php echo $this->session->users['userName'];?></span> </a>
+                            
                         </li>
 
                         <!-- 退出 -->
@@ -42,7 +43,7 @@
                     </div> -->
                     <span class="user-panel-logged-in-text">
               <i class="am-icon-circle-o am-text-success tpl-user-panel-status-icon"></i>
-              <?php echo $this->session->users['userName'];?>
+              <a href="<?php echo site_url('/Login/editInfo');?>" title="修改信息"><?php echo $this->session->users['userName'];?></a>
           </span>
                 </div>
             </div>
@@ -58,7 +59,6 @@
                  <?php 
                 $menus = json_decode($this->session->menus,true);?>
                 
-
                 <?php foreach($menus as $val):?>
                     <?php if(isset($val['value']['chick'])):?>
                         <li class="sidebar-nav-link">
@@ -68,11 +68,13 @@
                             </a>
                             <ul class="sidebar-nav sidebar-nav-sub" <?php if($menu['0'] == $val['value']['url']){echo 'style="display: block"';}?>>
                                 <?php foreach($val['value']['chick'] as $v):?>
+                               
                                 <li class="sidebar-nav-link">
                                     <a href="<?php echo site_url('/').$v['url'];?>"  <?php if($menu['1'] == $v['other']){echo "class='active'";}?>> 
                                         <span class="am-icon-angle-right sidebar-nav-link-logo"></span> <?php echo $v['name'];?>
                                     </a>
                                 </li>
+                              
                                 <?php endforeach;?>
                             </ul>
                         </li>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>管理登陆-噢唛嘎车位管理系统</title>
+    <meta name="description" content="噢唛嘎车位管理系统">
+    <meta name="keywords" content="噢唛嘎车位管理系统">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="<?php echo base_url('/assets');?>/img/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="<?php echo base_url('/assets');?>/i/app-icon72x72@2x.png">
+    <link rel="stylesheet" href="<?php echo base_url('/assets');?>/css/amazeui.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url('/assets');?>/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="<?php echo base_url('/assets');?>/css/app.css">
+    <script src="<?php echo base_url('/assets');?>/js/jquery.min.js"></script>
+
+</head>
+
+<body data-type="login">
+    <script src="<?php echo base_url('/assets');?>/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <div class="tpl-login">
+            <div class="tpl-login-content">
+                <div class="">
+                    <h1 style="text-align: center;">恒纪元后台管理系统</h1>
+                </div>
+                <div data-am-widget="tabs" class="am-tabs am-tabs-default">
+                    <ul class="am-tabs-nav am-cf">
+                        <li class="am-active">
+                            <a href="[data-tab-panel-0]">公司人员登陆</a>
+                        </li>
+                    
+                    </ul>
+                    <div class="am-tabs-bd">
+                            <form class="am-form tpl-form-line-form" action="<?php echo site_url('/Login/companyLand');?>" method="post">
+                                <div class="am-form-group">
+                                    <input type="text" name="name" class="tpl-form-input" id="user-name" placeholder="请输入账号">
+
+                                </div>
+
+                                <div class="am-form-group">
+                                    <input type="password" name="pass" class="tpl-form-input" id="user-name" placeholder="请输入密码">
+
+                                </div>
+                                <?php if(!empty($error)){?>
+
+                                <div class="am-form-group" id="error">
+
+                                    <span style="color:red;">
+                                        <?php echo $error;?>
+                                    </span>
+
+                                </div>
+
+                                <script>  setTimeout(function () {//5秒后隐藏
+
+                                        $("#error").fadeOut();
+
+                                    }, 5000);</script>
+
+                                <?php }?>
+
+                                <div class="am-form-group">
+
+                                    <button type="submit" class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn">提交</button>
+
+                                </div>
+                            </form>
+                    </div>
+                    <div class="am-tabs-bd">
+
+                        <a href="<?php echo site_url('/Login/index');?>" style="float: right; margin-right: 10px;">
+                            <span class="am-icon-arrow-right"></span>管理员登录</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="<?php echo base_url('/assets');?>/js/amazeui.min.js"></script>
+    <script src="<?php echo base_url('/assets');?>/js/app.js"></script>
+
+</body>
+
+</html>

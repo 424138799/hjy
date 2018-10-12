@@ -40,6 +40,8 @@
                                 <div class="am-alert am-alert-danger" id="my-alert" style="display: none">
                                     <p>开始日期应小于结束日期！</p>
                                 </div>
+                                                                <?php if($this->session->users['type'] == '1'):?>
+
                                 <form action="<?php echo site_url('/Post/searchBusiness');?>" method="get">
 
                                     <div style="margin-top:20px;" class="am-padding-left">
@@ -74,12 +76,13 @@
                                         </div>
                                     </div>
                                 </form>
+                                <?php endif;?>
                                 <div class="am-u-sm-12">
                                     <div style="margin-bottom: 20px">
                                         <a href="<?php echo site_url('/Post/addHusiness');?>" class="am-btn am-btn-default am-btn-success">
                                             <span class="am-icon-plus"></span> 添加商家</a>
                                     </div>
-                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black " id="example-r">
+                                    <table width="100%" class="am-table am-table-compact am-table-striped tpl-table-black ">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -125,9 +128,11 @@
                                                 <td>
                                                     <?php echo $v['sort'];?>
                                                 </td>
-                                                <td>
-                                                    <?php echo $v['sort'];?>
-                                                </td>
+                                                <?php if($v['isDel'] == '0'):?>
+                                                <td>正常</td>
+                                                <?php else:?>
+                                                <td>删除</td>
+                                                <?php endif;?>
                                                
                                                 <td>
                                                     <div class="am-btn-toolbar">

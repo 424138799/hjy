@@ -420,8 +420,11 @@ class Member extends Default_Controller
 
     //用户组
     function group(){
-
-        $data['group'] = $this->public_model->select($this->group,'');
+        if($this->session->users['type'] =='1'){
+            $data['group'] = $this->public_model->select_where($this->group, 'pId', '0', 'gid', 'desc');
+        }else{
+            $data['group'] = $this->public_model->select_where($this->group, 'pId',$this->session->users['gId'],'gid','desc');
+        }
         $data['menu'] = array('member', 'group');
 
         $this->load->view('member/group.html',$data);
@@ -431,6 +434,9 @@ class Member extends Default_Controller
     function addGroup(){
         if($_POST){
             $data = $this->input->post();
+            if ($this->session->users['type'] != '1') {
+                $data['pId'] = $this->session->users['gId'];
+            }
             if($this->public_model->insert($this->group,$data)){
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
@@ -527,16 +533,24 @@ class Member extends Default_Controller
             echo "<script>alert('请求错误！');window.location.href='".site_url('/Member/group')."'</script>";exit;
         }else{
             $group = $this->public_model->select_info($this->group,'gid',$id);
+            // var_dump($group);
+            $group_permission = json_decode($group['user_power'],true);
+                //
+            if ($this->session->users['type'] == '1') {
 
-            $group_permission = json_decode($group['perm'],true);
+                $list = $this->public_model->select($this->systemNav,'id');
+                $menus = subtree($list,$group_permission);
+                $data['list'] = $menus;
 
-            //
-            $list = $this->public_model->select($this->systemNav,'id');
-            $menus = subtree($list,$group_permission);
+            }else{   
+                $list = json_decode($this->session->users['user_power'],true);
+                $menus = subtree($list, $group_permission);
+
+                $data['list'] = $menus;
+
+            }
             $data['gid'] = $id;
-
-            $data['menu'] = array('Member','group');
-            $data['list'] = $menus;
+            $data['menu'] = array('member','group');
             $this->load->view('member/jurisdiction.html',$data);
         }
     }
@@ -544,6 +558,8 @@ class Member extends Default_Controller
         if($_POST){
             $data = $this->input->post();
             $plateid = json_decode($data['perm'],true);
+
+           
 
             foreach ($plateid as $key => $value) {
                 
@@ -562,9 +578,15 @@ class Member extends Default_Controller
                         $menus_data[$value['pid']]['value']['chick'][] = $value;
                     }
                 }
-		    }
+            }
+           
+            
             $data['perm'] = json_encode($menus_data);
-         
+            $data['user_power'] = json_encode($menus);
+            // echo "<pre>";
+            // var_dump($data['user_power']);
+            // exit;
+
             if($this->public_model->updata($this->group,'gid',$data['gid'],$data)){
                 $arr = array(
                     'log_url'=>$this->uri->uri_string(),
@@ -637,18 +659,25 @@ class Member extends Default_Controller
 
         $config['last_link'] = '末页';
         $config['num_links'] = 4;
+        if($this->session->users['type'] == '1'){
+            $total = count($this->public_model->select($this->member, 'createTime'));
+            $config['total_rows'] = $total;
 
-        $total = count($this->public_model->select($this->member, 'createTime'));
-        $config['total_rows'] = $total;
+            $this->load->library('pagination');//加载ci pagination类
+            $listpage = $this->public_model->select_page($this->member, 'createTime', $current_page, $config['per_page']);
+            $this->pagination->initialize($config);
 
-        $this->load->library('pagination');//加载ci pagination类
-        $listpage = $this->public_model->select_page($this->member, 'createTime', $current_page, $config['per_page']);
-        $this->pagination->initialize($config);
+            $group = $this->public_model->select($this->group, 'gid', 'desc');
+            $menu = array('member', 'adminUser');
 
-        $group = $this->public_model->select($this->group, 'gid', 'desc');
-        $menu = array('member', 'adminUser');
+            $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'group' => $group, 'menu' => $menu);
+        }else{
+            $menu = array('member', 'adminUser');
+            $listpage = $this->public_model->select_where($this->member, 'createUser', $this->session->users['userId'],'userId','desc');
 
-        $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'group'=>$group,'menu'=>$menu);
+            $data = array('lists' => $listpage, 'pages' => '', 'menu' => $menu);
+        }
+       
         $this->load->view('member/adminUser.html',$data);
     }
 
@@ -665,6 +694,7 @@ class Member extends Default_Controller
 
             } else {
                  $data['password'] = md5($data['password']);
+                 $data['createUser'] = $this->session->users['userId'];
                 if ($this->public_model->insert($this->member, $data)) {
                     $arr = array(
                         'log_url' => $this->uri->uri_string(),
@@ -694,25 +724,22 @@ class Member extends Default_Controller
             }
 
         }else{
-            $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
+            if($this->session->users['type'] == '1'){
+                $data['group'] = $this->public_model->select($this->group,  'gid', 'desc');
+
+            }else{
+                $data['group'] = $this->public_model->select_where($this->group, 'pId', $this->session->users['gId'], 'gid', 'desc');
+                $data['defi'] = $this->public_model->select_where($this->department, 'cId', $this->session->users['companyId'], 'id', 'desc');
+
+            }
             $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
             $data['menu'] = array('member', 'adminUser');
 
             $this->load->view('member/addUser.html', $data);
         }
     }
-    //根据公司返回职位
-    function retCompanyDear(){
-        if($_POST){
-            $id = $this->input->post('cId');
-            $lists = $this->public_model->select_where($this->department,'cId',$id,'id','desc');
-            if(!empty($lists)){
-                echo json_encode($lists);
-            }else{
-                echo "2";
-            }
-        }
-    }
+    //
+   
 
 
     //修改
@@ -721,11 +748,12 @@ class Member extends Default_Controller
             $data = $this->input->post();
             $user = $this->public_model->ret_userInfo($this->member, 'loginNum', $data['loginNum'],$data['userId']);        
             if(empty($user)){
-                if (!empty($password)) {
-                    $data['password'] = md5($password);
+                if (!empty($data['password'])) {
+                    $data['password'] = md5($data['password']);
                 } else {
                     unset($data['password']);
                 }
+               
                 if ($this->public_model->updata($this->member, 'userId', $data['userId'], $data)) {
                     $arr = array(
                         'log_url' => $this->uri->uri_string(),
@@ -757,11 +785,18 @@ class Member extends Default_Controller
         }else{
             $id = intval($this->uri->segment('3'));
             if($id != '0'){
-                $data['users'] = $this->public_model->select_info($this->member,'userId',$id);
+                $users = $this->public_model->select_info($this->member,'userId',$id);
                 
-                $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
-                $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+                if ($this->session->users['type'] == '1') {
+                    $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
+                    $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+
+                } else {
+                    $data['group'] = $this->public_model->select_where($this->group, 'pId', $this->session->users['gId'], 'gid', 'desc');
+                }
                 $data['menu'] = array('member', 'adminUser');
+                $data['defi'] = $this->public_model->select_where($this->department,'cId', $users['companyId'],'id','desc');
+                $data['users']= $users;
 
                 $this->load->view('member/editUser.html', $data);
             }else{
@@ -803,8 +838,175 @@ class Member extends Default_Controller
                 add_system_log($arr);
                 echo "2";
             }
-
         }
     }
+
+    //个人资料
+    function menberInfo(){
+        
+    }
+
+    //公司总负责人
+    // function companyUser(){
+    //     $config['per_page'] = 10;
+    //     //获取页码
+    //     $current_page = intval($this->uri->segment(3));//index.php 后数第4个/
+    //     //配置
+    //     $config['base_url'] = site_url('/Member/companyUser');
+    //     //分页配置
+    //     $config['full_tag_open'] = '<ul class="am-pagination tpl-pagination"">';
+    //     $config['full_tag_close'] = '</ul>';
+    //     $config['first_tag_open'] = '<li>';
+
+    //     $config['first_tag_close'] = '</li>';
+
+    //     $config['prev_tag_open'] = '<li>';
+
+    //     $config['prev_tag_close'] = '</li>';
+
+    //     $config['next_tag_open'] = '<li>';
+
+    //     $config['next_tag_close'] = '</li>';
+
+    //     $config['cur_tag_open'] = '<li class="am-active"><a>';
+
+    //     $config['cur_tag_close'] = '</a></li>';
+
+    //     $config['last_tag_open'] = '<li>';
+
+    //     $config['last_tag_close'] = '</li>';
+
+    //     $config['num_tag_open'] = '<li>';
+
+    //     $config['num_tag_close'] = '</li>';
+
+    //     $config['first_link'] = '首页';
+
+    //     $config['next_link'] = '»';
+
+    //     $config['prev_link'] = '«';
+
+    //     $config['last_link'] = '末页';
+    //     $config['num_links'] = 4;
+
+    //     $total = count($this->public_model->select('hj_company_user', 'createTime'));
+    //     $config['total_rows'] = $total;
+
+    //     $this->load->library('pagination');//加载ci pagination类
+    //     $listpage = $this->public_model->select_page('hj_company_user', 'createTime', $current_page, $config['per_page']);
+    //     $this->pagination->initialize($config);
+
+    //     $group = $this->public_model->select($this->group, 'gid', 'desc');
+    //     $menu = array('member', 'companyUser');
+        
+    //     $data = array('lists' => $listpage, 'pages' => $this->pagination->create_links(), 'group' => $group, 'menu' => $menu);
+    //     $this->load->view('member/companyUser.html', $data);
+    // }    
+
+    // function addCompanyUser(){
+    //     if($_POST){
+    //         $data = $this->input->post();
+    //         // $data['passWord'] = md5($data['passWord']);
+    //         $user = $this->public_model->select_info('hj_company_user', 'loginNum', $data['loginNum']);
+    //         if (!empty($user)) {
+    //             echo "<script>alert('用户登陆账户已注册！');window.location.href='" . site_url('/Member/companyUser') . "'</script>";
+    //             exit;
+
+    //         } else {
+    //             $data['passWord'] = md5($data['passWord']);
+    //             if ($this->public_model->insert('hj_company_user', $data)) {
+    //                 $arr = array(
+    //                     'log_url' => $this->uri->uri_string(),
+    //                     'user_id' => $this->session->users['userId'],
+    //                     'username' => $this->session->users['userName'],
+    //                     'log_ip' => get_client_ip(),
+    //                     'log_status' => '1',
+    //                     'log_message' => "新增公司负责人信息成功,用户登陆账户是" . $data['loginNum'],
+    //                 );
+    //                 add_system_log($arr);
+    //                 echo "<script>alert('操作成功！');window.location.href='" . site_url('/Member/companyUser') . "'</script>";
+    //                 exit;
+    //             } else {
+    //                 $arr = array(
+    //                     'log_url' => $this->uri->uri_string(),
+    //                     'user_id' => $this->session->users['userId'],
+    //                     'username' => $this->session->users['userName'],
+    //                     'log_ip' => get_client_ip(),
+    //                     'log_status' => 'o',
+    //                     'log_message' => "新增公司负责人信息失败,用户登陆账户是" . $data['loginNum'],
+    //                 );
+    //                 add_system_log($arr);
+    //                 echo "<script>alert('操作失败！');window.location.href='" . site_url('/Member/companyUser') . "'</script>";
+    //                 exit;
+
+    //             }
+    //         }
+
+    //     }else{
+    //         $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
+    //         $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+    //         $data['menu'] = array('member', 'companyUser');
+    //         $this->load->view('member/addCompanyUser.html', $data);
+    //     }
+    // }
+
+    // function editCompanyUser(){
+    //     if($_POST){
+    //         $data = $this->input->post();
+    //         $user = $this->public_model->ret_CompanyuserInfo('hj_company_user', 'loginNum', $data['loginNum'], $data['id']);
+    //         if (empty($user)) {
+    //             if (!empty($data['password'])) {
+    //                 $data['passWord'] = md5($data['passWord']);
+    //             } else {
+    //                 unset($data['passWord']);
+    //             }
+
+    //             if ($this->public_model->updata('hj_company_user', 'id', $data['id'], $data)) {
+    //                 $arr = array(
+    //                     'log_url' => $this->uri->uri_string(),
+    //                     'user_id' => $this->session->users['userId'],
+    //                     'username' => $this->session->users['userName'],
+    //                     'log_ip' => get_client_ip(),
+    //                     'log_status' => '1',
+    //                     'log_message' => "编辑公司负责人成功,用户id是:" . $data['id'],
+    //                 );
+    //                 add_system_log($arr);
+    //                 echo "<script>alert('操作成功');window.location.href='" . site_url('/Member/companyUser') . "'</script>";
+    //             } else {
+    //                 $arr = array(
+    //                     'log_url' => $this->uri->uri_string(),
+    //                     'user_id' => $this->session->users['userId'],
+    //                     'username' => $this->session->users['userName'],
+    //                     'log_ip' => get_client_ip(),
+    //                     'log_status' => '0',
+    //                     'log_message' => "编辑公司负责人失败,用户id是:" . $data['id'],
+    //                 );
+    //                 add_system_log($arr);
+    //                 echo "<script>alert('操作失败');window.location.href='" . site_url('/Member/companyUser') . "'</script>";
+
+    //             }
+    //         } else {
+    //             echo "<script>alert('用户登陆账户已注册！');window.location.href='" . site_url('/Member/companyUser') . "'</script>";
+    //             exit;
+    //         }
+    //     }else{
+    //         $id = intval($this->uri->segment(3));
+    //         if ($id != '0') {
+    //             $users = $this->public_model->select_info('hj_company_user', 'id', $id);
+
+    //             $data['group'] = $this->public_model->select($this->group, 'gid', 'desc');
+    //             $data['company'] = $this->public_model->select($this->company, 'createTime', 'desc');
+    //             $data['menu'] = array('member', 'companyUser');
+    //             $data['defi'] = $this->public_model->select_where($this->department, 'cId', $users['companyId'], 'id', 'desc');
+    //             $data['users'] = $users;
+
+    //             $this->load->view('member/editCompanyUser.html', $data);
+    //         } else {
+    //             $this->load->view('404.html');
+    //         }
+    //     }
+      
+    // }
+
 }
  ?>
